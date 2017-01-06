@@ -1,0 +1,191 @@
+---
+title: "Getting Started With R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=F, warning=F, echo=F}
+library(data.table)
+```
+
+## Installing R
+
+1. Visit the [R download](https://cran.r-project.org/) page.
+2. Click the "Download" link for your operating system.
+3. Click the "base" link.
+4. Click the "Download R 3.3.2 for {your operating system}" link.
+5. A file called "R-3.3.2-win.exe" will download. When it is downloaded, click on it and follow the installation wizard (default settings should work just fine).
+
+
+## Installing RStudio
+
+1. Visit the [RStudio download](https://www.rstudio.com/products/rstudio/download3/) page.
+2. Under the "Installers for Supported Platforms" section, click on whatever link corresponds to your operating system. 
+3. A file called "RStudio-{some number}.exe" will download. When it is downloaded, click on it and follow the installation wizard (default settings should work just fine).
+
+
+## Getting Started with RStudio
+
+An application called "RStudio" should now exist on your computer. Open it! (The easiest way to find it is by searching, using the search bar available in the "Start" button on Windows or by pressing "CMD-Space" on OSX.)
+
+Once opened, you should see this:
+[insert 3-tab screen here]
+
+RStudio, when first opened, has three main sections: the **Console**, the **Environment** section (which also has a **History** tab), and the **Plots** section (which also has **Files**, **Packages**, **Help**, and **Viewer** tabs).
+
+Make sure that you see text in the console section that looks something like this:
+[R text screenshot]
+
+This means that the RStudio application is successfully communicating with the R software you installed above.
+
+
+Let's make sure everything is working correctly by trying to load a built-in sample dataset called "mtcars". Try typing this into the Console:
+```{r}
+data(mtcars)
+```
+Then press `Enter` or `Return` to **run** that code. "Running" means that you're telling the computer to **execute** the command you just gave it. Notice that a new value named `mtcars` should appear in your environment tab. 
+
+Now let's try taking a look at that dataset:
+```{r, results='hide'}
+View(mtcars)
+```
+When you press `Enter` on this, a new section should appear on your screen showing the `mtcars` dataset in full. 
+
+It's kind of annoying to look at a dataset that way, so let's just look at a summary of that dataset. Run this:
+```{r, results='hide'}
+summary(mtcars)
+```
+After running this command, a table should pop up in the Console showing summary statistics about each column of the dataset:
+```{r, echo=F}
+summary(mtcars)
+```
+
+If all of the above worked smoothly, you're up and running in R! If things aren't working for you, post to the coding discussion board or send me an email to troubleshoot. 
+
+## A Note About the Text You're Reading
+
+I'm writing these coding-based lectures using a utility called "RMarkdown", which lets me intersperse plaintext (like what you're reading) with actual code and its output (like what you saw above). You can access these documents in your Canvas page, but they're also published to the RMarkdown website. 
+
+You should get comfortable looking at this type of image:
+
+```{r}
+3+4
+```
+
+The first box here shows what code I typed into the Console. In this example, I wanted to add two numbers together. The second box contains the *output* of that command-- here, the result of that arithmetic. These "results" boxes will always be a lighter color and have those two "##" in front of them so you can tell what they are. 
+
+
+## Stepping up our RStudio Game: Scripts
+
+Typing code into the Console and pressing `Enter` to run it is a good method for testing short, simple pieces of code that you won't need to re-use again later. But that's not what most of programming is about. In most of programming, you'll want to write a lot of longer, more involved code, then save it so that you (or someone else) can run it again later. And to accomplish that, you'll need to write a **script**. 
+
+### Script Basics
+A script is like a Word document, but for code. You can open it, edit it, save it, and share it. You can run all the code in it at once, or only run a little bit at a time. You can run scripts from other scripts. Scripts are great. Let's write one!
+
+Type `Ctrl/Cmd-Shift-N` to open a new script in RStudio (Or, you could click `File -> New File -> R Script` in the menu). A big new section should open in your RStudio session, so your application now looks like this:
+
+[insert 4-pane image].
+
+This is your **Editor**, or **Source**. Let's write some sample code in here just so you can get used to interacting with this interface. We'll go through what this code actually means in the next page.
+
+Write these three lines in your Editor:
+```{r, results='hide'}
+print("This is our first script.")
+9+3
+7==10
+```
+
+Notice that in the Editor, pressing `Enter` just brings you to the next line, it doesn't execute any code like the Console does. 
+
+The first thing you need to know about scripts in R: lacking any special instuctions, they're set up to assume that one line equals one command. So these three lines that we just typed are three totally separate commands.
+
+
+### Running Scripts
+The fastest way to run code is using the keyboard shortcut `Ctrl-Enter` (or `Cmd-Return`). This shortcut does different (but predictable) things under different circumstances:
+
+If **no code is highlighted**, `Ctrl-Enter` executes *only the line that the cursor is on*.   
+If **multiple lines are highlighted**, `Ctrl-Enter` executes *only the selected lines*.   
+If **the whole script is highlighted**, `Ctrl-Enter` executes *the whole script*.   
+
+Let's give this a whirl with the lines we've just written. Press `Ctrl-A` to select all lines in the script, then `Ctrl-Enter` to run. You should get an output that looks like this:
+```{r}
+print("This is our first script.")
+9+3
+7==10
+```
+
+<br>
+Manually select the first two lines, and hit `Ctrl-Enter` to get this:
+```{r}
+print("This is our first script.")
+9+3
+```
+
+<br>
+And just place your cursor anywhere on the first line and hit `Ctrl-Enter` to get this:
+```{r}
+print("This is our first script.")
+```
+
+
+### Commenting
+Code is a computer language, not a human language. These three lines that we wrote, while they're easy to understand for an experienced programmer, might look kind of cryptic for you or another new programmer. And even seasoned R users might not immediately understand these lines of code:
+```{r, results='hide'}
+mtcars <- data.table(mtcars)
+mtcars[, weighted_mpg:=weighted.mean(mpg, cyl), by="am"]
+```
+
+<br>
+It would be nice if there were a way to communicate what any given line of code is trying to accomplish in plain English, so that someone else reading your code can understand what's going on. Luckily, there is just such a tool: commenting! 
+
+A code **comment** is a line or lines in a script that are preceded by a special character. The computer will ignore whatever comes after that special character, so you can write notes in there. In R, the comment character is `#`. 
+
+Let's comment our script:
+```{r}
+# Print a message to the Console
+print("This is our first script.")
+
+#Add two numbers 
+9+3
+
+# Test if two numbers are equal
+7==10
+```
+
+<br>
+When you rerun your script, you should see exactly the same output you saw before. Comments don't exist for the computer, they exist for users!
+
+You can also add comments at the end of a line:
+```{r}
+9+3 # Add two numbers 
+```
+
+<br>
+If you want to avoid running a segment of code in your script, you can **comment out** that code and it won't get executed:
+```{r}
+# Print a message to the Console
+print("This is our first script.")
+
+#Add two numbers (COMMENTED OUT)
+# 9+3
+
+# Test if two numbers are equal
+7==10
+```
+
+<br>
+If you want to **batch comment** multiple lines of code, select the lines you want to comment and hit `Ctrl-Shift-C`. Hit that key sequence again to uncomment your lines. 
+
+You can find a full list of keyboard shortcuts for RStudio at any time by hitting `Alt-Shift-K`.
+
+## Save Your Work!
+Remember that time that you forgot to save that big paper you were working on and your computer crashed and you lost everything? That feeling is just as terrible when you're writing code as when you're writing longform. Saving works exactly the way you'd expect it to in RStudio-- just hit `Ctrl/Cmd-S` and a window will pop up prompting you to enter the name and location of your script. Notice that R scripts have the suffix ".R" or ".r", the same way word documents have the suffix ".docx".
+
+Ok, by now you should know your way around RStudio pretty well. Let's move on to coding!
+
+<br>
+
+
