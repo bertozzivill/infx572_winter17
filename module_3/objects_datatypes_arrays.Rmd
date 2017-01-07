@@ -1,0 +1,125 @@
+---
+title: "Objects, Data Types, ID Arrays"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Basic Data Types
+Remember from our last lecture that you can use R as a calculator: 
+```{r}
+4+5  # addition
+19-17 # subtraction
+5*3 # multiplication
+9/38 # division
+2^4 # exponentiation
+```
+
+<br>
+And that you can use it to display and manipulate strings:
+```{r}
+print("Hello, World!") # display text in the console
+substr("Hello, World!", 3, 7) # select the 3rd-7th characters of the phrase "Hello, World!"
+```
+
+<br> 
+And that you can test the equality, inequality, or relative size of two statements or numbers:
+```{r}
+4 == 2+2 # test the equality of numbers
+4 != 2+2 # test the INequality of numbers
+
+"Hello"=="hello" # test the equivalence of phrases
+"Hello"!="hello" # test the INequivalence of phrases
+
+# size comparisons
+3>2 
+3<2
+3<3
+
+```
+
+<br> 
+These three types of operation mirror the three basic ways that data is stored in R. **Numeric** data types are numbers like `7` or `-2` or `3.14159`. **Character** data types, also called **strings**, are letters or phrases enclosed by quotes, like `"Hello, World!"` or `"This is a string"`, or `"3.14159"`. (Yes, if you put a number in quotes it becomes a string!) **Logical** data types, also known as **booleans**, are `TRUE` or `FALSE` values, usually generated as a result of *testing the equivalence* of two objects. 
+
+Get to know these data types well-- programming is all about manipulating them in intricate ways.
+
+
+## Objects and Variables
+So far, you're probably less-than-impressed that R knows how to add two numbers together. Fair. Programming languages like R really start to get powerful when you realize that you can **store** values in named objects called **variables**. 
+
+For example, let's say you want to multiply a number by 4, then check if that result is equal to 32. We can write code that looks like this:
+```{r}
+my_variable <- 8 # generate a variable named my_variable
+my_variable*4 == 32 # check if that variable, multiplied by 4, equals 32 
+```
+The `<-` symbol is what we use in R to **assign** a number to a variable name. 
+
+<br>
+But wait! I hear you say. That code is actually *longer* than doing what we learned earlier:
+```{r}
+8*4 == 32
+```
+
+That's true, but the code with the variable has the benefit that, if we decide we're not interested in 8 and actually want to test if 9*4 equals 32, all we have to do is change the value of the variable:
+```{r}
+my_variable <- 9 # generate a variable named my_variable
+```
+
+And then we can run the `my_variable*4==32` code without having to change it at all. This becomes especially useful if you want to perform multiple tests on a certain number:
+```{r}
+my_variable <- 9 
+
+my_variable*4 ==32 
+my_variable/6 > 2
+my_variable+17 <27.4
+
+```
+With this code, if I suddenly decided I wanted to test the value 25 instead of 9, all I'd have to change is the top line. Whereas if I'd originally written this:
+```{r, results='hide'}
+9*4 ==32 
+9/6 > 2
+9+17 <27.4
+
+```
+I'd have to painstakingly change everything to this:
+```{r, results='hide'}
+25*4 ==32 
+25/6 > 2
+25+17 <27.4
+
+```
+<br>
+And there's more! You can use variables to create other variables:
+```{r}
+new_variable <- my_variable*4
+new_variable==32
+```
+<br>
+You can make string variables, or boolean variables:
+```{r}
+# String variables
+string_variable <- "Hello, World!"
+print(string_variable)
+substr(string_variable, 3, 7)
+
+# Boolean variables
+boolean_variable <- 2==4
+boolean_variable
+```
+<br>
+Variables have that name because, as we've seen, they're very easy to change. We'll learn how to systematically change the value of a variable in our section about **loops**. 
+
+Notice that I can name variables whatever I want. I called our first variable `my_variable`, but I could have called it `goldfish` and the code would have understood it just fine:
+```{r}
+goldfish <- 8 # generate a variable named goldfish
+goldfish*4 == 32 # check if that variable, multiplied by 4, equals 32
+```
+
+Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. 
+
+I've thrown the word "object" around a few times without really describing what it is. An **object** is just anything that you can manipulate in a programming language. They're usually named, and you can see them in your `Environment` panel. Variables are objects, but so are lots of other things (like arrays, which we'll learn about in the next section). 
+
+
+
