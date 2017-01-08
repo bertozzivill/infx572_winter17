@@ -7,6 +7,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+This is our first real coding lecture. In this and all future such lectures, I highly highly recommend that you work through examples with me as we go along.
+
 ## Basic Data Types
 Remember from our last lecture that you can use R as a calculator: 
 ```{r}
@@ -117,9 +119,159 @@ goldfish <- 8 # generate a variable named goldfish
 goldfish*4 == 32 # check if that variable, multiplied by 4, equals 32
 ```
 
+Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:
+```{r, error=T}
+print(goldfish)
+print(Goldfish)
+print(godlfish)
+```
+
 Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. 
 
-I've thrown the word "object" around a few times without really describing what it is. An **object** is just anything that you can manipulate in a programming language. They're usually named, and you can see them in your `Environment` panel. Variables are objects, but so are lots of other things (like arrays, which we'll learn about in the next section). 
+I've thrown the word "object" around a few times without really describing what it is. An **object** is anything that you can manipulate in a programming language. They're usually named, and you can see them in your `Environment` panel. Variables are objects, but so are lots of other things (like arrays, which we'll learn about in the next section). 
+
+## 1-Dimensional Arrays
+
+So far we've just looked at objects that represent single things, like the number 8 or the word "cat" or the value "TRUE". What if we instead want a *collection* of things, like a list of numbers or words or true/false values? Well, we'd use an array. 
+
+**"Array"** is a generic term for a group of things. Arrays can have many different formats, dimensions, and names. We're going to be focusing on a type of 1-dimensional array in R called a **vector**. (1-dimensional means that there's just one list of things-- a 2-dimensional array would be like a spreadsheet or a dataset, we'll get to those later.) 
+
+### Making Vectors
+There are a few different ways to make vectors in R; the most manual way is using a fuction called `c()`. `c()` takes all the elements you give it (separated by commas) and *combines* elements into a vector (the `c` is for "combine"). Let's look at a few examples:
+
+```{r}
+numeric_vector <- c(1, 2, 3)
+print(numeric_vector)
+
+string_vector <- c("cat", "dog", "horse")
+print(string_vector)
+
+boolean_vector <- c(F, T, T, F)  # note: you can just write "T" or "F" instead of "TRUE" and "FALSE"; it acheives the same thing.
+print(boolean_vector)
+```
+
+<br>
+Notice that all the *members* of each of these vectors is the same type. For vectors, each element has to be of the same type. If you try to make a vector with multiple types, it will coerce them to all be the same:
+
+```{r}
+c(3, "cat", 4, "dog") # strings "beat" numerics
+c(7, T, F, 2) # numerics "beat" logicals (in binary arithmetic, 1 equals "True" and 0 equals "False", hence the conversions)
+c("Hello", F, "World!", T, T) # strings "beat" logicals
+```
+<br>
+
+There are a few other ways to make vectors that are useful to know. If you want a series of numbers, you can use the `:` operator and then you just have to specify the first and last number you want:
+```{r}
+1:10 # vector of integers from 1 to 10
+57:65 # integers from 57 to 65
+10:1 # it can go backwards, too!
+5.5:8.5 # it's fine with decimal numbers, but the interval between values will always be 1
+```
+<br> 
+If you want a series of numbers at intervals other than 1, use the `seq()` function. It needs three values: your starting number, your final number, and the interval between values:
+```{r}
+seq(1, 10, 1) # this is the same as "1:10"
+seq(1, 10, 2) # every other number
+seq(10, 100, 10) # every ten numbers
+```
+<br> 
+If you want to repeat the same set of values many times, use the `rep()` function. It needs two things: the vector of values you want to repeat, and how many times you want to repeat them:
+```{r}
+rep(1:5, 3) # repeat the sequence 1:5 three times
+rep(c("Hello", "World!"), 2) # repeat this two element string vector twice
+rep(c(F, F, T), 4) # repeat this three-element boolean vector four times
+```
+
+### Subsetting Vectors
+<br> 
+Let's say you make a vector using one of the methods above:
+```{r}
+example_vector <- rep(1:5, 2)
+```
+And you want to know what the seventh element is. This is called an **indexing** operation. In our example, it's easy to count and discover that the seventh element is a 2:
+```{r, echo=F}
+rep(1:5, 2)
+```
+But you can do this much more quickly with code. R uses brackets `[]` for indexing operations. So, if you wanted to know the seventh element of `example_vector`, you would run:
+```{r}
+example_vector[7]
+```
+<br>
+you can use this same syntax to query a range of values:
+```{r}
+example_vector[7:9] # shows the 7th-9thth members of example_vector
+```
+<br>
+or (using more vector notation) to find a few specific values:
+```{r}
+example_vector[c(5, 7, 9)] # shows the 5th, 7th, and 9th members of example_vector
+```
+<br>
+Each of these outputs is itself a vector, and you can save it as such:
+```{r}
+subset_vector <- example_vector[c(5, 7, 9)] # saves the 5th, 7th, and 9th members of example_vector to a new vector
+```
+
+### Adding to, Subtracting from, and Combining Vectors
+
+Shoot! What if you wanted `example_vector` to have one last "1" at the end? You can add more elements to vectors using the same function we used to create them: `c()`! 
+
+```{r}
+example_vector <- c(example_vector, 1)
+print(example_vector)
+```
+**IMPORTANT: Notice that I assigned our new vector the name `example_vector` in order to *update* it. If I had just done this:**
+```{r, echo=F, results='hide'}
+example_vector <- rep(1:5, 2)
+```
+```{r}
+c(example_vector, 1)
+```
+**it would have printed the result to the screen, but would *not* have updated the values in `example_vector`**:
+```{r}
+print(example_vector)
+```
+**BE VIGILANT!**
+<br>
+
+Ok, now you have your new `example_vector` with the 1 at the end:
+```{r, echo=F}
+example_vector <- c(example_vector, 1)
+print(example_vector)
+```
+
+Shoot! You just realized you don't want that last 5 in there. You can get rid of it using `[]`, the same as an indexing operation, but putting a `-` sign before the index value:
+```{r}
+example_vector <- example_vector[-10]
+```
+Notice that you remove values based on their *position* in the line, not based on their *value*. Doing `example_vector[-5]` would have removed the *first* `5` from the vector, because it's in the `fifth spot`. 
+<br>
+What if you want to combine `example_vector` with some other vector? Our friend `c()` is here to help us again!
+```{r}
+other_vector <- c(50, 27, 84)
+new_vector <- c(example_vector, other_vector)
+print(new_vector)
+```
+
+## Functions
+
+I've used the term "function" a few times in this page, but haven't really defined it yet. A **function** is a piece of code that *performs an action* on other objects. If variables and arrays, are the nouns of the coding world, functions are the verbs.
+
+Functions have **arguments**, which are the input variables, and they produce **outputs**. Let's think back to that function `seq()`, which takes three arguments: a starting value, a stopping value, and the interval between values:
+```{r}
+seq(1, 10, 2)
+```
+Its *output* is a vector of values: the starting value, then the starting value plus the interval value, and so on until you hit the stopping value. But function outputs don't have to be vectors: they can be just about anything. The function `print()`, which we've seen several times before, doesn't strictly speaking "return" any output at all-- it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions! 
+
+Each argument in a function has a name, but you don't need to use them so long as you keep arguments in the same order that the function is expecting to see them. However, if you do choose to use argument names, you can list things in whatever order you like. These three lines of code are equivalent:
+```{r}
+seq(1, 10, 2)
+seq(from=1, to=10, by=2)
+seq(to=10, by=2, from=1)
+```
+<br>
+We won't get too deep into the nitty gritty of functions in this course, but I want you to have some idea of what they are and when you're using them. 
+
 
 
 
