@@ -252,8 +252,12 @@ other_vector <- c(50, 27, 84)
 new_vector <- c(example_vector, other_vector)
 print(new_vector)
 ```
+<br>
+Ok, now that we're armed with variables and arrays, we can get into the powerhouses of programming: logic and loops! 
 
-## Functions
+
+
+## Side Note: Functions
 
 I've used the term "function" a few times in this page, but haven't really defined it yet. A **function** is a piece of code that *performs an action* on other objects. If variables and arrays, are the nouns of the coding world, functions are the verbs.
 

@@ -1,0 +1,169 @@
+---
+title: "Logic and Loops"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Logic 
+
+In the last page, one of our three main data types probably stuck out to you as unusual: the booleans. It's easy to imagine occasions when you would want to generate lists of numbers or strings, but what use is it to have these True and False values running around?
+
+It turns out that boolean values become incredibly important when you're considering the **logical flow** of your script. It's incredibly common to want to do different things depending on the data you're working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called `if`, `else`, and `else if`.
+
+### If
+Let's say you have a variable named `example_variable`. You know that this variable will always have a numeric value. If `example_variable` equals 8, you want to print a response to the screen, otherwise you want to do nothing. You would write the following:
+```{r, echo=F}
+example_variable<-8
+```
+
+```{r, results='hide'}
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}
+```
+<br>
+Let's see what happens when `example_variable` does and doesn't equal 8:
+```{r}
+example_variable <- 8
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}
+
+example_variable <- 80
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}
+```
+<br> 
+Let's break down what just happened there. We invoked our special word, `if`, and put a **logical statement** in parentheses `()` right after it. After the logical statement, we have a set of curly brackets `{}` with some lines of code inside of them. Here's how the computer interprets this when we ran the code with `example_variable` equal to 8: 
+1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
+2. The locical statement evaluates to `TRUE`! I should **run** all the code inside those curly brackets!
+
+And how the computer interprets it when we ran the code with `example_variable` not equal to 8:
+1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
+2. The logical statement evaluates to `FALSE`! I should **ignore** all the code inside those curly brackets and move on with the script!
+
+### Else
+We're in the exact same situation as we were before, but we have an additional demand: If `example_variable` is NOT equal to 8, we want to know what value `example_variable` is. This is where an `else` statement comes in. You can never have an `else` without an `if` before it.
+```{r, results='hide'}
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}else{
+  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) # "paste" is a new function for us! Do you understand what it does?
+}
+```
+<br> 
+Ok, our `if` statement has not changed at all. All we've done is added an `else` after the `if` statement, with its own set of code-containing curly brackets. Heres' how the computer interprets this:
+*If `example_variable` is equal to 8*:
+1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
+2. The logical statement evaluates to `TRUE`! I should run all the code inside the `if` statement's curly brackets and ignore the `else` statement completely!
+
+*If `example_variable` is not equal to 8*:
+1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
+2. The logical statement evaluates to `FALSE`! I should ignore all the code inside the `if` statement's curly brackets and run all the code inside the `else` statement's curly brackets!
+
+Let's see if it works:
+```{r}
+example_variable <- 8
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}else{
+  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
+}
+
+example_variable <- 80
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}else{
+  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
+}
+```
+
+### Else if 
+`else if` is less common than `else` and `if`, but it's still useful. You use it when there are multiple `if` statements you want to evaluate before you move to your default option, `else`. 
+
+So let's say you want to print a special message not only if `example_variable` equals 8, but also if it equals 20. Here's your code:
+```{r, results='hide'}
+if (example_variable==8){
+  print("example_variable is equal to 8!")
+}else if (example_variable==20){
+  print("Why would you choose to write a special message for the number 20?")
+}else{
+  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
+}
+```
+Test this code out yourself! See if it works as expected for different values of `example_variable`. 
+
+###  And and Or in Logical Statements
+So far, we've used very simple logical statements: `example_variable==8`, `4>3`, `"cat"!="dog"`. But there are often circumstances when we want to run certain code only if *two* things are true, or if one of two things is true, or if one thing is true and one isn't. For that, we use the `and` symbol `&` and the `or` symbol `|`. Below are some examples. Guess whether each statement will evaluate to `TRUE` or `FALSE`, then copy-paste it into your own console to check. Notice that in R, `or` is *inclusive*: it evaluates to `TRUE` if just one of its two inputs are true, *and* if they're both true.
+```{r, results='hide'}
+4>3 & 1+1==2
+4>3 | 1+1==2
+
+4>3 & 1+1==2
+4<3 | 1+1==2
+
+(4<5 & 3==1+2) & 1+1==5
+(4<5 & 3==1+2) | 1+1==5
+```
+
+## Loops
+
+Often times, in coding, we'll want to perform a similar action over and over again, just changing a few input values each time. This is the express purpose of a **loop**. 
+
+A loop of code allows you to **iterate over** the elements of a vector, and perform an operation on each of those elements in isolation. There are two main types of loop: `for` and `while`.
+
+### For
+`for` loops are by far the most common variety. They iterate over the entirety of a vector of specified length. Let's look at a simple example:
+```{r}
+iterating_vector <- 1:10
+for (this_variable in iterating_vector){
+  print(paste("this variable is ", this_variable))
+}
+```
+<br> 
+Notice that the structure of this looks kind of like an `if` statement: there's a special word (here it's `for` instead of `if`), followed by a statement in parentheses `()`, followed by some code in curly brackets `{}`. The flow of code is fairly similar too-- instead of the statement in parentheses determining *whether or not* the code in curly brackets gets run, it determines *how many times* and *with what values* that code gets run. The computer interpreting the code goes something like:  
+1. Aha! A `for`! There's a loop coming up.
+2. I should save the *first* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
+3. I should save the *second* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
+...
+11. I should save the *tenth* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
+
+Note that loops work just fine on non-numeric vectors, too:
+```{r}
+iterating_vector <- c("dog", "cat", "giraffe", "parrot", "penguin")
+for (this_variable in iterating_vector){
+  print(paste("this variable is ", this_variable))
+}
+```
+
+### While
+While loops are used less commonly, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here's an example:
+```{r}
+this_variable <- 1
+while (this_variable/2<10){
+  print(paste(this_variable, "is less than 20"))
+  this_variable <- this_variable+1 # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
+}
+```
+<br>
+It's a silly example, but bear with me. There are a couple of things to notice about this loop:
+* Now the phrase in parentheses is a logical statement again. The loop keeps going until that statement evaluates to `FALSE`. 
+* Unlike in a `for` loop, you need to explicitly initialize the variable you're iterating over, and then add to it every time you loop through.
+
+## Combining Loops and Logic
+
+What does this code do?
+```{r, results='hide'}
+for (this_variable in 1:10){
+  if(this_variable%%2==0){ # the '%%' operator shows the remainder of a division. 10%%3 would be 1, since 10/3 leaves a remainder of 1
+    print(paste(this_variable, "is even!"))
+  }else{
+    print(paste(this_variable, "is odd!"))
+  }
+}
+```
+
