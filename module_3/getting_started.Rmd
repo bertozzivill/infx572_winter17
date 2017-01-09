@@ -34,7 +34,7 @@ An application called "RStudio" should now exist on your computer. Open it! (The
 Once opened, you should see this:
 [insert 3-tab screen here]
 
-RStudio, when first opened, has three main sections: the **Console**, the **Environment** section (which also has a **History** tab), and the **Plots** section (which also has **Files**, **Packages**, **Help**, and **Viewer** tabs).
+RStudio, when first opened, has three main sections: the **Console**, the **Environment** panel (which also has a **History** tab), and the **Plots** panel (which also has **Files**, **Packages**, **Help**, and **Viewer** tabs).
 
 Make sure that you see text in the console section that looks something like this:
 [R text screenshot]
@@ -46,7 +46,7 @@ Let's make sure everything is working correctly by trying to load a built-in sam
 ```{r}
 data(mtcars)
 ```
-Then press `Enter` or `Return` to **run** that code. "Running" means that you're telling the computer to **execute** the command you just gave it. Notice that a new value named `mtcars` should appear in your environment tab. 
+Then press `Enter` or `Return` to **run** that code. "Running" means that you're telling the computer to **execute** the command you just gave it. Notice that a new value named `mtcars` should appear in your environment panel. 
 
 Now let's try taking a look at that dataset:
 ```{r, results='hide'}
@@ -58,7 +58,7 @@ It's kind of annoying to look at a dataset that way, so let's just look at a sum
 ```{r, results='hide'}
 summary(mtcars)
 ```
-After running this command, a table should pop up in the Console showing summary statistics about each column of the dataset:
+After running this command, a table should pop up in the console showing summary statistics about each column of the dataset:
 ```{r, echo=F}
 summary(mtcars)
 ```
@@ -75,7 +75,7 @@ You should get comfortable looking at this type of image:
 3+4
 ```
 
-The first box here shows what code I typed into the Console. In this example, I wanted to add two numbers together. The second box contains the *output* of that command-- here, the result of that arithmetic. These "results" boxes will always be a lighter color and have those two "##" in front of them so you can tell what they are. 
+The first box here shows what code I typed into the console. In this example, I wanted to add two numbers together. The second box contains the *output* of that command-- here, the result of that arithmetic. These "results" boxes will always be a lighter color and have those two "##" in front of them so you can tell what they are. 
 
 
 ## Stepping up our RStudio Game: Scripts

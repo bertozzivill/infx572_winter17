@@ -1,0 +1,125 @@
+---
+title: "Writing Good Code"
+output: html_document
+---
+
+There are hundreds of papers, blog posts, and even books written about how to write code in the clearest, least buggy way possible. A personal favorite of mine is this Module's nonrequired reading, (Best Practices for Scientific Computing)[http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&type=printable]. You're not required to read through the whole thing, but I'll reiterate some of the authors' points (and add my own input) below. 
+
+## Golden Rule: Write Code for People, not Computers
+
+Yes, computers are the ones who will *execute* your code, but humans are the ones who will be looking at it. And if you write messy, terrible code, it will be extremely difficult for humans to understand what on earth is going on. Even if no one else will look at a script you wrote, *your future self* will have to deal with that script. And your future self will be *pissed* if it's impossible to read. 
+
+## Name with Wisdom
+
+We discussed this a little bit in Module 3. Being able to name the objects in our code gives us great power, but also great responsibility. Names should be *consistent*, *distinctive*, *meaningful*, and *concise*. Let me give a few example of how each of these can go wrong:
+
+### Consistency
+```{r, error=T}
+# Generate scaling factors for our countries of interest
+scaling_factor_ecuador <- 19
+scaling.factor.chile <- 25
+scalingFactorArgentina <- 10
+
+scaling_factor_vector <- c(scaling_factor_ecuador, scaling_factor_chile, scaling_factor_argentina)
+```
+<br>
+All three of these methods of naming variables is valid, but it's extremely confusing to use all three of them in a single script, and you're liable to accidentally mix them up (like I did in the last line). Pick a style, and stick with it!
+
+### Distinctiveness
+```{r, error=T}
+# Generate scaling factors for our countries of interest
+scaling_factor <- 19 # Ecuador
+scaling_Factor <- 25 # Chile
+Scaling_Factor <- 10 # Argentina
+
+scaling_factor_vector <- c(scaling_factor, scaling_Factor, Scaling_Factor)
+```
+<br>
+
+Distinguishing very different variables by tiny differences in their names leaves you ripe for damaging typos or misrepresentations. Make your names significantly different from each other!
+
+### Meaning
+```{r, error=T}
+# Generate scaling factors for our countries of interest
+scaling_factor_1 <- 19 # Ecuador
+scaling_factor_3 <- 25 # Chile
+scaling_factor_3 <- 10 # Argentina
+
+scaling_factor_vector <- c(scaling_factor_1, scaling_factor_2, scaling_factor_3)
+```
+<br>
+Even though you spelled out what country each factor represented in the comments, because the variable names don't have any meaning to them it's incredibly difficult to remember which is which. You have to keep referring up to the original lines, which is tedious and unnecessary when you could just give your variables meaningful names. 
+
+### Conciseness
+```{r, error=T}
+# Generate scaling factors for our countries of interest
+mortality_rate_scaling_factor_for_ecuador <- 19
+mortality_rate_scaling_factor_for_chile <- 25 # Chile
+mortality_rate_scaling_factor_for_argentina <- 10 # Argentina
+
+scaling_factor_vector <- c(mortality_rate_scaling_factor_for_ecuador, mortality_rate_scaling_factor_for_chile, mortality_rate_scaling_factor_for_argentina)
+```
+<br>
+Do you know how annoying it was to write those whole variable names out three times when I was making my vector? Incredibly annoying. And I probably put a typo in there somewhere. Keep the variables as concise as possible without sacrificing meaning or distinctiveness. 
+
+## Comment Your Code!
+
+As mentioned in Module 3, commenting code is a fantastic way to clarify and document what you're trying to achieve, and to separate your code out into separate chunks. Here's an example of some well-commented code:
+```{r, results='hide'}
+# Load necessary libraries
+library(data.table)
+
+# Make some toy data of mortality rates three Latin American countries
+toy_data <- data.table(country=c(rep("Ecuador", 3), rep("Chile", 3), rep("Argentina", 3)),
+                       year=c(1980, 1985, 1990),
+                       mortality=runif(9)) # pick mortality as a random number between 0 and 1
+
+# Generate scaling factors for our countries of interest
+scaling_factor_ecuador <- 19
+scaling_factor_chile <- 25
+scaling_factor_argentina <- 10
+
+# Scale each country's mortality by the scaling factor
+toy_data[, scaling_factor:= ifelse(country=="Ecuador", scaling_factor_ecuador,
+                                   ifelse(country=="Chile", scaling_factor_chile, scaling_factor_argentina))]
+toy_data[, scaled_mortality:=mortality/scaling_factor]
+
+```
+<br>
+It doesn't matter that you don't understand every detail of this code-- you can still get the basic flow of things by looking at the comments and the variable names.
+
+
+## ...But Don't Comment Too Much
+Someone reading your code should be able to understand a lot of it just by looking (if you've named your objects according to the guidelines). Past a certain point, comments just become distractions. Here's an example of that same code, over-commented:
+```{r, results='hide'}
+# Load necessary libraries
+library(data.table) # load the data.table library
+
+# Make some toy data of mortality rates three Latin American countries
+toy_data <- data.table(country=c(rep("Ecuador", 3), rep("Chile", 3), rep("Argentina", 3)), # three countries: Chile, Argentina, and Ecuador
+                       year=c(1980, 1985, 1990), # three years: 1980, 1985, and 1990
+                       mortality=runif(9)) # pick mortality as a random number between 0 and 1
+
+# Generate scaling factors for our countries of interest
+scaling_factor_ecuador <- 19 # scaling factor for ecuador
+scaling_factor_chile <- 25 # scaling factor for chile
+scaling_factor_argentina <- 10 # scaling factor for argentina
+
+# Scale each country's mortality by the scaling factor
+toy_data[, scaling_factor:= ifelse(country=="Ecuador", scaling_factor_ecuador,
+                                   ifelse(country=="Chile", scaling_factor_chile, scaling_factor_argentina))]
+toy_data[, scaled_mortality:=mortality/scaling_factor] # divide mortality by the scaling factor
+
+```
+
+## Don't Repeat Yourself
+You've written some code that accomplishes what you want it to for data from 2010. Now you want to do that exact same thing, but to data from 2011. It would be fairly easy to just copy-paste all your code for 2010, change the names to "2011", and be on your way. 
+
+**DON'T DO THIS**. 
+
+Inevitably, later you'll make some small but important change to your code for the 2010 data, and then one of two things will happen: either you'll tediously need to make that same change in your 2011 code, or you'll forget about the 2011 code entirely and it will still have a bug in it. 
+
+Don't repeat yourself in coding-- use loops or functions instead!
+
+
+

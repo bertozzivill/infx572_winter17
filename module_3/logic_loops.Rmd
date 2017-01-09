@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In the last page, one of our three main data types probably stuck out to you as unusual: the booleans. It's easy to imagine occasions when you would want to generate lists of numbers or strings, but what use is it to have these True and False values running around?
 
-It turns out that boolean values become incredibly important when you're considering the **logical flow** of your script. It's incredibly common to want to do different things depending on the data you're working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called `if`, `else`, and `else if`.
+It turns out that boolean values become extremely important when you're considering the **logical flow** of your script. It's incredibly common to want to do different things depending on the data you're working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called `if`, `else`, and `else if`.
 
 ### If
 Let's say you have a variable named `example_variable`. You know that this variable will always have a numeric value. If `example_variable` equals 8, you want to print a response to the screen, otherwise you want to do nothing. You would write the following:
@@ -63,7 +63,7 @@ Ok, our `if` statement has not changed at all. All we've done is added an `else`
 *If `example_variable` is equal to 8*:
 
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
-2. The logical statement evaluates to `TRUE`! I should run all the code inside the `if` statement's curly brackets and ignore the `else` statement completely!
+2. The logical statement evaluates to `TRUE`! I should run all the code inside the `if` statement's curly brackets and ignore the `else` code completely!
 
 *If `example_variable` is not equal to 8*:
 

@@ -123,7 +123,7 @@ $(document).ready(function () {
 <div id="logic" class="section level2">
 <h2>Logic</h2>
 <p>In the last page, one of our three main data types probably stuck out to you as unusual: the booleans. It’s easy to imagine occasions when you would want to generate lists of numbers or strings, but what use is it to have these True and False values running around?</p>
-<p>It turns out that boolean values become incredibly important when you’re considering the <strong>logical flow</strong> of your script. It’s incredibly common to want to do different things depending on the data you’re working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called <code>if</code>, <code>else</code>, and <code>else if</code>.</p>
+<p>It turns out that boolean values become extremely important when you’re considering the <strong>logical flow</strong> of your script. It’s incredibly common to want to do different things depending on the data you’re working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called <code>if</code>, <code>else</code>, and <code>else if</code>.</p>
 <div id="if" class="section level3">
 <h3>If</h3>
 <p>Let’s say you have a variable named <code>example_variable</code>. You know that this variable will always have a numeric value. If <code>example_variable</code> equals 8, you want to print a response to the screen, otherwise you want to do nothing. You would write the following:</p>
@@ -166,7 +166,7 @@ if (example_variable==8){
 <ol style="list-style-type: decimal">
 <li>Aha! an <code>if</code>! There should be a logical statement coming up for me to evaluate!<br />
 </li>
-<li>The logical statement evaluates to <code>TRUE</code>! I should run all the code inside the <code>if</code> statement’s curly brackets and ignore the <code>else</code> statement completely!</li>
+<li>The logical statement evaluates to <code>TRUE</code>! I should run all the code inside the <code>if</code> statement’s curly brackets and ignore the <code>else</code> code completely!</li>
 </ol>
 <p><em>If <code>example_variable</code> is not equal to 8</em>:</p>
 <ol style="list-style-type: decimal">
@@ -263,8 +263,8 @@ for (this_variable in iterating_vector){
 <div id="while" class="section level3">
 <h3>While</h3>
 <p><code>while</code> loops are less common, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here’s an example:</p>
-<pre class="r"><code>this_variable &lt;- 1
-while (this_variable/2&lt;10){
+<pre class="r"><code>this_variable &lt;- 1 # Initialize your looping variable
+while (this_variable&lt;20){
   print(paste(this_variable, &quot;is less than 20&quot;))
   this_variable &lt;- this_variable+1 # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
 }</code></pre>

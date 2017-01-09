@@ -63,12 +63,12 @@ But wait! I hear you say. That code is actually *longer* than doing what we lear
 ```{r}
 8*4 == 32
 ```
-
+<br>
 That's true, but the code with the variable has the benefit that, if we decide we're not interested in 8 and actually want to test if 9*4 equals 32, all we have to do is change the value of the variable:
 ```{r}
 my_variable <- 9 # generate a variable named my_variable
 ```
-
+<br>
 And then we can run the `my_variable*4==32` code without having to change it at all. This becomes especially useful if you want to perform multiple tests on a certain number:
 ```{r}
 my_variable <- 9 
@@ -78,6 +78,7 @@ my_variable/6 > 2
 my_variable+17 <27.4
 
 ```
+<br>
 With this code, if I suddenly decided I wanted to test the value 25 instead of 9, all I'd have to change is the top line. Whereas if I'd originally written this:
 ```{r, results='hide'}
 9*4 ==32 
@@ -118,15 +119,15 @@ Notice that I can name variables whatever I want. I called our first variable `m
 goldfish <- 8 # generate a variable named goldfish
 goldfish*4 == 32 # check if that variable, multiplied by 4, equals 32
 ```
-
+<br>
 Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:
 ```{r, error=T}
 print(goldfish)
 print(Goldfish)
 print(godlfish)
 ```
-
-Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. 
+<br>
+Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. See the coding best practices page for more details. 
 
 I've thrown the word "object" around a few times without really describing what it is. An **object** is anything that you can manipulate in a programming language. They're usually named, and you can see them in your `Environment` panel. Variables are objects, but so are lots of other things (like arrays, which we'll learn about in the next section). 
 
@@ -199,7 +200,7 @@ example_vector[7]
 <br>
 you can use this same syntax to query a range of values:
 ```{r}
-example_vector[7:9] # shows the 7th-9thth members of example_vector
+example_vector[7:9] # shows the 7th-9th members of example_vector
 ```
 <br>
 or (using more vector notation) to find a few specific values:
@@ -214,12 +215,13 @@ subset_vector <- example_vector[c(5, 7, 9)] # saves the 5th, 7th, and 9th member
 
 ### Adding to, Subtracting from, and Combining Vectors
 
-Shoot! What if you wanted `example_vector` to have one last "1" at the end? You can add more elements to vectors using the same function we used to create them: `c()`! 
+Shoot! What if you wanted `example_vector` to have one last "1" at the end? You can **append** more elements to vectors using the same function we used to create them: `c()`! 
 
 ```{r}
 example_vector <- c(example_vector, 1)
 print(example_vector)
 ```
+<br>
 **IMPORTANT: Notice that I assigned our new vector the name `example_vector` in order to *update* it. If I had just done this:**
 ```{r, echo=F, results='hide'}
 example_vector <- rep(1:5, 2)
@@ -233,7 +235,7 @@ print(example_vector)
 ```
 **BE VIGILANT!**
 <br>
-
+<br>
 Ok, now you have your new `example_vector` with the 1 at the end:
 ```{r, echo=F}
 example_vector <- c(example_vector, 1)
@@ -243,8 +245,11 @@ print(example_vector)
 Shoot! You just realized you don't want that last 5 in there. You can get rid of it using `[]`, the same as an indexing operation, but putting a `-` sign before the index value:
 ```{r}
 example_vector <- example_vector[-10]
+print(example_vector)
 ```
+<br>
 Notice that you remove values based on their *position* in the line, not based on their *value*. Doing `example_vector[-5]` would have removed the *first* `5` from the vector, because it's in the `fifth spot`. 
+<br>
 <br>
 What if you want to combine `example_vector` with some other vector? Our friend `c()` is here to help us again!
 ```{r}
@@ -259,12 +264,13 @@ Ok, now that we're armed with variables and arrays, we can get into the powerhou
 
 ## Side Note: Functions
 
-I've used the term "function" a few times in this page, but haven't really defined it yet. A **function** is a piece of code that *performs an action* on other objects. If variables and arrays, are the nouns of the coding world, functions are the verbs.
+I've used the term "function" a few times in this page, but haven't really defined it yet. A **function** is a piece of code that *performs an action* on other objects. If variables and arrays are the nouns of the coding world, functions are the verbs.
 
 Functions have **arguments**, which are the input variables, and they produce **outputs**. Let's think back to that function `seq()`, which takes three arguments: a starting value, a stopping value, and the interval between values:
 ```{r}
 seq(1, 10, 2)
 ```
+<br>
 Its *output* is a vector of values: the starting value, then the starting value plus the interval value, and so on until you hit the stopping value. But function outputs don't have to be vectors: they can be just about anything. The function `print()`, which we've seen several times before, doesn't strictly speaking "return" any output at all-- it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions! 
 
 Each argument in a function has a name, but you don't need to use them so long as you keep arguments in the same order that the function is expecting to see them. However, if you do choose to use argument names, you can list things in whatever order you like. These three lines of code are equivalent:
