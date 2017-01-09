@@ -22,7 +22,7 @@ This is extremely useful information! The message tells us that our code is brea
 ```{r}
 print(goldfish)
 ```
-
+<br>
 Here's another example of a helpful error message:
 ```{r, error=T}
 new_vector <- c("dog" "cat", "mouse")
@@ -35,7 +35,7 @@ The `c()` function is expecting a series of elements separated by commas that it
 
 Typos are by *far* the most common coding mistake. Probably 75% of the problems students brought to me last quarter involved some sort of small typo. Before you spend a lot of time online getting into the weeds of whatever function you're using, make sure you didn't just switch two letters around or forget a parenthesis. 
 
-Speaking of forgetting parentheses, try typing this into your console and hitting Enter: `c("dog", "cat"`. Notice that instead of printing out the vector you've just specified, or giving you a `>` indicator like usual, you now have a `+` sign at the far left of your cursor. That means that you've opened some sort of bookended operator (like `""`, "()", or "{}"), but haven't closed it. The `+` indicates that the console is still waiting to get the end of its instruction. You can make it go away by actually closing the loop (in this case, by typing the missing `)`), or by pressing `Esc` to get back to the `>` cursor. 
+Speaking of forgetting parentheses, try typing this into your console and hitting Enter: `c("dog", "cat"`. Notice that instead of printing out the vector you've just specified, or giving you a `>` indicator like usual, you now have a `+` sign at the far left of your cursor. That means that you've opened some sort of bookended operator (like `""`, `"()"`, or `"{}"`), but haven't closed it. The `+` indicates that the console is still waiting to get the end of its instruction. You can make it go away by actually closing the loop (in this case, by typing the missing `)`), or by pressing `Esc` to get back to the `>` cursor. 
 
 RStudio trys to help avoid this issue by automatically generating the twin of most bookended operators when you type just one of them, but these types of mistake still happen. 
 
@@ -49,13 +49,13 @@ The format of documentation can be a little nonintuitive at first, but you'll qu
 
 ## Step 4: Ask the Internet: Googling
 
-Programming broadly, and popular languages like R in particular, are fabulous because they have an incredibly vibrant online community that's constantly helping solve each other's problems. There are a lot of different forums for getting help with programming, but by far the most popular one is a site called (Stack Overflow)[www.stackoverflow.com]. The great thing about sites like these is that, especially for intro-level questions, you probably don't have to post a question yourself. You can just search for and read the answer to questions that have already been asked and answered. 
+Programming broadly, and popular languages like R in particular, are fabulous because they have an incredibly vibrant online community that's constantly helping solve each other's problems. There are a lot of different forums for getting help with programming, but by far the most popular one is a site called [Stack Overflow](www.stackoverflow.com). The great thing about sites like these is that, especially for intro-level questions, you probably don't have to post a question yourself. You can just search for and read the answer to questions that have already been asked and answered. 
 
 The idea of Googling problems we have is so obvious that it's become a clich&#232; ("Let me Google that for you"), but Googleing coding issues actually requires some skill and practice. The trick is in the lingo: a new programmer might search "putting a list in order from largest to smallest", whereas a more experienced one would search "sorting a vector in descending order". These syntactical differences can drastically affect the helpfulness of your search results. The only way to become a better Googler is to practice! 
 
 ### Tip 1: Google the Error Message
 
-Yes, error messages are great, but sometimes they're a little cryptic. Googling the error message you got is a great way to quickly find forum posts addressing your specific bug. For example, our `print(godlfish)` command above generated the error message `Error in print(godlfish) : object 'godlfish' not found`. Try copy-pasting that into Google, with the letter "R" at the end to narrow things down to the R programming language. For me, the second-ranked output was an (extremely thorough explanation of this type of error message)[http://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean]. 
+Yes, error messages are great, but sometimes they're a little cryptic. Googling the error message you got is a great way to quickly find forum posts addressing your specific bug. For example, our `print(godlfish)` command above generated the error message `Error in print(godlfish) : object 'godlfish' not found`. Try copy-pasting that into Google, with the letter "R" at the end to narrow things down to the R programming language. For me, the second-ranked output was an [extremely thorough explanation of this type of error message](http://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean). 
 
 Sometimes Google will get mixed up if you have unusual object names (like "goldfish") in your search query, so it's good to try and distill your error messages down to their essence: Googling "object not found error R" pulls up a whole suite of excellent Stack Overflow questions and R tutorials. 
 
@@ -71,11 +71,11 @@ Are you trying to write a `for` loop, and just can't make heads or tail of it? I
 
 A lot of people taking this class already have some programming experience (and those who don't will quickly learn it). Posting to the discussion board is a wonderful way to get help from your classmates (and from Shrawan and me) in a way that also leaves a record of that problem in case someone else has that same issue later. 
 
-There are very specific guidelines for writing a great help request. You can find them (here)[http://stackoverflow.com/help/how-to-ask] **Please follow them when posting!**
+There are very specific guidelines for writing a great help request. You can find them [here](http://stackoverflow.com/help/how-to-ask). **Please follow them when posting!**
 
 ## Step 6: Email Me and/or Shrawan
 
-I'm here if you need me, though I'd really prefer you post to the board so everyone can learn together. If you're emailing me with coding problems, please still **(follow the guidelines)[http://stackoverflow.com/help/how-to-ask] for asking a good question**! 
+I'm here if you need me, though I'd really prefer you post to the board so everyone can learn together. If you're emailing me with coding problems, please still **[follow the guidelines](http://stackoverflow.com/help/how-to-ask) for asking a good question**! 
 
 ## Step 7: Ask the Internet: Writing your Own Stack Overflow Question
 

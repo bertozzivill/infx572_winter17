@@ -132,7 +132,7 @@ print(godlfish)</code></pre>
 <p><br> This is extremely useful information! The message tells us that our code is breaking because we’re trying to perform an operation on an object that doesn’t exist, and it’s telling us the name of the problematic object! This makes it easy for us to see our mistake (a small typo), and correct it:</p>
 <pre class="r"><code>print(goldfish)</code></pre>
 <pre><code>## [1] 8</code></pre>
-<p>Here’s another example of a helpful error message:</p>
+<p><br> Here’s another example of a helpful error message:</p>
 <pre class="r"><code>new_vector &lt;- c(&quot;dog&quot; &quot;cat&quot;, &quot;mouse&quot;)</code></pre>
 <pre><code>## Error: &lt;text&gt;:1:23: unexpected string constant
 ## 1: new_vector &lt;- c(&quot;dog&quot; &quot;cat&quot;
@@ -142,7 +142,7 @@ print(godlfish)</code></pre>
 <div id="step-2-chekc-for-typos" class="section level2">
 <h2>Step 2: Chekc for Typos</h2>
 <p>Typos are by <em>far</em> the most common coding mistake. Probably 75% of the problems students brought to me last quarter involved some sort of small typo. Before you spend a lot of time online getting into the weeds of whatever function you’re using, make sure you didn’t just switch two letters around or forget a parenthesis.</p>
-<p>Speaking of forgetting parentheses, try typing this into your console and hitting Enter: <code>c(&quot;dog&quot;, &quot;cat&quot;</code>. Notice that instead of printing out the vector you’ve just specified, or giving you a <code>&gt;</code> indicator like usual, you now have a <code>+</code> sign at the far left of your cursor. That means that you’ve opened some sort of bookended operator (like <code>&quot;&quot;</code>, “()”, or “{}”), but haven’t closed it. The <code>+</code> indicates that the console is still waiting to get the end of its instruction. You can make it go away by actually closing the loop (in this case, by typing the missing <code>)</code>), or by pressing <code>Esc</code> to get back to the <code>&gt;</code> cursor.</p>
+<p>Speaking of forgetting parentheses, try typing this into your console and hitting Enter: <code>c(&quot;dog&quot;, &quot;cat&quot;</code>. Notice that instead of printing out the vector you’ve just specified, or giving you a <code>&gt;</code> indicator like usual, you now have a <code>+</code> sign at the far left of your cursor. That means that you’ve opened some sort of bookended operator (like <code>&quot;&quot;</code>, <code>&quot;()&quot;</code>, or <code>&quot;{}&quot;</code>), but haven’t closed it. The <code>+</code> indicates that the console is still waiting to get the end of its instruction. You can make it go away by actually closing the loop (in this case, by typing the missing <code>)</code>), or by pressing <code>Esc</code> to get back to the <code>&gt;</code> cursor.</p>
 <p>RStudio trys to help avoid this issue by automatically generating the twin of most bookended operators when you type just one of them, but these types of mistake still happen.</p>
 </div>
 <div id="step-3-check-the-documentation" class="section level2">
@@ -153,11 +153,11 @@ print(godlfish)</code></pre>
 </div>
 <div id="step-4-ask-the-internet-googling" class="section level2">
 <h2>Step 4: Ask the Internet: Googling</h2>
-<p>Programming broadly, and popular languages like R in particular, are fabulous because they have an incredibly vibrant online community that’s constantly helping solve each other’s problems. There are a lot of different forums for getting help with programming, but by far the most popular one is a site called (Stack Overflow)[www.stackoverflow.com]. The great thing about sites like these is that, especially for intro-level questions, you probably don’t have to post a question yourself. You can just search for and read the answer to questions that have already been asked and answered.</p>
-<p>The idea of Googling problems we have is so obvious that it’s become a clichè</p>
+<p>Programming broadly, and popular languages like R in particular, are fabulous because they have an incredibly vibrant online community that’s constantly helping solve each other’s problems. There are a lot of different forums for getting help with programming, but by far the most popular one is a site called <a href="www.stackoverflow.com">Stack Overflow</a>. The great thing about sites like these is that, especially for intro-level questions, you probably don’t have to post a question yourself. You can just search for and read the answer to questions that have already been asked and answered.</p>
+<p>The idea of Googling problems we have is so obvious that it’s become a clichè (“Let me Google that for you”), but Googleing coding issues actually requires some skill and practice. The trick is in the lingo: a new programmer might search “putting a list in order from largest to smallest”, whereas a more experienced one would search “sorting a vector in descending order”. These syntactical differences can drastically affect the helpfulness of your search results. The only way to become a better Googler is to practice!</p>
 <div id="tip-1-google-the-error-message" class="section level3">
 <h3>Tip 1: Google the Error Message</h3>
-<p>Yes, error messages are great, but sometimes they’re a little cryptic. Googling the error message you got is a great way to quickly find forum posts addressing your specific bug. For example, our <code>print(godlfish)</code> command above generated the error message <code>Error in print(godlfish) : object 'godlfish' not found</code>. Try copy-pasting that into Google, with the letter “R” at the end to narrow things down to the R programming language. For me, the second-ranked output was an (extremely thorough explanation of this type of error message)[<a href="http://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean" class="uri">http://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean</a>].</p>
+<p>Yes, error messages are great, but sometimes they’re a little cryptic. Googling the error message you got is a great way to quickly find forum posts addressing your specific bug. For example, our <code>print(godlfish)</code> command above generated the error message <code>Error in print(godlfish) : object 'godlfish' not found</code>. Try copy-pasting that into Google, with the letter “R” at the end to narrow things down to the R programming language. For me, the second-ranked output was an <a href="http://stackoverflow.com/questions/27886839/what-does-error-object-myvariable-not-found-mean">extremely thorough explanation of this type of error message</a>.</p>
 <p>Sometimes Google will get mixed up if you have unusual object names (like “goldfish”) in your search query, so it’s good to try and distill your error messages down to their essence: Googling “object not found error R” pulls up a whole suite of excellent Stack Overflow questions and R tutorials.</p>
 </div>
 <div id="tip-2-google-the-function-name" class="section level3">
@@ -172,11 +172,11 @@ print(godlfish)</code></pre>
 <div id="step-5-ask-your-peers" class="section level2">
 <h2>Step 5: Ask Your Peers</h2>
 <p>A lot of people taking this class already have some programming experience (and those who don’t will quickly learn it). Posting to the discussion board is a wonderful way to get help from your classmates (and from Shrawan and me) in a way that also leaves a record of that problem in case someone else has that same issue later.</p>
-<p>There are very specific guidelines for writing a great help request. You can find them (here)[<a href="http://stackoverflow.com/help/how-to-ask" class="uri">http://stackoverflow.com/help/how-to-ask</a>] <strong>Please follow them when posting!</strong></p>
+<p>There are very specific guidelines for writing a great help request. You can find them <a href="http://stackoverflow.com/help/how-to-ask">here</a>. <strong>Please follow them when posting!</strong></p>
 </div>
 <div id="step-6-email-me-andor-shrawan" class="section level2">
 <h2>Step 6: Email Me and/or Shrawan</h2>
-<p>I’m here if you need me, though I’d really prefer you post to the board so everyone can learn together. If you’re emailing me with coding problems, please still <strong>(follow the guidelines)[<a href="http://stackoverflow.com/help/how-to-ask" class="uri">http://stackoverflow.com/help/how-to-ask</a>] for asking a good question</strong>!</p>
+<p>I’m here if you need me, though I’d really prefer you post to the board so everyone can learn together. If you’re emailing me with coding problems, please still <strong><a href="http://stackoverflow.com/help/how-to-ask">follow the guidelines</a> for asking a good question</strong>!</p>
 </div>
 <div id="step-7-ask-the-internet-writing-your-own-stack-overflow-question" class="section level2">
 <h2>Step 7: Ask the Internet: Writing your Own Stack Overflow Question</h2>

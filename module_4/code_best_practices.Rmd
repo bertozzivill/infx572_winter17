@@ -3,7 +3,7 @@ title: "Writing Good Code"
 output: html_document
 ---
 
-There are hundreds of papers, blog posts, and even books written about how to write code in the clearest, least buggy way possible. A personal favorite of mine is this Module's nonrequired reading, (Best Practices for Scientific Computing)[http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&type=printable]. You're not required to read through the whole thing, but I'll reiterate some of the authors' points (and add my own input) below. 
+There are hundreds of papers, blog posts, and even books written about how to write code in the clearest, least buggy way possible. A personal favorite of mine is this module's nonrequired reading, [Best Practices for Scientific Computing](http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&type=printable). You're not required to read through the whole thing, but I'll reiterate some of the authors' points (and add my own input) below. 
 
 ## Golden Rule: Write Code for People, not Computers
 
@@ -30,22 +30,23 @@ All three of these methods of naming variables is valid, but it's extremely conf
 # Generate scaling factors for our countries of interest
 scaling_factor <- 19 # Ecuador
 scaling_Factor <- 25 # Chile
-Scaling_Factor <- 10 # Argentina
+scaling_Factor <- 10 # Argentina
 
-scaling_factor_vector <- c(scaling_factor, scaling_Factor, Scaling_Factor)
+scaling_factor_vector <- c(scaling_factor, scaling_Factor, scaling_Factor)
+print(scaling_factor_vector)
 ```
 <br>
 
-Distinguishing very different variables by tiny differences in their names leaves you ripe for damaging typos or misrepresentations. Make your names significantly different from each other!
+Distinguishing very different variables by tiny differences in their names leaves you ripe for damaging typos or misrepresentations. (Notice the repeated value in `scaling_factor_vector`) Make your names significantly different from each other!
 
 ### Meaning
 ```{r, error=T}
 # Generate scaling factors for our countries of interest
 scaling_factor_1 <- 19 # Ecuador
-scaling_factor_3 <- 25 # Chile
+scaling_factor_2 <- 25 # Chile
 scaling_factor_3 <- 10 # Argentina
 
-scaling_factor_vector <- c(scaling_factor_1, scaling_factor_2, scaling_factor_3)
+scaling_factor_vector <- c(scaling_factor_1, scaling_factor_2, scaling_factor_3) # I have no idea what these three scaling factors represent anymore
 ```
 <br>
 Even though you spelled out what country each factor represented in the comments, because the variable names don't have any meaning to them it's incredibly difficult to remember which is which. You have to keep referring up to the original lines, which is tedious and unnecessary when you could just give your variables meaningful names. 
@@ -54,8 +55,8 @@ Even though you spelled out what country each factor represented in the comments
 ```{r, error=T}
 # Generate scaling factors for our countries of interest
 mortality_rate_scaling_factor_for_ecuador <- 19
-mortality_rate_scaling_factor_for_chile <- 25 # Chile
-mortality_rate_scaling_factor_for_argentina <- 10 # Argentina
+mortality_rate_scaling_factor_for_chile <- 25 
+mortality_rate_scaling_factor_for_argentina <- 10 
 
 scaling_factor_vector <- c(mortality_rate_scaling_factor_for_ecuador, mortality_rate_scaling_factor_for_chile, mortality_rate_scaling_factor_for_argentina)
 ```

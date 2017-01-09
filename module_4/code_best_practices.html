@@ -120,7 +120,7 @@ $(document).ready(function () {
 </div>
 
 
-<p>There are hundreds of papers, blog posts, and even books written about how to write code in the clearest, least buggy way possible. A personal favorite of mine is this Module’s nonrequired reading, (Best Practices for Scientific Computing)[<a href="http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&amp;type=printable" class="uri">http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&amp;type=printable</a>]. You’re not required to read through the whole thing, but I’ll reiterate some of the authors’ points (and add my own input) below.</p>
+<p>There are hundreds of papers, blog posts, and even books written about how to write code in the clearest, least buggy way possible. A personal favorite of mine is this module’s nonrequired reading, <a href="http://journals.plos.org/plosbiology/article/file?id=10.1371/journal.pbio.1001745&amp;type=printable">Best Practices for Scientific Computing</a>. You’re not required to read through the whole thing, but I’ll reiterate some of the authors’ points (and add my own input) below.</p>
 <div id="golden-rule-write-code-for-people-not-computers" class="section level2">
 <h2>Golden Rule: Write Code for People, not Computers</h2>
 <p>Yes, computers are the ones who will <em>execute</em> your code, but humans are the ones who will be looking at it. And if you write messy, terrible code, it will be extremely difficult for humans to understand what on earth is going on. Even if no one else will look at a script you wrote, <em>your future self</em> will have to deal with that script. And your future self will be <em>pissed</em> if it’s impossible to read.</p>
@@ -144,29 +144,30 @@ scaling_factor_vector &lt;- c(scaling_factor_ecuador, scaling_factor_chile, scal
 <pre class="r"><code># Generate scaling factors for our countries of interest
 scaling_factor &lt;- 19 # Ecuador
 scaling_Factor &lt;- 25 # Chile
-Scaling_Factor &lt;- 10 # Argentina
+scaling_Factor &lt;- 10 # Argentina
 
-scaling_factor_vector &lt;- c(scaling_factor, scaling_Factor, Scaling_Factor)</code></pre>
+scaling_factor_vector &lt;- c(scaling_factor, scaling_Factor, scaling_Factor)
+print(scaling_factor_vector)</code></pre>
+<pre><code>## [1] 19 10 10</code></pre>
 <p><br></p>
-<p>Distinguishing very different variables by tiny differences in their names leaves you ripe for damaging typos or misrepresentations. Make your names significantly different from each other!</p>
+<p>Distinguishing very different variables by tiny differences in their names leaves you ripe for damaging typos or misrepresentations. (Notice the repeated value in <code>scaling_factor_vector</code>) Make your names significantly different from each other!</p>
 </div>
 <div id="meaning" class="section level3">
 <h3>Meaning</h3>
 <pre class="r"><code># Generate scaling factors for our countries of interest
 scaling_factor_1 &lt;- 19 # Ecuador
-scaling_factor_3 &lt;- 25 # Chile
+scaling_factor_2 &lt;- 25 # Chile
 scaling_factor_3 &lt;- 10 # Argentina
 
-scaling_factor_vector &lt;- c(scaling_factor_1, scaling_factor_2, scaling_factor_3)</code></pre>
-<pre><code>## Error in eval(expr, envir, enclos): object 'scaling_factor_2' not found</code></pre>
+scaling_factor_vector &lt;- c(scaling_factor_1, scaling_factor_2, scaling_factor_3) # I have no idea what these three scaling factors represent anymore</code></pre>
 <p><br> Even though you spelled out what country each factor represented in the comments, because the variable names don’t have any meaning to them it’s incredibly difficult to remember which is which. You have to keep referring up to the original lines, which is tedious and unnecessary when you could just give your variables meaningful names.</p>
 </div>
 <div id="conciseness" class="section level3">
 <h3>Conciseness</h3>
 <pre class="r"><code># Generate scaling factors for our countries of interest
 mortality_rate_scaling_factor_for_ecuador &lt;- 19
-mortality_rate_scaling_factor_for_chile &lt;- 25 # Chile
-mortality_rate_scaling_factor_for_argentina &lt;- 10 # Argentina
+mortality_rate_scaling_factor_for_chile &lt;- 25 
+mortality_rate_scaling_factor_for_argentina &lt;- 10 
 
 scaling_factor_vector &lt;- c(mortality_rate_scaling_factor_for_ecuador, mortality_rate_scaling_factor_for_chile, mortality_rate_scaling_factor_for_argentina)</code></pre>
 <p><br> Do you know how annoying it was to write those whole variable names out three times when I was making my vector? Incredibly annoying. And I probably put a typo in there somewhere. Keep the variables as concise as possible without sacrificing meaning or distinctiveness.</p>
@@ -221,43 +222,6 @@ toy_data[, scaled_mortality:=mortality/scaling_factor] # divide mortality by the
 <p><strong>DON’T DO THIS</strong>.</p>
 <p>Inevitably, later you’ll make some small but important change to your code for the 2010 data, and then one of two things will happen: either you’ll tediously need to make that same change in your 2011 code, or you’ll forget about the 2011 code entirely and it will still have a bug in it.</p>
 <p>Don’t repeat yourself in coding– use loops or functions instead!</p>
-</div>
-<div id="check-for-errors-as-you-go" class="section level2">
-<h2>Check for Errors as You Go</h2>
-<p>The first time you write a script, it will have bugs. It just will. That’s the way of life. But if you code defensively, you can catch most of those bugs early and easily.</p>
-<p>It’s a good idea to <strong>test</strong> the code you write, especially if you’re doing something a little bit complicated. For example, let’s say I have a vector of numbers, and I want a vector of <code>TRUE</code> or <code>FALSE</code> values for those numbers (<code>TRUE</code> if that number is even, <code>FALSE</code> if it isn’t). For example, I’d want to put in <code>c(2, 3, 4)</code> and get out <code>c(T, F, T)</code>. I could write this:</p>
-<pre class="r"><code>numeric_vector &lt;- 2:4
-logical_vector &lt;- NULL # initialize an empty vector
-
-for (this_variable in numeric_vector){
-  if(this_variable%%2==0){ # if number is even
-    number_is_even &lt;- T
-  }else{
-    number_is_even &lt;- T 
-  }
-  logical_vector &lt;- c(logical_vector, number_is_even) # Append the appropriate logical value to vector
-}</code></pre>
-<p><br> Let’s see what it comes up with:</p>
-<pre class="r"><code>print(logical_vector)</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE</code></pre>
-<p><br> Oh no! It seems like that’s not working properly. To try to understand what’s going on, I could add a <code>print()</code> statement inside my loop:</p>
-<pre class="r"><code>numeric_vector &lt;- 2:4
-logical_vector &lt;- NULL # initialize an empty vector
-
-for (this_variable in numeric_vector){
-  if(this_variable%%2==0){ # if number is even
-    number_is_even &lt;- T
-  }else{
-    number_is_even &lt;- T 
-  }
-  print(paste(&quot;For value&quot;, this_variable, &quot;number_is_even is&quot;, number_is_even))
-  logical_vector &lt;- c(logical_vector, number_is_even) # Append the appropriate logical value to vector
-}</code></pre>
-<pre><code>## [1] &quot;For value 2 number_is_even is TRUE&quot;
-## [1] &quot;For value 3 number_is_even is TRUE&quot;
-## [1] &quot;For value 4 number_is_even is TRUE&quot;</code></pre>
-<p><br> Aha! This shows us that the problem is in our <code>else</code> statement.</p>
-<p>There are a wide range of ways to test your code– experiment!</p>
 </div>
 
 
