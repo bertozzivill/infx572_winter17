@@ -39,10 +39,12 @@ if (example_variable==8){
 ```
 <br> 
 Let's break down what just happened there. We invoked our special word, `if`, and put a **logical statement** in parentheses `()` right after it. After the logical statement, we have a set of curly brackets `{}` with some lines of code inside of them. Here's how the computer interprets this when we ran the code with `example_variable` equal to 8: 
+
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The locical statement evaluates to `TRUE`! I should **run** all the code inside those curly brackets!
 
 And how the computer interprets it when we ran the code with `example_variable` not equal to 8:
+
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `FALSE`! I should **ignore** all the code inside those curly brackets and move on with the script!
 
@@ -57,11 +59,14 @@ if (example_variable==8){
 ```
 <br> 
 Ok, our `if` statement has not changed at all. All we've done is added an `else` after the `if` statement, with its own set of code-containing curly brackets. Heres' how the computer interprets this:
+
 *If `example_variable` is equal to 8*:
+
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `TRUE`! I should run all the code inside the `if` statement's curly brackets and ignore the `else` statement completely!
 
 *If `example_variable` is not equal to 8*:
+
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `FALSE`! I should ignore all the code inside the `if` statement's curly brackets and run all the code inside the `else` statement's curly brackets!
 
@@ -126,10 +131,15 @@ for (this_variable in iterating_vector){
 ```
 <br> 
 Notice that the structure of this looks kind of like an `if` statement: there's a special word (here it's `for` instead of `if`), followed by a statement in parentheses `()`, followed by some code in curly brackets `{}`. The flow of code is fairly similar too-- instead of the statement in parentheses determining *whether or not* the code in curly brackets gets run, it determines *how many times* and *with what values* that code gets run. The computer interpreting the code goes something like:  
+
 1. Aha! A `for`! There's a loop coming up.
 2. I should save the *first* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
 3. I should save the *second* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
-...
+
+.  
+.  
+.  
+
 11. I should save the *tenth* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
 
 Note that loops work just fine on non-numeric vectors, too:
@@ -141,16 +151,17 @@ for (this_variable in iterating_vector){
 ```
 
 ### While
-While loops are used less commonly, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here's an example:
+`while` loops are less common, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here's an example:
 ```{r}
-this_variable <- 1
-while (this_variable/2<10){
+this_variable <- 1 # Initialize your looping variable
+while (this_variable<20){
   print(paste(this_variable, "is less than 20"))
   this_variable <- this_variable+1 # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
 }
 ```
 <br>
-It's a silly example, but bear with me. There are a couple of things to notice about this loop:
+It's a silly example, but bear with me. There are a couple of things to notice about this loop:  
+
 * Now the phrase in parentheses is a logical statement again. The loop keeps going until that statement evaluates to `FALSE`. 
 * Unlike in a `for` loop, you need to explicitly initialize the variable you're iterating over, and then add to it every time you loop through.
 
