@@ -11,7 +11,7 @@ Last lecture, we focused on libraries mostly as containers for related *function
 
 To load a dataset from a library, you first need to have that library *installed* on your machine and *loaded* into your R session (see last lecture if these terms are unfamiliar). After that, you can load a datset by name using the simple command `data({dataset_name})`.
 
-Say we want to load the dataset `Davis` that I used as an example last lecture. That dataset is from the `car` library. Since I've already run `install.packages("car")` on my machine, I don't have to do it again, but if you've never installed the `car` package you should do so now. Then, I would type the following code into my script to load the library, load the dataset, and view the first few rows of that datset:
+Say we want to load the dataset `Davis` that I used as an example last lecture. That dataset is from the `car` library. Since I've already run `install.packages("car")` on my machine, I don't have to do it again, but if you've never installed the `car` package you should do so now. Then, I would type the following code into my script to load the library, load the dataset, and view the first few rows of that dataset:
 
 ```{r}
 library(car) # load car library
@@ -28,23 +28,23 @@ Let's take a step back and think about this data structure for a moment, because
 
 `data.frame` aren't the most convenient for some common data operations, and there are a range of packages that people use to make these operations simpler. My preferred package, and the one we'll be using in this course, is called `data.table`. `data.table` works by actually making a `data.frame` into a new data type (naturally, called a `data.table`) that has some nice properties. We'll go into a lot of detail about `data.table` next lecture, so I'm not going to go into too many details here. 
 
-The most basic conventions for 2D arrays extends across all programming languages: when you're *indexing* elements of your array, you always go by row first, then column. The same way that if you were asked to find the point (2, 5) on a plot you would always go 2 to the *right* and then 5 *up*, if you were asked to find the element (2,5) in a 2D array you would always go 2 elements *down*, then 5 *across*. 
+The most basic convention for 2D arrays extends across all programming languages: when you're *indexing* elements of your array, you always go by row first, then column. The same way that if you were asked to find the point (2, 5) on a plot you would always go 2 to the *right* and then 5 *up*, if you were asked to find the element (2,5) in a 2D array you would always go 2 elements *down*, then 5 *across*. 
 
 In 2D arrays in R, as with our 1D arrays, we index using square brackets `[]`. The row and columns are known as the `i` and `j` elements, respectively, and are separated by a comma. So, if you wanted to see the first row of the `Davis` `data.frame`, you would type:
 ```{r}
-Davis[1,] # there's a 1 in the "i" spot to denote that we want the first row, and nothing after the comma to denote that we want all columns
+Davis[1,] # there's a 1 in the "i" spot to denote that we want the first row, and nothing in the "j" spot to denote that we want all columns. Notice that you still need the comma!
 ```
 <br>
 If you just want the first column of that row, you have two options: because the column is *named*, you can reference it by number or by name:
 ```{r}
-Davis[1, 1]
-Davis[1, "sex"] 
+Davis[1, 1] # 1 in the "i" position, 1 in the "j" position
+Davis[1, "sex"]  # 1 in the "i" position, "sex" in the "j" position
 ```
 <br>
 And the first column, all rows:
 ```{r}
 # these three lines of code are equivalent:
-Davis[, 1]
+Davis[, 1] # nothing in the "i" position, 1 in the "j" position
 Davis[, "sex"]
 Davis$sex # the '$' operator is a convenient way to just select a column by name
 ```
@@ -60,11 +60,12 @@ I haven't printed the output of those two lines because they'd take up a lot of 
 ## Importing Your Own Data
 What if you have your own data, and you want to load it into R? For example, just now I downloaded the [Pew Research Center's 2014 Religious Landscape Study](http://www.pewforum.org/datasets/pew-research-center-2014-u-s-religious-landscape-study/) and saved it to the desktop of my computer as "example_dataset.sav". How would I get this into R?
 
-By default, R has the capacity to read in some common data types like .csv's and space-delimited files, but an .sav file is and SPSS format, which R doesn't know by default. Fortunately, there's a library called `foreign` that lets R load other data formats. So, to load this data, I would do the following:
+By default, R has the capacity to read in some common data types like .csv's and space-delimited files, but an .sav file is an SPSS format, which R doesn't know by default. Fortunately, there's a library called `foreign` that lets R load other data formats. So, to load this data, I would do the following:
 
 ```{r, warning=F, message=F}
 library(foreign)
-file_path <- "/Users/bertozzivill/Desktop/example_dataset.sav"
+# If you were running this, you would need to download the data yourself, save it somewhere on your machine, and switch the filepath below to the location of the file on your computer.
+file_path <- "/Users/bertozzivill/Desktop/example_dataset.sav" 
 pew_data <- read.spss(file_path, to.data.frame = TRUE)
 ```
 
