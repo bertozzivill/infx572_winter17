@@ -1,0 +1,14 @@
+---
+title: "What Does Your Data Represent? Designing a Sample"
+output: html_document
+---
+
+## How Do You Know What Data to Collect?
+
+## What Question Are You Asking?
+
+## How Can Your Sampling Method Introduce Bias?
+
+## Nonrandom Sampling: Convenience and Snowball Samples
+
+## Random Sampling Methods

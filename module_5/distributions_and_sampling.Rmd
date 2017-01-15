@@ -1,0 +1,18 @@
+---
+title: "Distributions and Sampling"
+output: html_document
+---
+
+## Motivating Example: Human Height
+
+## Motivating Example: Coin Flips
+
+## Describing Distributions: Measures of Spread and Central Tendency
+
+## Normal Distributions: Means and Standard Errors
+
+## Binomial Distributions: Number of Trials and Probabilities of "Success"
+
+## What is a Sample?
+
+## What Assumptions Do We Make When We Sample?

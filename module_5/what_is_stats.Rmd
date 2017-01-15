@@ -1,0 +1,12 @@
+---
+title: "What is Statistics?"
+output: html_document
+---
+
+## Brief History of Stats
+
+## Distributions: a Primer
+
+## Inference vs. Prediction
+
+## Frequentists vs. Bayesians
