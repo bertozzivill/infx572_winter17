@@ -12,8 +12,13 @@ Let's say instead that you wanted to pick an adult at random from the global pop
 ```{r, echo=F}
 library(data.table)
 library(ggplot2)
+main_dir <- 
 test <- data.table(height=rnorm(n=5000, mean=60, sd=10))
-ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
+normal_dist <- ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
+print(normal_dist)
+png("/Users/bertozzivill/Desktop/normal_distribution.png")
+print(normal_dist)
+graphics.off()
 ```
 
 And you'd see that the probability of picking a person over 72 inches tall is right around 2%. (Note: I just made the data for that plot up, don't take it as gospel.)
@@ -32,14 +37,19 @@ What is the normal distribution, and why do we hear so much about it? Also calle
 #   return(data)
 # })
 # example <- rbindlist(example)
+load("/Users/bertozzivill/repos/infx572_winter17/module_5/example.rdata")
 
-ggplot(example, aes(x=height))+
-  geom_bar(stat="bin") +
-  facet_grid(n~., scales="free_y") +
-  labs(title="Height Histogram with Increasing Sample Size",
-       x="Height (in)",
-       y="Frequency")
+increase_n <- ggplot(example, aes(x=height))+
+              geom_bar(stat="bin") +
+              facet_grid(n~., scales="free_y") +
+              labs(title="Height Histogram with Increasing Sample Size",
+                   x="Height (in)",
+                   y="Frequency")
+print(increase_n)
 
+png("/Users/bertozzivill/Desktop/increase_n.png")
+print(increase_n)
+graphics.off()
 ```
 
 Many statistical methods rely on the assumption that you're pulling data from a *normally distributed* variable.
@@ -54,7 +64,7 @@ $$P(x | \mu,\sigma^2) = \frac{1}{{\sqrt{2\sigma^2\pi}}}e^{-\frac{(x-\mu)^2}{2\si
 
 The left part of that equation is read as, "The *probability* of $x$ *given* $\mu$ and $\sigma^2$" is...
 
-It's less important that you remember the specific equation, and more important that you understand how the two interact. In normal distributions, the $\mu$ parameter determines where the peak of the distribution is, and the $\sigma^2$ parameter determines how wide the distribution is. Below are some examples of different normal distributions:
+It's less important that you remember the specific equation, and more important that you understand how the two parameters shape the distribution. In normal distributions, the $\mu$ parameter determines where the peak of the distribution is, and the $\sigma^2$ parameter determines how wide the distribution is. Below are some examples of different normal distributions:
 
 [insert wikipedia plot]
 
@@ -82,7 +92,7 @@ A **sample** is the data that we actually see. We can never actually "capture" a
 ### What Assumptions Do We Make When We Sample?
 When sampling from a population, our most fundamental assumption is that *the data we're collecting is an unbiased reflection of the distribution it's drawn from*. This assumption can be mistaken for a number of reasons we'll get to in the next lecture.
 
-Another important assumption we make is that *the more data we collect, the closer we get to approximating the real distribution*. Let's take my example up above, where we plotted the histograms of human height for different sample sizes. I pulled that data at random from a normal distribution with $mu$ of 60 and a $\sigma^2$ of 100. Let's see what the mean and variance are of the *data* that I *sampled* for each value of n:
+Another important assumption we make is that *the more data we collect, the closer we get to approximating the real distribution*. Let's take my example up above, where we plotted the histograms of human height for different sample sizes. I pulled that data at random from a normal distribution with $\mu$ of 60 and a $\sigma^2$ of 100. Let's see what the mean and variance are of the *data* that I *sampled* for each value of n:
 
 ```{r, echo=F}
 for (exponent in 1:4){

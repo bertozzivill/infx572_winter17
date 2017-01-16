@@ -4,11 +4,48 @@ output: html_document
 ---
 
 ## How Do You Know What Data to Collect?
+Let's think back to my (again, made-up) plot of the distrubiton of human height:
+```{r, echo=F}
+library(data.table)
+library(ggplot2)
+test <- data.table(height=rnorm(n=5000, mean=60, sd=10))
+ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
+```
+
+This distribution is well and good if I have no information about the person whose height I'm trying to predict, but what if I know she's a woman? An American woman? An American woman of Japanese descent? Suddenly, this distribution of human height across all individuals is insufficient. 
+
+Conversely, what if I were trying to make a distribution of human height worldwide, and the only people I sampled were male professional basketball players? I'd do a pretty terrible job of predicting height probabilities for most people. 
+
+Both of these examples show cases in which distributions are not actually *representative* of the population they're claiming to capture. This introduces *bias*-- a deviation between the true distribution and the distribution you capture while sampling.
 
 ## What Question Are You Asking?
+The best way to avoid bias while collecting data is to be extremely clear about what question you are trying to answer. Are you interested in answering questions about the height of humans globally, or the height of male professional basketball players specifically? This dramatically impacts what type of data you should collect. 
 
-## How Can Your Sampling Method Introduce Bias?
+Some common sampling methods are below, but there are dozens of different sampling tactics. 
 
 ## Nonrandom Sampling: Convenience and Snowball Samples
 
+**Convenience** sampling is when you go to a location (like a mall or a hospital), and collect data from whoever shows up there. This method of sampling has the benefit of being relatively easy and cheap, but it's inappropriate to project your findings from a convenience sample onto the population at large. For example, the people you survey on their way into the food court are much more likely to want to buy some fro-yo than a person you sample at random from the population. Similarly, someone you survey at a hospital is far more likely to have a serious illness than any random person.
+
+**Snowball** sampling is an excellent method of finding people who are have a rare attribute that you're specifically interested in. It relies on the fact that people with common attributes tend to form communities. Let's say you want to do a survey of drug addicts. You aren't likely to find many in the population at random, but if you can interview one addict and get them to name three or four other people in their community, then you can seek out those individuals for surveying. Snowball sampling is a highly efficient method to collect data within communities, but is obviously nonrandom and (for sensitive topics especially) needs to be performed with extreme care and tact to preserve anonymity and respect of those surveyed.  
+
 ## Random Sampling Methods
+
+**Simple random sampling** is the "purest" form of random sample. If there are $N$ people in your community of interest, select $k$ of them and survey those people. Simple random sampling is basically impossible for large communities of interest, because a) you probably can't identify everyone in your community of interest, and b) even if you could, locating, accessing, and surveying that random sample would be incredibly time-consuming and expensive.
+
+To that end, there are many variations on random sampling methods:
+
+* **Stratified** sampling: Split the population into groups based on some characteristic, then sample randomly within that characteristic. For example, you could split a state into counties, then sample randomly within each county. 
+* **Cluster** sampling: Assign each member of the population to a small cluster, then pick a random sample of clusters and survey all individuals within that cluster. 
+* **Multistage** sampling: Mix and match the sampling methods above. For example, it's common to use cluster randomization to pick a set of areas to survey, then simple random sampling within those clusters.
+
+Each of these methods has the same glaring weakness: Ethically, you can never force someone to do a survey (remember, censuses are different), so your sample will *always* be biased toward the people who agree to answer your questions. You have to make a case for why that bias shouldn't affect the outcome you're interested in. Here are some other common sources of bias in surveys:
+
+* **Self-report bias**: People lie. Or, to be kinder, people fudge. Women tend to underreport their own weight, men tend to overreport their height. Nobody will ever actually tell you how many sexual partners they've had. All of these lead to biased results when you ask people questions directly.
+* **Binning**: Numbers are hard to remember. People are far more likely to report their age (or their relative's ages, or their weight, etc) as multiples of 5, which leads to non-normally distributed survey results. 
+* **Survey fatigue**: The more questions you ask people, the more likely they are to get bored and just start answering "Yes" or "C" to each question you present to them. Keep surveys short, and shuffle question order if you can. 
+
+
+In looking at data, you should always ask yourself two key questions: "What question was this data collected to answer?", and "How could the data collection method have biased this sample?"
+
+
