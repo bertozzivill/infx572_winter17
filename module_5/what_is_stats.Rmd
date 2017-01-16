@@ -3,10 +3,35 @@ title: "What is Statistics?"
 output: html_document
 ---
 
-## Brief History of Stats
+Statistics is the oldest form of data science. It began in the [brief history of stats and why it's still relevant today].
 
 ## Distributions: a Primer
+The basic unit of statistics is the **distribution**. Statistics looks at the variation in the world and claims that this variation is *patterned* and *informative*. For example, if you know something about the distribution of human heights, you could make a good guess about how likely a random person is to be a certain height. Or at least, so statistics claims. 
+
+We'll talk a lot more about distributions next lecture, but for now just get used to the idea of thinking about every data point as a single sample from a varied background. 
+
+## Descriptive Statisics
+The most basic set of explorations you can conduct on a dataset is what are called *descriptive* statistics-- this is simply understanding what patterns there are in each individual variable of your dataset. Things like, "How many observations are there?" "What is the average value of this variable?" "What are the minimum and maximum values?", etc. Running the `summary()` command on a dataset in R is a great way to get descriptive statistics for each variable.
 
 ## Inference vs. Prediction
+Descriptive statistics, while useful, isn't usually considered a statistical "analysis". Things like regressions or other models are more of the meat-and-potatoes of statistical methods, and these analyses are usually performed for one of two distinct purposes. In both cases, you run some model to establish a relationship between two or more variables.
+
+The first case, known as **inference**, asks the question "What does the relationships between my variables *mean*?" For example, if you run an analysis testing how education, access to health care, and income affect mortality, inferential statistics would be interested in knowing which of those three variables had the biggest impact on mortality, whether or not that impact was *statistically significant*, and what the values and directions were of those relationships. 
+
+In the second case, known as **prediction**, you don't really care what the values of the relationship are in the model, so long as they allow you to accurately predict outcomes for new data points. So, using the above example of the model for mortality rates, a predictive analysis would be interested in knowing what mortality outcome the model would expect for a person with a given education level, degree of access to health care, and income. 
+
+These two types of analysis are of course not mutually exclusive, but give very different content and motivation to statistical analyses. 
+
 
 ## Frequentists vs. Bayesians
+There's a philosophical divide in statistics between two different camps: *Frequentists* and *Bayesians*. The fundamental difference between the two groups is a difference in how to interpret probabilities. The easiest way to describe this is with an example. You've all seen these *95% confidence intervals* around reports of statistical results, right?
+
+[insert picture]
+
+A Frequentist, looking at these intervals, would say, "They only collected data/ran this experiment once. But if they had collected data and run the analysis 100 times, on 95 of those occasions the mean result they found would be within that interval." A Bayesian would say "There's a 95% chance the true value is within this interval."
+
+This seems like a silly semantic issue, but it actually leads to quite distinct analytical strategies. Both groups use data to inform model outcomes, but Bayesians also use something called a *prior* in their analyses. A prior is an "educated guess" of what you think is going in in a model. [give a longer/better description of priors.]
+
+In recent years especially, Bayesian statistics has gone through something of a renaissance, and the Frequentist/Bayesian divide has often been pegged as this huge contentious battle, but the reality is that any statistician will use both methods over the source of his or her career. Different approaches are appropriate for different problems, and few people get overly ideological about such things.
+
+

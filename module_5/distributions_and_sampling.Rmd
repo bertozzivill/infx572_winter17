@@ -3,16 +3,95 @@ title: "Distributions and Sampling"
 output: html_document
 ---
 
-## Motivating Example: Human Height
+A **probability distribution** is a mathematical function that describes the probability of any given outcome in an experiment. For example, let's say that you wanted to pick a completely random number between *a* and *b*, with every value in that interval having the same probability of being chosen. This scenario describes a *uniform distribution*:
 
-## Motivating Example: Coin Flips
+[insert uniform distribution plot]
 
-## Describing Distributions: Measures of Spread and Central Tendency
+Let's say instead that you wanted to pick an adult at random from the global population, and wanted to know the probability of that person being over 6 feet (72 inches) tall. In that case, you would look at a *normal distribution* reflective of human height worldwide, and make your assessment from there:
+
+```{r, echo=F}
+library(data.table)
+library(ggplot2)
+test <- data.table(height=rnorm(n=5000, mean=60, sd=10))
+ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
+```
+
+And you'd see that the probability of picking a person over 72 inches tall is right around 2%. (Note: I just made the data for that plot up, don't take it as gospel.)
+
+Different distributions are defined in different ways and serve different purposes. Here we'll describe two of the most common distributions: Normal and Binomal. 
 
 ## Normal Distributions: Means and Standard Errors
 
+What is the normal distribution, and why do we hear so much about it? Also called the Gaussian distribution (or, colloquially, a "bell curve"), normal distributions define most aspects of daily life. Just about any *continuous random variable*, like height or test score results, will *converge* to a normal distribution. What that means is that, as you take more and more samples from the population, and make a histogram, that plot will start to look more and more like a normal distribution: 
+
+```{r, echo=F, message=F}
+# example <- lapply(c(1:4), function(exponent){
+#   n <- 10^exponent
+#   data <- data.table(n=n,
+#                      height=rnorm(n, mean=60, sd=10))
+#   return(data)
+# })
+# example <- rbindlist(example)
+
+ggplot(example, aes(x=height))+
+  geom_bar(stat="bin") +
+  facet_grid(n~., scales="free_y") +
+  labs(title="Height Histogram with Increasing Sample Size",
+       x="Height (in)",
+       y="Frequency")
+
+```
+
+Many statistical methods rely on the assumption that you're pulling data from a *normally distributed* variable.
+
+That's all well and good, but what *is* a normal distribution? How do you define it?
+
+Remember high school math class, when you learned the formula for a line: $y=mx+b$. That line is defined by two parameters: $m$, the slope, and $b$, the intercept. Normal distributions are also defined by two parameters: the **mean** of the distribution, $\mu$ ("mu"), and the **variance**, $\sigma^2$ ("sigma squared")[^1].The formula for a normal distribution is a little more complicated than the one for a line, but the basic idea is the same:
+
+[^1]: The square root of the variance, $\sigma$, is called the **standard deviation**. It will come up later.
+
+$$P(x | \mu,\sigma^2) = \frac{1}{{\sqrt{2\sigma^2\pi}}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+The left part of that equation is read as, "The *probability* of $x$ *given* $\mu$ and $\sigma^2$" is...
+
+It's less important that you remember the specific equation, and more important that you understand how the two interact. In normal distributions, the $\mu$ parameter determines where the peak of the distribution is, and the $\sigma^2$ parameter determines how wide the distribution is. Below are some examples of different normal distributions:
+
+[insert wikipedia plot]
+
 ## Binomial Distributions: Number of Trials and Probabilities of "Success"
 
-## What is a Sample?
+Let's say you're flipping a coin, and you want to know your probability of getting four heads if you flip six times. It should be clear that you can't go to a normal distribution for this problem-- the outcome of a coin flip is *random*, but it's not *continuous*. It can only take one of two values-- heads or tails. For this type of *binary* outcome, we use a **binomial** distribution. 
 
-## What Assumptions Do We Make When We Sample?
+Binomial distributions are also defined by two paramters: the *number of trials*, $n$ (that is, the number of times you flip the coin), and the *probability of success*, $p$ (for a fair coin, the probability of getting "heads" is 0.5). The probability of getting $k$ successes in a binomial distribution is
+
+$$P(X=k | n,p) = {{n}\choose{k}}p^k(1-p)^{(n-k)}$$
+Where ${n}\choose{k}$ means "n choose k". ${n}\choose{k}$ is a count of how many different ways you can pull a subset of $k$ elements from a set of $n$ elements. Specifically it means:
+
+$${{n}\choose{k}} = \frac{n!}{k!(n-k)!}$$
+Where $!$ means "factorial"-- $5!$ means $5*4*3*2*1=120$
+
+Again, don't get too bogged down in the math here-- all you really need to know is that binomial distributions describe the paradigm where your outcome can only be one of two options. Binomial distributions look like this, for some example values of $n$ and $p$:
+
+[insert wikipedia plot]
+
+In this plot, the x axis represents $k$, the number of successes. Notice that, unlike the normal distribution, the binomial distribution is *discrete*-- it only has meaningful probabilities at integer values of $k$, because you can't have fractional successes. 
+
+## What is a Sample?
+A **sample** is the data that we actually see. We can never actually "capture" an entire distribution because distributions are infinite and unknown-- all we can do is take observations from a distribution and let those observations help us understand the shape of the distribution. 
+
+### What Assumptions Do We Make When We Sample?
+When sampling from a population, our most fundamental assumption is that *the data we're collecting is an unbiased reflection of the distribution it's drawn from*. This assumption can be mistaken for a number of reasons we'll get to in the next lecture.
+
+Another important assumption we make is that *the more data we collect, the closer we get to approximating the real distribution*. Let's take my example up above, where we plotted the histograms of human height for different sample sizes. I pulled that data at random from a normal distribution with $mu$ of 60 and a $\sigma^2$ of 100. Let's see what the mean and variance are of the *data* that I *sampled* for each value of n:
+
+```{r, echo=F}
+for (exponent in 1:4){
+  n_val=10^exponent
+  subset <- example[n==n_val]
+  print(paste("For n of", n_val, "data has mean", mean(subset$height), "and variance", var(subset$height)))
+}
+```
+
+Notice that the higher my value of $n$, the closer I get to the true parameters of the distribution I was pulling from (but always with some random error!)
+
+Now, let's get into more detail about what can go wrong with sampling, especially when you're sampling *people*...
