@@ -124,9 +124,11 @@ $(document).ready(function () {
 <h2>Getting Started with <code>data.table</code></h2>
 <p>My favorite package for data manipulation in R is called <code>data.table</code>. Go ahead and install it, and then load it into your R session:</p>
 <pre class="r"><code>library(data.table) # quiz: why don't I have an 'install.packages(&quot;data.table&quot;)' command in this code?</code></pre>
+<pre><code>## Warning: package 'data.table' was built under R version 3.3.2</code></pre>
 <p><br> Let’s also load the <code>Salaries</code> dataset from the <code>car</code> library (remember this dataset? You wrote an essay about it!):</p>
-<pre class="r"><code>library(car)
-data(Salaries)</code></pre>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Warning: package 'car' was built under R version 3.3.2</code></pre>
+<pre class="r"><code>data(Salaries)</code></pre>
 <p><br> As I mentioned last time, <code>Salaries</code> is a <code>data.frame</code> object:</p>
 <pre class="r"><code>class(Salaries)</code></pre>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
@@ -311,8 +313,8 @@ print(example_vector)</code></pre>
 ## 397: AsstProf          A  81035</code></pre>
 <p><br> You should notice two things about this code. The first is that, for <code>j</code> statements, I <em>always</em> need to include a comma. That single comma is indicating that there’s an (in this case, empty) <code>i</code> statement in this operation. Without that comma, the code would be evaluated as an <code>i</code> statement and it would break.</p>
 <p>The second thing to notice is that I put all the columns I wanted to keep in this thing called list(). Functionally, this is a way of subdividing the command so R doesn’t get confused about which commas are between columns you want to keep, and which are separating different parts of your <code>data.table</code> statement.</p>
-<div id="creating-new-columns-with-j" class="section level4">
-<h4>Creating New Columns with <code>j</code></h4>
+<div id="returning-new-columns-with-j" class="section level4">
+<h4>Returning New Columns with <code>j</code></h4>
 <p>There are two different ways of making new columns in <code>data.table</code>. The first makes a new column in whatever subset of the data you return with your <code>j</code> statement. Let’s say we want to select the “sex”, “discipline”, and “salary” columns of the dataset, but we wanted to rename the “discipline” column to “department”. One way to do that would be:</p>
 <pre class="r"><code>Salaries[, list(department=discipline, sex, salary)]</code></pre>
 <pre><code>##      department  sex salary
@@ -367,7 +369,10 @@ print(example_vector)</code></pre>
 ## 395:          A Male 101738       17
 ## 396:          A Male  95329       10
 ## 397:          A Male  81035        4</code></pre>
-<p><br> Again as stressed above, all of these operations print a <em>new dataset</em> to the screen that has the properties you want. However, it’s very common to want to actually add a new column to the <code>Salaries</code> dataset itself, so <code>data.table</code> has a shortcut for that using a special assignment operator that looks like this: <code>:=</code>. This operator assigns values <em>within</em> a <code>data.table</code>, instead of making an entirely new object. <strong>When you use the <code>:=</code> operator, you are changing values in your original dataset!</strong></p>
+</div>
+<div id="creating-new-columns-with-j" class="section level4">
+<h4>Creating New Columns with <code>j</code></h4>
+<p>Again as stressed above, all of these operations print a <em>new dataset</em> to the screen that has the properties you want. However, it’s very common to want to actually add a new column to the <code>Salaries</code> dataset itself, so <code>data.table</code> has a shortcut for that using a special assignment operator that looks like this: <code>:=</code>. This operator assigns values <em>within</em> a <code>data.table</code>, instead of making an entirely new object. <strong>When you use the <code>:=</code> operator, you are changing values in your original dataset!</strong></p>
 <p>That <code>yrs.diff</code> column seemed useful, let’s actually add that to the Salaries datset itself:</p>
 <pre class="r"><code>Salaries[, yrs.diff:=yrs.since.phd-yrs.service] </code></pre>
 <p><br> Notice that this command <em>does not</em> print anything to the screen, but <em>does</em> change the columns of <code>Salaries</code> itself:</p>
@@ -386,6 +391,9 @@ print(example_vector)</code></pre>
 ## 397: AsstProf          A             8           4 Male  81035        4</code></pre>
 <p><br> What if we changed our minds, and we don’t want that column anymore? You can remove it by assigning it to the special value <code>NULL</code>.</p>
 <pre class="r"><code>Salaries[, yrs.diff:=NULL] # Still using the := operator, just setting the value equal to &quot;nothing&quot;</code></pre>
+</div>
+<div id="aggregating-with-j" class="section level4">
+<h4>Aggregating with <code>j</code></h4>
 </div>
 </div>
 </div>

@@ -139,4 +139,20 @@ Salaries[, yrs.diff:=NULL] # Still using the := operator, just setting the value
 ```
 
 #### Aggregating with `j`
+You can also use the `j` statement in `data.table` to make completely new datasets that *aggregate* the data found in the original dataset. For a simple example, here's a way of collapsing our entire salaries dataset down into just one value: the mean years.of.service:
+```{r}
+Salaries[, list(mean.service=mean(yrs.of.service))]
+```
+<br>
+Or you could perform multiple aggregating operations:
+```{r}
+# make a new data.table with the mean, max, and sum across all years of service
+Salaries[, list(mean.service=mean(yrs.of.service), max.service=max(yrs.of.service), sum.service=sum(yrs.of.service))]
+```
+<br>
+This probably doesn't seem very useful to you right now, but it will become much more powerful when we bring in the `by` argument.
+
+### `by`
+The final piece of the `data.table` puzzle is the `by` argument. You use `by` to *group* your `j` operations according to some other value of the dataset. 
+
 
