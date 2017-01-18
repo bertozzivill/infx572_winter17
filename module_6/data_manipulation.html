@@ -124,11 +124,9 @@ $(document).ready(function () {
 <h2>Getting Started with <code>data.table</code></h2>
 <p>My favorite package for data manipulation in R is called <code>data.table</code>. Go ahead and install it, and then load it into your R session:</p>
 <pre class="r"><code>library(data.table) # quiz: why don't I have an 'install.packages(&quot;data.table&quot;)' command in this code?</code></pre>
-<pre><code>## Warning: package 'data.table' was built under R version 3.3.2</code></pre>
 <p><br> Let’s also load the <code>Salaries</code> dataset from the <code>car</code> library (remember this dataset? You wrote an essay about it!):</p>
-<pre class="r"><code>library(car)</code></pre>
-<pre><code>## Warning: package 'car' was built under R version 3.3.2</code></pre>
-<pre class="r"><code>data(Salaries)</code></pre>
+<pre class="r"><code>library(car)
+data(Salaries)</code></pre>
 <p><br> As I mentioned last time, <code>Salaries</code> is a <code>data.frame</code> object:</p>
 <pre class="r"><code>class(Salaries)</code></pre>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
@@ -394,8 +392,88 @@ print(example_vector)</code></pre>
 </div>
 <div id="aggregating-with-j" class="section level4">
 <h4>Aggregating with <code>j</code></h4>
+<p>You can also use the <code>j</code> statement in <code>data.table</code> to make completely new datasets that <em>aggregate</em> the data found in the original dataset. For a simple example, here’s a way of collapsing our entire salaries dataset down into just one value: the mean years.of.service:</p>
+<pre class="r"><code>Salaries[, list(mean.service=mean(yrs.service))]</code></pre>
+<pre><code>##    mean.service
+## 1:     17.61461</code></pre>
+<p><br> Or you could perform multiple aggregating operations:</p>
+<pre class="r"><code># make a new data.table with the mean, max, and sum across all years of service
+Salaries[, list(mean.service=mean(yrs.service), max.service=max(yrs.service), sum.service=sum(yrs.service))]</code></pre>
+<pre><code>##    mean.service max.service sum.service
+## 1:     17.61461          60        6993</code></pre>
+<p><br> Common aggregation functions include <code>mean()</code>, <code>max()</code>, <code>min()</code>, and <code>sum()</code>.</p>
+<p>This probably doesn’t seem very useful to you right now, but it will become much more powerful when we bring in the <code>by</code> argument.</p>
 </div>
 </div>
+<div id="by" class="section level3">
+<h3><code>by</code></h3>
+<p>The final piece of the <code>data.table</code> puzzle is the <code>by</code> argument. <code>by</code> must be accompanied by a <code>j</code> statement. You use <code>by</code> to <em>group</em> your <code>j</code> operations according to some other value of the dataset. This allows you to, for example, find the mean years of service <em>within each rank</em>:</p>
+<pre class="r"><code>Salaries[, list(mean.service=mean(yrs.service)), by=list(rank)]</code></pre>
+<pre><code>##         rank mean.service
+## 1:      Prof    22.815789
+## 2:  AsstProf     2.373134
+## 3: AssocProf    11.953125</code></pre>
+<p><br> <code>by</code> is extremely versatile. You can group on multiple different variables, or make multiple new variables based on one grouping:</p>
+<pre class="r"><code># find the mean for each sex-rank grouping
+Salaries[, list(mean.service=mean(yrs.service)), by=list(rank, sex)] </code></pre>
+<pre><code>##         rank    sex mean.service
+## 1:      Prof   Male    23.229839
+## 2:  AsstProf   Male     2.339286
+## 3: AssocProf   Male    12.037037
+## 4:      Prof Female    17.111111
+## 5: AssocProf Female    11.500000
+## 6:  AsstProf Female     2.545455</code></pre>
+<pre class="r"><code># perform multiple aggregations on the same grouping
+Salaries[, list(mean.service=mean(yrs.service), mean.salary=mean(salary)), by=list(rank)] </code></pre>
+<pre><code>##         rank mean.service mean.salary
+## 1:      Prof    22.815789   126772.11
+## 2:  AsstProf     2.373134    80775.99
+## 3: AssocProf    11.953125    93876.44</code></pre>
+<p><br> You can also use <code>by</code> with the <code>:=</code> operator to make new columns that are equal to the aggregate of other values in the dataset. For example, let’s say you wanted a new column in <code>Salaries</code> equal to the maximum salary in that professor’s rank. You would do:</p>
+<pre class="r"><code> Salaries[, max.salary.in.rank:=max(salary), by=list(rank)]</code></pre>
+<pre><code>##          rank discipline yrs.since.phd yrs.service  sex salary
+##   1:     Prof          B            19          18 Male 139750
+##   2:     Prof          B            20          16 Male 173200
+##   3: AsstProf          B             4           3 Male  79750
+##   4:     Prof          B            45          39 Male 115000
+##   5:     Prof          B            40          41 Male 141500
+##  ---                                                          
+## 393:     Prof          A            33          30 Male 103106
+## 394:     Prof          A            31          19 Male 150564
+## 395:     Prof          A            42          25 Male 101738
+## 396:     Prof          A            25          15 Male  95329
+## 397: AsstProf          A             8           4 Male  81035
+##      max.salary.in.rank
+##   1:             231545
+##   2:             231545
+##   3:              97032
+##   4:             231545
+##   5:             231545
+##  ---                   
+## 393:             231545
+## 394:             231545
+## 395:             231545
+## 396:             231545
+## 397:              97032</code></pre>
+<p><br> <strong>Question 1</strong>: How would you delete that column in the dataset? <strong>Question 2</strong>: What would you type if you instead wanted to find the minimum salary, by rank and discipline?</p>
+</div>
+</div>
+<div id="combining-the-three-statement-types" class="section level2">
+<h2>Combining the Three Statement Types</h2>
+<p>You can use <code>i</code> and <code>j</code> in isolation, or with each other. <code>by</code>, again, always needs <code>j</code>. Below are some example commands. Do you understand what they do?</p>
+<pre class="r"><code>Salaries[sex==&quot;Female&quot;, list(mean.yrs.since.phd=mean(yrs.since.phd))]</code></pre>
+<pre><code>##    mean.yrs.since.phd
+## 1:           16.51282</code></pre>
+<pre class="r"><code>Salaries[sex==&quot;Male&quot;, list(mean.yrs.since.phd=mean(yrs.since.phd)), by=list(rank)]</code></pre>
+<pre><code>##         rank mean.yrs.since.phd
+## 1:      Prof           28.63306
+## 2:  AsstProf            5.00000
+## 3: AssocProf           15.44444</code></pre>
+<pre class="r"><code>Salaries[sex==&quot;Male&quot;, list(mean.diff=mean(yrs.service-yrs.since.phd)), by=list(rank)]</code></pre>
+<pre><code>##         rank mean.diff
+## 1:      Prof -5.403226
+## 2:  AsstProf -2.660714
+## 3: AssocProf -3.407407</code></pre>
 </div>
 
 

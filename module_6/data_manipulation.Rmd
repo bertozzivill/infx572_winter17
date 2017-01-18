@@ -141,18 +141,50 @@ Salaries[, yrs.diff:=NULL] # Still using the := operator, just setting the value
 #### Aggregating with `j`
 You can also use the `j` statement in `data.table` to make completely new datasets that *aggregate* the data found in the original dataset. For a simple example, here's a way of collapsing our entire salaries dataset down into just one value: the mean years.of.service:
 ```{r}
-Salaries[, list(mean.service=mean(yrs.of.service))]
+Salaries[, list(mean.service=mean(yrs.service))]
 ```
 <br>
 Or you could perform multiple aggregating operations:
 ```{r}
 # make a new data.table with the mean, max, and sum across all years of service
-Salaries[, list(mean.service=mean(yrs.of.service), max.service=max(yrs.of.service), sum.service=sum(yrs.of.service))]
+Salaries[, list(mean.service=mean(yrs.service), max.service=max(yrs.service), sum.service=sum(yrs.service))]
 ```
 <br>
+Common aggregation functions include `mean()`, `max()`, `min()`, and `sum()`.
+
 This probably doesn't seem very useful to you right now, but it will become much more powerful when we bring in the `by` argument.
 
 ### `by`
-The final piece of the `data.table` puzzle is the `by` argument. You use `by` to *group* your `j` operations according to some other value of the dataset. 
+The final piece of the `data.table` puzzle is the `by` argument. `by` must be accompanied by a `j` statement. You use `by` to *group* your `j` operations according to some other value of the dataset. This allows you to, for example, find the mean years of service *within each rank*:
+```{r}
+Salaries[, list(mean.service=mean(yrs.service)), by=list(rank)]
+```
+<br> 
+`by` is extremely versatile. You can group on multiple different variables, or make multiple new variables based on one grouping:
+```{r}
+# find the mean for each sex-rank grouping
+Salaries[, list(mean.service=mean(yrs.service)), by=list(rank, sex)] 
+# perform multiple aggregations on the same grouping
+Salaries[, list(mean.service=mean(yrs.service), mean.salary=mean(salary)), by=list(rank)] 
+```
+<br>
+You can also use `by` with the `:=` operator to make new columns that are equal to the aggregate of other values in the dataset. For example, let's say you wanted a new column in `Salaries` equal to the maximum salary in that professor's rank. You would do:
+```{r} 
+ Salaries[, max.salary.in.rank:=max(salary), by=list(rank)]
+```
+<br>
+**Question 1**: How would you delete that column in the dataset?
+**Question 2**: What would you type if you instead wanted to find the minimum salary, by rank and discipline?
+
+## Combining the Three Statement Types
+You can use `i` and `j` in isolation, or with each other. `by`, again, always needs `j`. Below are some example commands. Do you understand what they do? 
+
+```{r}
+Salaries[sex=="Female", list(mean.yrs.since.phd=mean(yrs.since.phd))]
+Salaries[sex=="Male", list(mean.yrs.since.phd=mean(yrs.since.phd)), by=list(rank)]
+Salaries[sex=="Male", list(mean.diff=mean(yrs.since.phd-yrs.service)), by=list(rank)]
+```
+
+Whew, that was a *lot* of material. Go take a break, drink a smoothie, and let's come back for some merging and reshaping operations!
 
 
