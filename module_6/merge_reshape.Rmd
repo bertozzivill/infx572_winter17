@@ -8,7 +8,6 @@ In addition to the data manipulation gymnastics we learned last week, there are 
 As always, I start out by loading some relevant libraries:
 ```{r}
 library(data.table)
-library(HistData) # library of historical datasets
 ```
 <br> 
 ## Merging
@@ -104,10 +103,45 @@ scores[, mean_score_2:=mean(score_2), by=list(class_section)]
 ```{r, echo=F}
 melt(scores, id.vars=c("student_id", "class_section"), variable.name="exam", value.name="score")
 ```
-If my dataset were in that format, I could just run one quick "by" command and be done with it! 
+If my dataset were in that format, I could just run one quick "by" command and be done with it! (Test yourself: what command would I run on the dataset above to get the mean score by exam and class section?) 
 
 Any time you want to change the shape of your dataset, either by making multiple columns into one column or by making one column into several, it's called a **reshape** operation. The type of reshape we're describing here, where several columns become a single column, is called a **melt** or a **reshape long**. They work using the `melt` command from the `data.table` package:
 ```{r}
-melt(scores, id.vars=c("student_id", "class_section"), variable.name="exam", value.name="score")
+melt(data=scores, id.vars=c("student_id", "class_section"))
 ```
+<br>
+The `melt` function requires two arguments: `data`, the dataset you want to reshape, and `id.vars`, a vector of all the column names you want to *keep as they are*. By default, every column that is not included in `id.vars` will get reshaped (though you can change this with the `measure.vars` argument). 
+
+`melt` produces a dataset with `n` + 2 columns, where `n` is the number of columns you included in `id.vars`. The additional two columns are named `variable` and `value`. `variable` contains the column names of the (former) columns that you have since reshaped into rows, while `value` contains all the elements that used to be in those columns. You can see this clearly in the dataset above: the `value` column is just the `score_1` and `score_2` columns from the original `scores` dataset stacked on top of each other, while the `variable` column identifies which of the original columns (`score_1` or `score_2`) that datapoint came from. 
+
+If you don't want your new columns to be named `variable` and `value`, you can change those names with the `variable.name` and `value.name` arguments to `melt`, respectively. That's what I did in my original example of a reshaped dataset. 
+
+Let's look at another example-- a real-life dataset from the `MASS` library, about nutritional value of US cereals. Let's start by loading in the data and doing a little cleaning (remember to install the `MASS` dataset if you haven't already!)
+```{r, results='hide'}
+library(MASS)
+data(UScereal) # load UScereal dataset
+UScereal$cereal_name <- rownames(UScereal) # this saves the names of cereals as an actual row, instead of an index value. not super important right now.
+UScereal <- data.table(UScereal) # convert to a data.table
+UScereal[, shelf:=NULL] # we won't need that column
+```
+```{r}
+print(head(UScereal))
+```
+<br>
+As we can see, this dataset has multiple columns. `cereal_name` is the name brand of the cereal, `mfr` is the first initial of the manufacturer, `vitamins` is the vitamin/mineral content of the cereal (equal to either "none", "enriched", or "100%"), and all the other columns are numeric. Most of these represent the grams of protein, fat, etc. in one portion of cereal, while `calories` indicates the calories in one portion of cereal. 
+What if we wanted to reshape this dataset so that all the numeric values were in one column? This would leave only the `cereal_name`, `mfr`, and `vitamins` columns separate. Try to work it out yourself before looking at the solution.
+
+Ready?
+
+To reshape this dataset as described, you would do:
+```{r}
+melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
+```
+<br>
+
+
+
+
+
+
 
