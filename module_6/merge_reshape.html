@@ -123,7 +123,6 @@ $(document).ready(function () {
 <p>In addition to the data manipulation gymnastics we learned last week, there are two other core tools you should have in your data wrangling toolkit: <em>merging</em> two datasets together, and <em>reshaping</em> datasets into a different format.</p>
 <p>As always, I start out by loading some relevant libraries:</p>
 <pre class="r"><code>library(data.table)</code></pre>
-<pre><code>## Warning: package 'data.table' was built under R version 3.3.2</code></pre>
 <p><br> ## Merging Let’s say I have two datasets about students’ test scores, named <code>scores_exam_1</code> and <code>scores_exam_2</code>:</p>
 <pre class="r"><code>## note: this is how you make a data.table from scratch! The values to the left of the &quot;=&quot; are column names, the vectors to the right are the values. You should recognize most of these functions, except &quot;sample&quot;. Type ?sample into your console to learn what it does.
 scores_exam_1 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 6)),
@@ -131,85 +130,85 @@ scores_exam_1 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;
                             score_1=sample(70:100, 11, replace=T))
 print(scores_exam_1)</code></pre>
 <pre><code>##     class_section student_id score_1
-##  1:             A          1      70
+##  1:             A          1      94
 ##  2:             A          2      84
-##  3:             A          3      74
-##  4:             A          4      75
-##  5:             A          5      96
-##  6:             B          1      88
-##  7:             B          2      94
-##  8:             B          3      96
-##  9:             B          4      93
-## 10:             B          5      97
-## 11:             B          6      87</code></pre>
+##  3:             A          3      71
+##  4:             A          4      90
+##  5:             A          5      90
+##  6:             B          1      99
+##  7:             B          2      77
+##  8:             B          3      72
+##  9:             B          4      82
+## 10:             B          5      71
+## 11:             B          6      74</code></pre>
 <pre class="r"><code>scores_exam_2 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 6)),
                             student_id=c(1:5, 1:6),
                             score_2=sample(70:100, 11, replace=T))
 print(scores_exam_2)</code></pre>
 <pre><code>##     class_section student_id score_2
-##  1:             A          1      98
-##  2:             A          2      97
-##  3:             A          3      78
-##  4:             A          4      95
-##  5:             A          5      98
-##  6:             B          1      81
-##  7:             B          2      71
-##  8:             B          3     100
-##  9:             B          4      83
-## 10:             B          5      93
-## 11:             B          6      95</code></pre>
+##  1:             A          1      80
+##  2:             A          2      92
+##  3:             A          3      79
+##  4:             A          4      75
+##  5:             A          5      86
+##  6:             B          1      80
+##  7:             B          2      97
+##  8:             B          3      90
+##  9:             B          4      86
+## 10:             B          5      97
+## 11:             B          6      75</code></pre>
 <p><br> I’d like to make these into a single dataset so that I can (for example) take the difference between the two test scores for each student, or plot one test score against the other. How can I do this? Using the <code>merge()</code> command, of course!</p>
 <p>Let’s take a look back up at our datasets. Each one has three columns: <code>student_id</code>, <code>class_section</code>, and some sort of “score” variable. The <code>student_id</code> and <code>class_section</code> variables are the same in each dataset, while the “score” variable has both a <em>different name</em> and <em>different values</em>. What we’d like to end up with is a dataset with <em>four</em> variables: <code>student_id</code>, <code>class_section</code>, <code>score_1</code>, and <code>score_2</code>:</p>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      70      98
-##  2:             A          2      84      97
-##  3:             A          3      74      78
-##  4:             A          4      75      95
-##  5:             A          5      96      98
-##  6:             B          1      88      81
-##  7:             B          2      94      71
-##  8:             B          3      96     100
-##  9:             B          4      93      83
-## 10:             B          5      97      93
-## 11:             B          6      87      95</code></pre>
+##  1:             A          1      94      80
+##  2:             A          2      84      92
+##  3:             A          3      71      79
+##  4:             A          4      90      75
+##  5:             A          5      90      86
+##  6:             B          1      99      80
+##  7:             B          2      77      97
+##  8:             B          3      72      90
+##  9:             B          4      82      86
+## 10:             B          5      71      97
+## 11:             B          6      74      75</code></pre>
 <p><code>merge()</code> takes three main arguments: <code>x</code>, <code>y</code>, and <code>by</code>. <code>x</code> and <code>y</code> are the datasets you want to merge together, while <code>by</code> is a vector of the column names the two datasets have in <em>common</em>. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;))</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      70      98
-##  2:             A          2      84      97
-##  3:             A          3      74      78
-##  4:             A          4      75      95
-##  5:             A          5      96      98
-##  6:             B          1      88      81
-##  7:             B          2      94      71
-##  8:             B          3      96     100
-##  9:             B          4      93      83
-## 10:             B          5      97      93
-## 11:             B          6      87      95</code></pre>
+##  1:             A          1      94      80
+##  2:             A          2      84      92
+##  3:             A          3      71      79
+##  4:             A          4      90      75
+##  5:             A          5      90      86
+##  6:             B          1      99      80
+##  7:             B          2      77      97
+##  8:             B          3      72      90
+##  9:             B          4      82      86
+## 10:             B          5      71      97
+## 11:             B          6      74      75</code></pre>
 <p><br> Notice that I need to include <em>both</em> <code>class_section</code> and <code>student_id</code> in order to effectively merge my dataset, because it’s only the <em>combination of those two</em> that uniquely identify a student. Let’s see what happens when I try to merge with just one of those columns:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;student_id&quot;))</code></pre>
 <pre><code>##     student_id class_section.x score_1 class_section.y score_2
-##  1:          1               A      70               A      98
-##  2:          1               A      70               B      81
-##  3:          1               B      88               A      98
-##  4:          1               B      88               B      81
-##  5:          2               A      84               A      97
-##  6:          2               A      84               B      71
-##  7:          2               B      94               A      97
-##  8:          2               B      94               B      71
-##  9:          3               A      74               A      78
-## 10:          3               A      74               B     100
-## 11:          3               B      96               A      78
-## 12:          3               B      96               B     100
-## 13:          4               A      75               A      95
-## 14:          4               A      75               B      83
-## 15:          4               B      93               A      95
-## 16:          4               B      93               B      83
-## 17:          5               A      96               A      98
-## 18:          5               A      96               B      93
-## 19:          5               B      97               A      98
-## 20:          5               B      97               B      93
-## 21:          6               B      87               B      95
+##  1:          1               A      94               A      80
+##  2:          1               A      94               B      80
+##  3:          1               B      99               A      80
+##  4:          1               B      99               B      80
+##  5:          2               A      84               A      92
+##  6:          2               A      84               B      97
+##  7:          2               B      77               A      92
+##  8:          2               B      77               B      97
+##  9:          3               A      71               A      79
+## 10:          3               A      71               B      90
+## 11:          3               B      72               A      79
+## 12:          3               B      72               B      90
+## 13:          4               A      90               A      75
+## 14:          4               A      90               B      86
+## 15:          4               B      82               A      75
+## 16:          4               B      82               B      86
+## 17:          5               A      90               A      86
+## 18:          5               A      90               B      97
+## 19:          5               B      71               A      86
+## 20:          5               B      71               B      97
+## 21:          6               B      74               B      75
 ##     student_id class_section.x score_1 class_section.y score_2</code></pre>
 <p><br> Whoa, that’s not what we wanted! That’s some weird mix of stacking and merging and it’s not useful. Be careful!</p>
 <p>There’s one more argument type you should be aware of in <code>merge()</code>: the <code>all</code>, <code>all.x</code>, and <code>all.y</code> arguments. To understand why they’re useful, let’s say that a new class section was added between exams 1 and 2, so you <code>scores_exam_2</code> actually looks like this:</p>
@@ -218,53 +217,53 @@ print(scores_exam_2)</code></pre>
                             score_2=sample(70:100, 15, replace=T))
 print(scores_exam_2)</code></pre>
 <pre><code>##     class_section student_id score_2
-##  1:             A          1      73
-##  2:             A          2      73
-##  3:             A          3      88
-##  4:             A          4      81
-##  5:             A          5      97
+##  1:             A          1      71
+##  2:             A          2      82
+##  3:             A          3      75
+##  4:             A          4      73
+##  5:             A          5      85
 ##  6:             B          1      99
-##  7:             B          2      91
-##  8:             B          3      71
-##  9:             B          4      87
-## 10:             B          5      99
-## 11:             B          6      80
-## 12:             C          1      80
-## 13:             C          2      95
-## 14:             C          3      81
-## 15:             C          4     100</code></pre>
+##  7:             B          2      99
+##  8:             B          3      90
+##  9:             B          4      91
+## 10:             B          5      90
+## 11:             B          6      70
+## 12:             C          1      70
+## 13:             C          2      89
+## 14:             C          3      71
+## 15:             C          4      86</code></pre>
 <p><br> By default, the <code>merge</code> command will keep <em>only rows that are found in both datasets</em>. So running the <code>merge</code> command we ran before will get us the same outcome we had before:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;))</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      70      73
-##  2:             A          2      84      73
-##  3:             A          3      74      88
-##  4:             A          4      75      81
-##  5:             A          5      96      97
-##  6:             B          1      88      99
-##  7:             B          2      94      91
-##  8:             B          3      96      71
-##  9:             B          4      93      87
-## 10:             B          5      97      99
-## 11:             B          6      87      80</code></pre>
+##  1:             A          1      94      71
+##  2:             A          2      84      82
+##  3:             A          3      71      75
+##  4:             A          4      90      73
+##  5:             A          5      90      85
+##  6:             B          1      99      99
+##  7:             B          2      77      99
+##  8:             B          3      72      90
+##  9:             B          4      82      91
+## 10:             B          5      71      90
+## 11:             B          6      74      70</code></pre>
 <p><br> But what if we wanted to keep the rows from <code>scores_exam_2</code>, and just fill in with missing values for exam 1 scores? We could do that by instructing <code>merge</code> to keep <em>all</em> the rows from the <em>y</em> dataset, by setting the argument <code>all.y</code> equal to <code>TRUE</code>:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;), all.y=TRUE)</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      70      73
-##  2:             A          2      84      73
-##  3:             A          3      74      88
-##  4:             A          4      75      81
-##  5:             A          5      96      97
-##  6:             B          1      88      99
-##  7:             B          2      94      91
-##  8:             B          3      96      71
-##  9:             B          4      93      87
-## 10:             B          5      97      99
-## 11:             B          6      87      80
-## 12:             C          1      NA      80
-## 13:             C          2      NA      95
-## 14:             C          3      NA      81
-## 15:             C          4      NA     100</code></pre>
+##  1:             A          1      94      71
+##  2:             A          2      84      82
+##  3:             A          3      71      75
+##  4:             A          4      90      73
+##  5:             A          5      90      85
+##  6:             B          1      99      99
+##  7:             B          2      77      99
+##  8:             B          3      72      90
+##  9:             B          4      82      91
+## 10:             B          5      71      90
+## 11:             B          6      74      70
+## 12:             C          1      NA      70
+## 13:             C          2      NA      89
+## 14:             C          3      NA      71
+## 15:             C          4      NA      86</code></pre>
 <p><br> Now let’s imagine that additionally, there’s a student in section A (id number 6) who dropped after the first exam, so he doesn’t show up in dataset 2:</p>
 <pre class="r"><code>scores_exam_1 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 6), rep(&quot;B&quot;, 6)),
                             student_id=c(1:6, 1:6),
@@ -272,18 +271,18 @@ print(scores_exam_2)</code></pre>
 
 print(scores_exam_1)</code></pre>
 <pre><code>##     class_section student_id score_1
-##  1:             A          1      76
-##  2:             A          2      90
-##  3:             A          3      92
-##  4:             A          4      77
-##  5:             A          5      75
-##  6:             A          6      78
-##  7:             B          1      80
-##  8:             B          2      99
-##  9:             B          3      98
-## 10:             B          4      99
-## 11:             B          5      96
-## 12:             B          6      96</code></pre>
+##  1:             A          1      75
+##  2:             A          2      73
+##  3:             A          3      87
+##  4:             A          4      98
+##  5:             A          5      99
+##  6:             A          6      86
+##  7:             B          1      92
+##  8:             B          2      96
+##  9:             B          3      76
+## 10:             B          4      87
+## 11:             B          5      73
+## 12:             B          6      71</code></pre>
 <p><br> You can include <em>just</em> this extra student (and nobody in section C from the other dataset), by running the <code>merge</code> command with <code>all.x</code> equal to <code>TRUE</code>. Or, if you wanted to keep all the extra rows, you could run with both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. It’s common enough to want to do this that <code>merge</code> has an <code>all</code> argument that, when set to <code>TRUE</code>, is equivalent to setting both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. Try it yourself!</p>
 <div id="reshaping" class="section level2">
 <h2>Reshaping</h2>
@@ -291,91 +290,93 @@ print(scores_exam_1)</code></pre>
 <pre class="r"><code>scores &lt;- merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;))
 print(scores)</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      93      82
-##  2:             A          2      93      90
-##  3:             A          3      84      86
-##  4:             A          4      81      83
-##  5:             A          5     100      79
-##  6:             B          1      82      93
-##  7:             B          2      75      97
-##  8:             B          3      74     100
-##  9:             B          4      84      98
-## 10:             B          5      90      95
-## 11:             B          6      75      96</code></pre>
+##  1:             A          1      76      95
+##  2:             A          2      86      88
+##  3:             A          3      95     100
+##  4:             A          4      83      93
+##  5:             A          5      77      76
+##  6:             B          1      85      98
+##  7:             B          2      88      74
+##  8:             B          3      75      81
+##  9:             B          4      87      83
+## 10:             B          5      73      93
+## 11:             B          6      81     100</code></pre>
 <p><br> What if I wanted a new column with the mean score for each exam, by class section? I could do this:</p>
 <pre class="r"><code>scores[, mean_score_1:= mean(score_1), by=list(class_section)]
 scores[, mean_score_2:=mean(score_2), by=list(class_section)]</code></pre>
 <p><br></p>
 <p>…But then I’d be repeating myself, and I hate doing that. It would be great if, instead, I could combine both of the “score” columns into a single column, with a new column to identify which exam they came from:</p>
 <pre><code>##     student_id class_section    exam score
-##  1:          1             A score_1    93
-##  2:          2             A score_1    93
-##  3:          3             A score_1    84
-##  4:          4             A score_1    81
-##  5:          5             A score_1   100
-##  6:          1             B score_1    82
-##  7:          2             B score_1    75
-##  8:          3             B score_1    74
-##  9:          4             B score_1    84
-## 10:          5             B score_1    90
-## 11:          6             B score_1    75
-## 12:          1             A score_2    82
-## 13:          2             A score_2    90
-## 14:          3             A score_2    86
-## 15:          4             A score_2    83
-## 16:          5             A score_2    79
-## 17:          1             B score_2    93
-## 18:          2             B score_2    97
-## 19:          3             B score_2   100
-## 20:          4             B score_2    98
-## 21:          5             B score_2    95
-## 22:          6             B score_2    96
+##  1:          1             A score_1    76
+##  2:          2             A score_1    86
+##  3:          3             A score_1    95
+##  4:          4             A score_1    83
+##  5:          5             A score_1    77
+##  6:          1             B score_1    85
+##  7:          2             B score_1    88
+##  8:          3             B score_1    75
+##  9:          4             B score_1    87
+## 10:          5             B score_1    73
+## 11:          6             B score_1    81
+## 12:          1             A score_2    95
+## 13:          2             A score_2    88
+## 14:          3             A score_2   100
+## 15:          4             A score_2    93
+## 16:          5             A score_2    76
+## 17:          1             B score_2    98
+## 18:          2             B score_2    74
+## 19:          3             B score_2    81
+## 20:          4             B score_2    83
+## 21:          5             B score_2    93
+## 22:          6             B score_2   100
 ##     student_id class_section    exam score</code></pre>
 <p>If my dataset were in that format, I could just run one quick “by” command and be done with it! (Test yourself: what command would I run on the dataset above to get the mean score by exam and class section?)</p>
+<div id="melting" class="section level3">
+<h3>Melting</h3>
 <p>Any time you want to change the shape of your dataset, either by making multiple columns into one column or by making one column into several, it’s called a <strong>reshape</strong> operation. The type of reshape we’re describing here, where several columns become a single column, is called a <strong>melt</strong> or a <strong>reshape long</strong>. They work using the <code>melt</code> command from the <code>data.table</code> package:</p>
 <pre class="r"><code>melt(data=scores, id.vars=c(&quot;student_id&quot;, &quot;class_section&quot;))</code></pre>
 <pre><code>##     student_id class_section variable value
-##  1:          1             A  score_1    93
-##  2:          2             A  score_1    93
-##  3:          3             A  score_1    84
-##  4:          4             A  score_1    81
-##  5:          5             A  score_1   100
-##  6:          1             B  score_1    82
-##  7:          2             B  score_1    75
-##  8:          3             B  score_1    74
-##  9:          4             B  score_1    84
-## 10:          5             B  score_1    90
-## 11:          6             B  score_1    75
-## 12:          1             A  score_2    82
-## 13:          2             A  score_2    90
-## 14:          3             A  score_2    86
-## 15:          4             A  score_2    83
-## 16:          5             A  score_2    79
-## 17:          1             B  score_2    93
-## 18:          2             B  score_2    97
-## 19:          3             B  score_2   100
-## 20:          4             B  score_2    98
-## 21:          5             B  score_2    95
-## 22:          6             B  score_2    96
+##  1:          1             A  score_1    76
+##  2:          2             A  score_1    86
+##  3:          3             A  score_1    95
+##  4:          4             A  score_1    83
+##  5:          5             A  score_1    77
+##  6:          1             B  score_1    85
+##  7:          2             B  score_1    88
+##  8:          3             B  score_1    75
+##  9:          4             B  score_1    87
+## 10:          5             B  score_1    73
+## 11:          6             B  score_1    81
+## 12:          1             A  score_2    95
+## 13:          2             A  score_2    88
+## 14:          3             A  score_2   100
+## 15:          4             A  score_2    93
+## 16:          5             A  score_2    76
+## 17:          1             B  score_2    98
+## 18:          2             B  score_2    74
+## 19:          3             B  score_2    81
+## 20:          4             B  score_2    83
+## 21:          5             B  score_2    93
+## 22:          6             B  score_2   100
 ##     student_id class_section variable value</code></pre>
 <p><br> The <code>melt</code> function requires two arguments: <code>data</code>, the dataset you want to reshape, and <code>id.vars</code>, a vector of all the column names you want to <em>keep as they are</em>. By default, every column that is not included in <code>id.vars</code> will get reshaped (though you can change this with the <code>measure.vars</code> argument).</p>
 <p><code>melt</code> produces a dataset with <code>n</code> + 2 columns, where <code>n</code> is the number of columns you included in <code>id.vars</code>. The additional two columns are named <code>variable</code> and <code>value</code>. <code>variable</code> contains the column names of the (former) columns that you have since reshaped into rows, while <code>value</code> contains all the elements that used to be in those columns. You can see this clearly in the dataset above: the <code>value</code> column is just the <code>score_1</code> and <code>score_2</code> columns from the original <code>scores</code> dataset stacked on top of each other, while the <code>variable</code> column identifies which of the original columns (<code>score_1</code> or <code>score_2</code>) that datapoint came from.</p>
 <p>If you don’t want your new columns to be named <code>variable</code> and <code>value</code>, you can change those names with the <code>variable.name</code> and <code>value.name</code> arguments to <code>melt</code>, respectively. That’s what I did in my original example of a reshaped dataset.</p>
 <p>Let’s look at another example– a real-life dataset from the <code>MASS</code> library, about nutritional value of US cereals. Let’s start by loading in the data and doing a little cleaning (remember to install the <code>MASS</code> dataset if you haven’t already!)</p>
-<pre class="r"><code>library(MASS)</code></pre>
-<pre><code>## Warning: package 'MASS' was built under R version 3.3.2</code></pre>
-<pre class="r"><code>data(UScereal) # load UScereal dataset
+<pre class="r"><code>library(MASS)
+data(UScereal) # load UScereal dataset
 UScereal$cereal_name &lt;- rownames(UScereal) # this saves the names of cereals as an actual row, instead of an index value. not super important right now.
 UScereal &lt;- data.table(UScereal) # convert to a data.table
-UScereal[, shelf:=NULL] # we won't need that column</code></pre>
+UScereal[, shelf:=NULL] # we won't need that column
+UScereal[, sodium:= sodium/1000] # this converts the units of the &quot;sodium&quot; column from milligrams to grams</code></pre>
 <pre class="r"><code>print(head(UScereal))</code></pre>
-<pre><code>##    mfr calories   protein      fat   sodium     fibre    carbo   sugars
-## 1:   N 212.1212 12.121212 3.030303 393.9394 30.303030 15.15152 18.18182
-## 2:   K 212.1212 12.121212 3.030303 787.8788 27.272727 21.21212 15.15151
-## 3:   K 100.0000  8.000000 0.000000 280.0000 28.000000 16.00000  0.00000
-## 4:   G 146.6667  2.666667 2.666667 240.0000  2.000000 14.00000 13.33333
-## 5:   K 110.0000  2.000000 0.000000 125.0000  1.000000 11.00000 14.00000
-## 6:   G 173.3333  4.000000 2.666667 280.0000  2.666667 24.00000 10.66667
+<pre><code>##    mfr calories   protein      fat    sodium     fibre    carbo   sugars
+## 1:   N 212.1212 12.121212 3.030303 0.3939394 30.303030 15.15152 18.18182
+## 2:   K 212.1212 12.121212 3.030303 0.7878788 27.272727 21.21212 15.15151
+## 3:   K 100.0000  8.000000 0.000000 0.2800000 28.000000 16.00000  0.00000
+## 4:   G 146.6667  2.666667 2.666667 0.2400000  2.000000 14.00000 13.33333
+## 5:   K 110.0000  2.000000 0.000000 0.1250000  1.000000 11.00000 14.00000
+## 6:   G 173.3333  4.000000 2.666667 0.2800000  2.666667 24.00000 10.66667
 ##    potassium vitamins               cereal_name
 ## 1: 848.48485 enriched                 100% Bran
 ## 2: 969.69697 enriched                  All-Bran
@@ -399,6 +400,28 @@ UScereal[, shelf:=NULL] # we won't need that column</code></pre>
 ## 518:                Wheat Chex   R enriched potassium 171.6418
 ## 519:                  Wheaties   G enriched potassium 110.0000
 ## 520:       Wheaties Honey Gold   G enriched potassium  80.0000</code></pre>
+<p><br> Does that make sense? every column I put in the `id.vars section stays separate, while the rest get compressed into just two columns. So now, if I wanted to (for example) take the mean value of every different type of nutritional factor across all cereals, I wouldn’t have to write out eight new column names. I could just do:</p>
+<pre class="r"><code># save the melted dataset to a new data.frame object so we can make further changes
+melted_UScereal &lt;- melt(UScereal, id.vars=c(&quot;cereal_name&quot;, &quot;mfr&quot;, &quot;vitamins&quot;))
+melted_UScereal[, list(mean_value=mean(value)), by=list(variable)]</code></pre>
+<pre><code>##     variable  mean_value
+## 1:  calories 149.4082578
+## 2:   protein   3.6837045
+## 3:       fat   1.4225384
+## 4:    sodium   0.2378384
+## 5:     fibre   3.8708440
+## 6:     carbo  19.9676195
+## 7:    sugars  10.0508422
+## 8: potassium 159.1197494</code></pre>
+<p><br> Put on your “data scientist” hat for a minute and look at this result. Does anything strike you as strange? Remember, I said before that every value in that list, except for calories, should count how many <em>grams</em> of each different nutritional component there are in <em>one serving</em> of cereal.</p>
+<p>Hopefully you noticed that the mean <code>potassium</code> value is far, far higher than it should be. Most servings of cereal don’t even weight 100 grams, so how could they have on average 160 grams of potassium?</p>
+<p>This is a mistake in the documentation– if you do <code>?UScereal</code> you’ll see that the description of the dataset claims that the <code>potassium</code> column has units of grams, but it’s almost certainly in milligrams instead. If you’ve been following along, you’ve noticed that we already converted one column in the dataset from units of milligrams to units of grams– how can you change your code to do the same thing for potassium?</p>
+<p>It’s extremely common in data science not to notice mistakes or discrepancies like these right away– I honestly didn’t catch the potassium thing until I looked at the means of those reshaped results. (Visualization is another great way to catch weird things in your data, we’ll talk about that next lecture). This is one of many reasons why writing <em>scripts</em> is so important– it allows you to go back and make a change in your workflow without having to rewrite all the steps that came after it.</p>
+<p>Ok, I’ve droned on for a <em>long</em> time about melting now– take a break, watch a gif of this cute animal, and let’s come back to have a discussion about melting’s sister operation, <strong>casting</strong>.</p>
+</div>
+<div id="casting" class="section level3">
+<h3>Casting</h3>
+</div>
 </div>
 
 

@@ -105,6 +105,8 @@ melt(scores, id.vars=c("student_id", "class_section"), variable.name="exam", val
 ```
 If my dataset were in that format, I could just run one quick "by" command and be done with it! (Test yourself: what command would I run on the dataset above to get the mean score by exam and class section?) 
 
+### Melting
+
 Any time you want to change the shape of your dataset, either by making multiple columns into one column or by making one column into several, it's called a **reshape** operation. The type of reshape we're describing here, where several columns become a single column, is called a **melt** or a **reshape long**. They work using the `melt` command from the `data.table` package:
 ```{r}
 melt(data=scores, id.vars=c("student_id", "class_section"))
@@ -123,6 +125,7 @@ data(UScereal) # load UScereal dataset
 UScereal$cereal_name <- rownames(UScereal) # this saves the names of cereals as an actual row, instead of an index value. not super important right now.
 UScereal <- data.table(UScereal) # convert to a data.table
 UScereal[, shelf:=NULL] # we won't need that column
+UScereal[, sodium:= sodium/1000] # this converts the units of the "sodium" column from milligrams to grams
 ```
 ```{r}
 print(head(UScereal))
@@ -138,8 +141,24 @@ To reshape this dataset as described, you would do:
 melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
 ```
 <br>
+Does that make sense? every column I put in the `id.vars section stays separate, while the rest get compressed into just two columns. So now, if I wanted to (for example) take the mean value of every different type of nutritional factor across all cereals, I wouldn't have to write out eight new column names. I could just do: 
+```{r}
+# save the melted dataset to a new data.frame object so we can make further changes
+melted_UScereal <- melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
+melted_UScereal[, list(mean_value=mean(value)), by=list(variable)]
+```
+<br>
+Put on your "data scientist" hat for a minute and look at this result. Does anything strike you as strange? Remember, I said before that every value in that list, except for calories, should count how many *grams* of each different nutritional component there are in *one serving* of cereal. 
 
+Hopefully you noticed that the mean `potassium` value is far, far higher than it should be. Most servings of cereal don't even weight 100 grams, so how could they have on average 160 grams of potassium? 
 
+This is a mistake in the documentation-- if you do `?UScereal` you'll see that the description of the dataset claims that the `potassium` column has units of grams, but it's almost certainly in milligrams instead. If you've been following along, you've noticed that we already converted one column in the dataset from units of milligrams to units of grams-- how can you change your code to do the same thing for potassium?
+
+It's extremely common in data science not to notice mistakes or discrepancies like these right away-- I honestly didn't catch the potassium thing until I looked at the means of those reshaped results. (Visualization is another great way to catch weird things in your data, we'll talk about that next lecture). This is one of many reasons why writing *scripts* is so important-- it allows you to go back and make a change in your workflow without having to rewrite all the steps that came after it. 
+
+Ok, I've droned on for a *long* time about melting now-- take a break, watch a gif of this cute animal, and let's come back to have a discussion about melting's sister operation, **casting**. 
+
+### Casting
 
 
 
