@@ -1,0 +1,78 @@
+---
+title: "Merging"
+output: html_document
+---
+
+In addition to the data manipulation gymnastics we learned last week, there are two other core tools you should have in your data wrangling toolkit: *merging* two datasets together, and *reshaping* datasets into a different format. 
+
+As always, I start out by loading some relevant libraries:
+```{r}
+library(data.table)
+```
+<br> 
+
+## Merging
+Let's say I have two datasets about students' test scores, named `scores_exam_1` and `scores_exam_2`:
+```{r}
+## note: this is how you make a data.table from scratch! The values to the left of the "=" are column names, the vectors to the right are the values. You should recognize most of these functions, except "sample". Type ?sample into your console to learn what it does.
+scores_exam_1 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
+                            student_id=c(1:5, 1:6),
+                            score_1=sample(70:100, 11, replace=T))
+print(scores_exam_1)
+
+scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
+                            student_id=c(1:5, 1:6),
+                            score_2=sample(70:100, 11, replace=T))
+print(scores_exam_2)
+```
+
+<br>
+I'd like to make these into a single dataset so that I can (for example) take the difference between the two test scores for each student, or plot one test score against the other. How can I do this? Using the `merge()` command, of course!
+
+Let's take a look back up at our datasets. Each one has three columns: `student_id`, `class_section`, and some sort of "score" variable. The `student_id` and `class_section` variables are the same in each dataset, while the "score" variable has both a *different name* and *different values*. What we'd like to end up with is a dataset with *four* variables: `student_id`, `class_section`, `score_1`, and `score_2`:
+```{r, echo=F}
+merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
+```
+
+`merge()` takes three main arguments: `x`, `y`, and `by`. `x` and `y` are the datasets you want to merge together, while `by` is a vector of the column names the two datasets have in *common*. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do: 
+```{r}
+merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
+```
+<br>
+Notice that I need to include *both* `class_section` and `student_id` in order to effectively merge my dataset, because it's only the *combination of those two* that uniquely identify a student. Let's see what happens when I try to merge with just one of those columns:
+```{r, error=T}
+merge(scores_exam_1, scores_exam_2, by=c("student_id"))
+```
+<br>
+Whoa, that's not what we wanted! That's some weird mix of stacking and merging and it's not useful. Be careful! 
+
+There's one more argument type you should be aware of in `merge()`: the `all`, `all.x`, and `all.y` arguments. To understand why they're useful, let's say that a new class section was added between exams 1 and 2, so you `scores_exam_2` actually looks like this:
+```{r}
+scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6), rep("C", 4)),
+                            student_id=c(1:5, 1:6, 1:4),
+                            score_2=sample(70:100, 15, replace=T))
+print(scores_exam_2)
+```
+<br>
+By default, the `merge` command will keep *only rows that are found in both datasets*. So running the `merge` command we ran before will get us the same outcome we had before:
+```{r}
+merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
+```
+<br>
+But what if we wanted to keep the rows from `scores_exam_2`, and just fill in with missing values for exam 1 scores? We could do that by instructing `merge` to keep *all* the rows from the *y* dataset, by setting the argument `all.y` equal to `TRUE`:
+```{r}
+merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"), all.y=TRUE)
+```
+<br>
+Now let's imagine that additionally, there's a student in section A (id number 6) who dropped after the first exam, so he doesn't show up in dataset 2:
+```{r}
+scores_exam_1 <- data.table(class_section=c(rep("A", 6), rep("B", 6)),
+                            student_id=c(1:6, 1:6),
+                            score_1=sample(70:100, 12, replace=T))
+
+print(scores_exam_1)
+```
+<br>
+You can include *just* this extra student (and nobody in section C from the other dataset), by running the `merge` command with `all.x` equal to `TRUE`. Or, if you wanted to keep all the extra rows, you could run with both `all.x` and `all.y` equal to `TRUE`. It's common enough to want to do this that `merge` has an `all` argument that, when set to `TRUE`, is equivalent to setting both `all.x` and `all.y` equal to  `TRUE`. Try it yourself!
+
+

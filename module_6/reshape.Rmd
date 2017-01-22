@@ -1,79 +1,11 @@
 ---
-title: "Merges and Reshapes"
+title: "Reshaping"
 output: html_document
 ---
 
-In addition to the data manipulation gymnastics we learned last week, there are two other core tools you should have in your data wrangling toolkit: *merging* two datasets together, and *reshaping* datasets into a different format. 
-
-As always, I start out by loading some relevant libraries:
 ```{r}
 library(data.table)
 ```
-<br> 
-## Merging
-Let's say I have two datasets about students' test scores, named `scores_exam_1` and `scores_exam_2`:
-```{r}
-## note: this is how you make a data.table from scratch! The values to the left of the "=" are column names, the vectors to the right are the values. You should recognize most of these functions, except "sample". Type ?sample into your console to learn what it does.
-scores_exam_1 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
-                            student_id=c(1:5, 1:6),
-                            score_1=sample(70:100, 11, replace=T))
-print(scores_exam_1)
-
-scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
-                            student_id=c(1:5, 1:6),
-                            score_2=sample(70:100, 11, replace=T))
-print(scores_exam_2)
-```
-
-<br>
-I'd like to make these into a single dataset so that I can (for example) take the difference between the two test scores for each student, or plot one test score against the other. How can I do this? Using the `merge()` command, of course!
-
-Let's take a look back up at our datasets. Each one has three columns: `student_id`, `class_section`, and some sort of "score" variable. The `student_id` and `class_section` variables are the same in each dataset, while the "score" variable has both a *different name* and *different values*. What we'd like to end up with is a dataset with *four* variables: `student_id`, `class_section`, `score_1`, and `score_2`:
-```{r, echo=F}
-merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
-```
-
-`merge()` takes three main arguments: `x`, `y`, and `by`. `x` and `y` are the datasets you want to merge together, while `by` is a vector of the column names the two datasets have in *common*. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do: 
-```{r}
-merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
-```
-<br>
-Notice that I need to include *both* `class_section` and `student_id` in order to effectively merge my dataset, because it's only the *combination of those two* that uniquely identify a student. Let's see what happens when I try to merge with just one of those columns:
-```{r, error=T}
-merge(scores_exam_1, scores_exam_2, by=c("student_id"))
-```
-<br>
-Whoa, that's not what we wanted! That's some weird mix of stacking and merging and it's not useful. Be careful! 
-
-There's one more argument type you should be aware of in `merge()`: the `all`, `all.x`, and `all.y` arguments. To understand why they're useful, let's say that a new class section was added between exams 1 and 2, so you `scores_exam_2` actually looks like this:
-```{r}
-scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6), rep("C", 4)),
-                            student_id=c(1:5, 1:6, 1:4),
-                            score_2=sample(70:100, 15, replace=T))
-print(scores_exam_2)
-```
-<br>
-By default, the `merge` command will keep *only rows that are found in both datasets*. So running the `merge` command we ran before will get us the same outcome we had before:
-```{r}
-merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
-```
-<br>
-But what if we wanted to keep the rows from `scores_exam_2`, and just fill in with missing values for exam 1 scores? We could do that by instructing `merge` to keep *all* the rows from the *y* dataset, by setting the argument `all.y` equal to `TRUE`:
-```{r}
-merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"), all.y=TRUE)
-```
-<br>
-Now let's imagine that additionally, there's a student in section A (id number 6) who dropped after the first exam, so he doesn't show up in dataset 2:
-```{r}
-scores_exam_1 <- data.table(class_section=c(rep("A", 6), rep("B", 6)),
-                            student_id=c(1:6, 1:6),
-                            score_1=sample(70:100, 12, replace=T))
-
-print(scores_exam_1)
-```
-<br>
-You can include *just* this extra student (and nobody in section C from the other dataset), by running the `merge` command with `all.x` equal to `TRUE`. Or, if you wanted to keep all the extra rows, you could run with both `all.x` and `all.y` equal to `TRUE`. It's common enough to want to do this that `merge` has an `all` argument that, when set to `TRUE`, is equivalent to setting both `all.x` and `all.y` equal to  `TRUE`. Try it yourself!
-
 
 ## Reshaping
 Let's go ahead and actually make a new dataset that merges the original `scores_exam_1` and `scores_exam_2`
@@ -109,7 +41,8 @@ If my dataset were in that format, I could just run one quick "by" command and b
 
 Any time you want to change the shape of your dataset, either by making multiple columns into one column or by making one column into several, it's called a **reshape** operation. The type of reshape we're describing here, where several columns become a single column, is called a **melt** or a **reshape long**. They work using the `melt` command from the `data.table` package:
 ```{r}
-melt(data=scores, id.vars=c("student_id", "class_section"))
+melted_scores <- melt(data=scores, id.vars=c("student_id", "class_section"))
+print(melted_scores)
 ```
 <br>
 The `melt` function requires two arguments: `data`, the dataset you want to reshape, and `id.vars`, a vector of all the column names you want to *keep as they are*. By default, every column that is not included in `id.vars` will get reshaped (though you can change this with the `measure.vars` argument). 
@@ -160,7 +93,49 @@ Ok, I've droned on for a *long* time about melting now-- take a break, watch a g
 
 ### Casting
 
+Ok, so now we have this new dataset called `melted_UScereal` (not the most appetizing name, but stick with me):
+```{r}
+print(melted_UScereal)
+```
+<br>
+What if I wanted to recreate my original dataset, `UScereal`? I'd have to split my `variable` and `value` columns back out into eight separate columns named `calories`, `protein`, etc. This type of reshaping, the opposite of melting, is called a **reshape wide** or a **cast**. The function for it in `data.table` is called `dcast`. To revert `melted_UScereal` back to its original format, you would write this code:
 
+```{r}
+unmelted_UScereal <- dcast(melted_UScereal, cereal_name + mfr + vitamins ~ variable, value.var="value")
+print(head(unmelted_UScereal))
+```
+<br> 
+Ta-da! Now we're back to where we started. 
 
+The syntax for `dcast` is a little unusual, let's break it down. 
 
+The first argument, as usual, is the dataset onto which we want to perform a reshaping operation. The second argument is an object we haven't seen before in R: a **formula**. We'll see these a lot in the "Regressions" module, but this is a good introduction. In this context, everything on the *left* side of the tilde `~` corresponds to the `id.vars` argument in `melt`-- these are the columns that you want to *stay as they are* in the reshaping operation. The column to the *right* side of the `~` is the column whose unique entries you want to turn into column names. Here, the only values of `variable` are `calories`, `protein`, `fat`, `sodium`, `fibre`, `carbo`, `sugars`, and `potassium`, and you want to create eight columns with those same names. 
 
+The final argument, `value.var`, is the column whose entries you want to reshape to fill the columns that you've just created. This diagram gives an excellent breakdown of a casting operation:
+
+[insert dcast figure]
+
+For another example, let's go back to our student test scores. Up above we melted the dataset so that exam type was *long*:
+```{r}
+melted_scores
+```
+What would we do if we wanted to reshape this dataset wide again, so that exam type was *wide*? See if you can figure it out before you look at the answer.
+
+Ready?
+
+```{r}
+dcast(melted_scores, student_id + class_section ~ variable, value.var="value")
+```
+<br>
+Excellent, now we're back to where we started.
+
+You can use casting to do more than simply reverse the effects of a melting operation. You can reshape wide on any variable you want. For example, what if I wanted a new column for each class section, instead of each exam? Can you work out the code for that?
+
+When you're ready, here's the solution:
+```{r}
+dcast(melted_scores, student_id + variable ~ class_section, value.var="value")
+```
+<br>
+Here, the first row is comparing the grades of the two students in each section who happen to have a student_id of 1. Notice that there are missing values in the last row because there is no "student 6" in section A.
+
+Reshaping is nonintuitive and takes some getting used to, but is an extremely valuable tool in efficiently analyzing and plotting your data. Practice makes perfect! 

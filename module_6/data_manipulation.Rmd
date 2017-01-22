@@ -32,7 +32,7 @@ Now let's see what type of object `Salaries` is:
 class(Salaries)
 ```
 <br>
-Why does `Salaries` have two types now? Well, the dataset hasn't lost a lot of it's `data.frame` functionality, `data.table` is just sort of a helper that sits on top and makes things easier. The important part here is that this object now *also* has type `data.table`. If an operation isn't working on your dataset, it's useful to check the class to make sure you remembered to convert it into a `data.table`. 
+Why does `Salaries` have two types now? Well, the dataset hasn't lost a lot of its `data.frame` functionality, `data.table` is just sort of a helper that sits on top and makes things easier. The important part here is that this object now *also* has type `data.table`. If an operation isn't working on your dataset, it's useful to check the class to make sure you remembered to convert it into a `data.table`. 
 
 Also, check this out:
 ```{r}
@@ -54,7 +54,7 @@ Last time I introduced you to the convention that indexing operations in 2D arra
 Of the three, `i` is the one that works most like it used to when we talked about indexing last lecture. `i` is still used in `data.table` to **select** a set of rows:
 ```{r}
 Salaries[1] # select the first row
-Salaries[1:10] # select the first ten lines
+Salaries[1:10] # select the first ten rows
 ```
 <br> 
 You should notice two things about the code above. First off, I didn't add a comma after my `i` statement-- `data.table` assumes that if you don't add any commas after a statement in brackets, it *must* be an `i` statement. You can add commas if you want to-- `Salaries[1]`, `Salaries[1,]`, and `Salaries[1,,]` are equivalent.
@@ -63,7 +63,7 @@ Secondly, notice that even after these operations on `Salaries`, the `Salaries` 
 ```{r}
 print(Salaries)
 ```
-This is because an operation **only changes the value of an object if you assign it to that object's name**. This seemed to be a sticking point in the Intro to R quiz. If I have a vector named `example_vector` equal to `c(3, 5, 12, 4, 15, 32, 9, 12)` and I run the command `c(example_vector,7)`, *the screen will print out the result of that concatenation observation*, but *`example_vector` will remain unchanged`. Let's verify that:
+This is because an operation **only changes the value of an object if you assign it to that object's name**. This seemed to be a sticking point in the Intro to R quiz. If I have a vector named `example_vector` equal to `c(3, 5, 12, 4, 15, 32, 9, 12)` and I run the command `c(example_vector,7)`, *the screen will print out the result of that concatenation observation*, but `example_vector` will remain unchanged`. Let's verify that:
 ```{r}
 # create example_vector, and print it to the screen
 example_vector <- c(3, 5, 12, 4, 15, 32, 9, 12)
@@ -107,6 +107,7 @@ You should notice two things about this code. The first is that, for `j` stateme
 
 The second thing to notice is that I put all the columns I wanted to keep in this thing called list(). Functionally, this is a way of subdividing the command so R doesn't get confused about which commas are between columns you want to keep, and which are separating different parts of your `data.table` statement. 
 
+
 #### Returning New Columns with `j`
 There are two different ways of making new columns in `data.table`. The first makes a new column in whatever subset of the data you return with your `j` statement. Let's say we want to select the "sex", "discipline", and "salary" columns of the dataset, but we wanted to rename the "discipline" column to "department". One way to do that would be:
 ```{r}
@@ -115,9 +116,12 @@ Salaries[, list(department=discipline, sex, salary)]
 <br>
 Here, we made a new column in the operation output by simply setting one column equal to another. But you can also do more complicated operations:
 ```{r}
-Salaries[, list(discipline, sex, salary, mean.salary=mean(salary))] # creates a column called "mean.salary" that's equal to the mean salary value across the whole dataset
-Salaries[, list(discipline, sex, salary, is.wealthy=salary>150000)] # creates a column called "is.wealthy" that's equal to TRUE or FALSE depending on each indivdual's salary
-Salaries[, list(discipline, sex, salary, yrs.diff=yrs.since.phd-yrs.service)] # creates a column called "yrs.diff" that's equal to the difference between yrs.since.phd and yrs.service
+# create a column called "mean.salary" equal to the mean salary value across the whole dataset
+Salaries[, list(discipline, sex, salary, mean.salary=mean(salary))] 
+# create a column called "is.wealthy" equal to TRUE or FALSE depending on each individual's salary
+Salaries[, list(discipline, sex, salary, is.wealthy=salary>150000)] 
+# create a column called "yrs.diff" that's equal to the difference between yrs.since.phd and yrs.service
+Salaries[, list(discipline, sex, salary, yrs.diff=yrs.since.phd-yrs.service)] 
 ```
 
 #### Creating New Columns with `j`
@@ -173,11 +177,11 @@ You can also use `by` with the `:=` operator to make new columns that are equal 
  Salaries[, max.salary.in.rank:=max(salary), by=list(rank)]
 ```
 <br>
-**Question 1**: How would you delete that column in the dataset?
+**Question 1**: How would you delete the `max.salary.in.rank` column in the dataset? <br>
 **Question 2**: What would you type if you instead wanted to find the minimum salary, by rank and discipline?
 
 ## Combining the Three Statement Types
-You can use `i` and `j` in isolation, or with each other. `by`, again, always needs `j`. Below are some example commands. Do you understand what they do? 
+You can use `i` and `j` in isolation, or with each other. `by`, again, always needs `j`. Below are some example commands. Do you understand what they do? Try writing good comments for each line.
 
 ```{r}
 Salaries[sex=="Female", list(mean.yrs.since.phd=mean(yrs.since.phd))]

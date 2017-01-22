@@ -135,7 +135,7 @@ data(Salaries)</code></pre>
 <p><br> Now let’s see what type of object <code>Salaries</code> is:</p>
 <pre class="r"><code>class(Salaries)</code></pre>
 <pre><code>## [1] &quot;data.table&quot; &quot;data.frame&quot;</code></pre>
-<p><br> Why does <code>Salaries</code> have two types now? Well, the dataset hasn’t lost a lot of it’s <code>data.frame</code> functionality, <code>data.table</code> is just sort of a helper that sits on top and makes things easier. The important part here is that this object now <em>also</em> has type <code>data.table</code>. If an operation isn’t working on your dataset, it’s useful to check the class to make sure you remembered to convert it into a <code>data.table</code>.</p>
+<p><br> Why does <code>Salaries</code> have two types now? Well, the dataset hasn’t lost a lot of its <code>data.frame</code> functionality, <code>data.table</code> is just sort of a helper that sits on top and makes things easier. The important part here is that this object now <em>also</em> has type <code>data.table</code>. If an operation isn’t working on your dataset, it’s useful to check the class to make sure you remembered to convert it into a <code>data.table</code>.</p>
 <p>Also, check this out:</p>
 <pre class="r"><code>print(Salaries)</code></pre>
 <pre><code>##          rank discipline yrs.since.phd yrs.service  sex salary
@@ -167,7 +167,7 @@ data(Salaries)</code></pre>
 <pre class="r"><code>Salaries[1] # select the first row</code></pre>
 <pre><code>##    rank discipline yrs.since.phd yrs.service  sex salary
 ## 1: Prof          B            19          18 Male 139750</code></pre>
-<pre class="r"><code>Salaries[1:10] # select the first ten lines</code></pre>
+<pre class="r"><code>Salaries[1:10] # select the first ten rows</code></pre>
 <pre><code>##          rank discipline yrs.since.phd yrs.service    sex salary
 ##  1:      Prof          B            19          18   Male 139750
 ##  2:      Prof          B            20          16   Male 173200
@@ -194,7 +194,7 @@ data(Salaries)</code></pre>
 ## 395:     Prof          A            42          25 Male 101738
 ## 396:     Prof          A            25          15 Male  95329
 ## 397: AsstProf          A             8           4 Male  81035</code></pre>
-<p>This is because an operation <strong>only changes the value of an object if you assign it to that object’s name</strong>. This seemed to be a sticking point in the Intro to R quiz. If I have a vector named <code>example_vector</code> equal to <code>c(3, 5, 12, 4, 15, 32, 9, 12)</code> and I run the command <code>c(example_vector,7)</code>, <em>the screen will print out the result of that concatenation observation</em>, but *<code>example_vector</code> will remain unchanged`. Let’s verify that:</p>
+<p>This is because an operation <strong>only changes the value of an object if you assign it to that object’s name</strong>. This seemed to be a sticking point in the Intro to R quiz. If I have a vector named <code>example_vector</code> equal to <code>c(3, 5, 12, 4, 15, 32, 9, 12)</code> and I run the command <code>c(example_vector,7)</code>, <em>the screen will print out the result of that concatenation observation</em>, but <code>example_vector</code> will remain unchanged`. Let’s verify that:</p>
 <pre class="r"><code># create example_vector, and print it to the screen
 example_vector &lt;- c(3, 5, 12, 4, 15, 32, 9, 12)
 print(example_vector)</code></pre>
@@ -328,7 +328,8 @@ print(example_vector)</code></pre>
 ## 396:          A Male  95329
 ## 397:          A Male  81035</code></pre>
 <p><br> Here, we made a new column in the operation output by simply setting one column equal to another. But you can also do more complicated operations:</p>
-<pre class="r"><code>Salaries[, list(discipline, sex, salary, mean.salary=mean(salary))] # creates a column called &quot;mean.salary&quot; that's equal to the mean salary value across the whole dataset</code></pre>
+<pre class="r"><code># create a column called &quot;mean.salary&quot; equal to the mean salary value across the whole dataset
+Salaries[, list(discipline, sex, salary, mean.salary=mean(salary))] </code></pre>
 <pre><code>##      discipline  sex salary mean.salary
 ##   1:          B Male 139750    113706.5
 ##   2:          B Male 173200    113706.5
@@ -341,7 +342,8 @@ print(example_vector)</code></pre>
 ## 395:          A Male 101738    113706.5
 ## 396:          A Male  95329    113706.5
 ## 397:          A Male  81035    113706.5</code></pre>
-<pre class="r"><code>Salaries[, list(discipline, sex, salary, is.wealthy=salary&gt;150000)] # creates a column called &quot;is.wealthy&quot; that's equal to TRUE or FALSE depending on each indivdual's salary</code></pre>
+<pre class="r"><code># create a column called &quot;is.wealthy&quot; equal to TRUE or FALSE depending on each individual's salary
+Salaries[, list(discipline, sex, salary, is.wealthy=salary&gt;150000)] </code></pre>
 <pre><code>##      discipline  sex salary is.wealthy
 ##   1:          B Male 139750      FALSE
 ##   2:          B Male 173200       TRUE
@@ -354,7 +356,8 @@ print(example_vector)</code></pre>
 ## 395:          A Male 101738      FALSE
 ## 396:          A Male  95329      FALSE
 ## 397:          A Male  81035      FALSE</code></pre>
-<pre class="r"><code>Salaries[, list(discipline, sex, salary, yrs.diff=yrs.since.phd-yrs.service)] # creates a column called &quot;yrs.diff&quot; that's equal to the difference between yrs.since.phd and yrs.service</code></pre>
+<pre class="r"><code># create a column called &quot;yrs.diff&quot; that's equal to the difference between yrs.since.phd and yrs.service
+Salaries[, list(discipline, sex, salary, yrs.diff=yrs.since.phd-yrs.service)] </code></pre>
 <pre><code>##      discipline  sex salary yrs.diff
 ##   1:          B Male 139750        1
 ##   2:          B Male 173200        4
@@ -455,7 +458,7 @@ Salaries[, list(mean.service=mean(yrs.service), mean.salary=mean(salary)), by=li
 ## 395:             231545
 ## 396:             231545
 ## 397:              97032</code></pre>
-<p><br> <strong>Question 1</strong>: How would you delete that column in the dataset? <strong>Question 2</strong>: What would you type if you instead wanted to find the minimum salary, by rank and discipline?</p>
+<p><br> <strong>Question 1</strong>: How would you delete the <code>max.salary.in.rank</code> column in the dataset? <br> <strong>Question 2</strong>: What would you type if you instead wanted to find the minimum salary, by rank and discipline?</p>
 </div>
 </div>
 <div id="combining-the-three-statement-types" class="section level2">
@@ -469,11 +472,12 @@ Salaries[, list(mean.service=mean(yrs.service), mean.salary=mean(salary)), by=li
 ## 1:      Prof           28.63306
 ## 2:  AsstProf            5.00000
 ## 3: AssocProf           15.44444</code></pre>
-<pre class="r"><code>Salaries[sex==&quot;Male&quot;, list(mean.diff=mean(yrs.service-yrs.since.phd)), by=list(rank)]</code></pre>
+<pre class="r"><code>Salaries[sex==&quot;Male&quot;, list(mean.diff=mean(yrs.since.phd-yrs.service)), by=list(rank)]</code></pre>
 <pre><code>##         rank mean.diff
-## 1:      Prof -5.403226
-## 2:  AsstProf -2.660714
-## 3: AssocProf -3.407407</code></pre>
+## 1:      Prof  5.403226
+## 2:  AsstProf  2.660714
+## 3: AssocProf  3.407407</code></pre>
+<p>Whew, that was a <em>lot</em> of material. Go take a break, drink a smoothie, and let’s come back for some merging and reshaping operations!</p>
 </div>
 
 
