@@ -120,7 +120,7 @@ $(document).ready(function () {
 </div>
 
 
-<p>In addition to the data manipulation gymnastics we learned last week, there are two other core tools you should have in your data wrangling toolkit: <em>merging</em> two datasets together, and <em>reshaping</em> datasets into a different format.</p>
+<p>In addition to the data manipulation gymnastics we learned last week, there are two other core proficiencies you should have in your data wrangling toolkit: <em>merging</em> two datasets together, and <em>reshaping</em> datasets into a different format. Let’s start with merging.</p>
 <p>As always, I start out by loading some relevant libraries:</p>
 <pre class="r"><code>library(data.table)</code></pre>
 <p><br></p>
@@ -130,143 +130,143 @@ $(document).ready(function () {
 <pre class="r"><code>## note: this is how you make a data.table from scratch! The values to the left of the &quot;=&quot; are column names, the vectors to the right are the values. You should recognize most of these functions, except &quot;sample&quot;. Type ?sample into your console to learn what it does.
 scores_exam_1 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 6)),
                             student_id=c(1:5, 1:6),
-                            score_1=sample(70:100, 11, replace=T))
+                            score_1=sample(70:100, 11, replace=T)) # randomly generate some plausible test scores
 print(scores_exam_1)</code></pre>
 <pre><code>##     class_section student_id score_1
-##  1:             A          1      98
-##  2:             A          2      83
-##  3:             A          3      82
-##  4:             A          4      72
-##  5:             A          5      70
-##  6:             B          1      85
-##  7:             B          2      87
-##  8:             B          3      95
-##  9:             B          4      88
-## 10:             B          5      92
-## 11:             B          6      92</code></pre>
+##  1:             A          1      76
+##  2:             A          2      89
+##  3:             A          3      85
+##  4:             A          4     100
+##  5:             A          5      84
+##  6:             B          1      80
+##  7:             B          2      83
+##  8:             B          3      76
+##  9:             B          4      97
+## 10:             B          5      99
+## 11:             B          6      87</code></pre>
 <pre class="r"><code>scores_exam_2 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 6)),
                             student_id=c(1:5, 1:6),
                             score_2=sample(70:100, 11, replace=T))
 print(scores_exam_2)</code></pre>
 <pre><code>##     class_section student_id score_2
-##  1:             A          1      88
-##  2:             A          2      80
-##  3:             A          3      82
-##  4:             A          4      76
-##  5:             A          5      76
-##  6:             B          1      81
-##  7:             B          2      94
-##  8:             B          3      87
-##  9:             B          4      73
-## 10:             B          5      91
-## 11:             B          6      71</code></pre>
+##  1:             A          1      79
+##  2:             A          2      89
+##  3:             A          3      75
+##  4:             A          4      79
+##  5:             A          5      94
+##  6:             B          1      89
+##  7:             B          2      91
+##  8:             B          3      96
+##  9:             B          4      93
+## 10:             B          5      97
+## 11:             B          6      93</code></pre>
 <p><br> I’d like to make these into a single dataset so that I can (for example) take the difference between the two test scores for each student, or plot one test score against the other. How can I do this? Using the <code>merge()</code> command, of course!</p>
 <p>Let’s take a look back up at our datasets. Each one has three columns: <code>student_id</code>, <code>class_section</code>, and some sort of “score” variable. The <code>student_id</code> and <code>class_section</code> variables are the same in each dataset, while the “score” variable has both a <em>different name</em> and <em>different values</em>. What we’d like to end up with is a dataset with <em>four</em> variables: <code>student_id</code>, <code>class_section</code>, <code>score_1</code>, and <code>score_2</code>:</p>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      98      88
-##  2:             A          2      83      80
-##  3:             A          3      82      82
-##  4:             A          4      72      76
-##  5:             A          5      70      76
-##  6:             B          1      85      81
-##  7:             B          2      87      94
-##  8:             B          3      95      87
-##  9:             B          4      88      73
-## 10:             B          5      92      91
-## 11:             B          6      92      71</code></pre>
-<p><code>merge()</code> takes three main arguments: <code>x</code>, <code>y</code>, and <code>by</code>. <code>x</code> and <code>y</code> are the datasets you want to merge together, while <code>by</code> is a vector of the column names the two datasets have in <em>common</em>. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do:</p>
+##  1:             A          1      76      79
+##  2:             A          2      89      89
+##  3:             A          3      85      75
+##  4:             A          4     100      79
+##  5:             A          5      84      94
+##  6:             B          1      80      89
+##  7:             B          2      83      91
+##  8:             B          3      76      96
+##  9:             B          4      97      93
+## 10:             B          5      99      97
+## 11:             B          6      87      93</code></pre>
+<p><code>merge()</code> takes three main arguments: <code>x</code>, <code>y</code>, and <code>by</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. <code>x</code> and <code>y</code> are the datasets you want to merge together, while <code>by</code> is a vector of the column names the two datasets have in <em>common</em>. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;))</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      98      88
-##  2:             A          2      83      80
-##  3:             A          3      82      82
-##  4:             A          4      72      76
-##  5:             A          5      70      76
-##  6:             B          1      85      81
-##  7:             B          2      87      94
-##  8:             B          3      95      87
-##  9:             B          4      88      73
-## 10:             B          5      92      91
-## 11:             B          6      92      71</code></pre>
+##  1:             A          1      76      79
+##  2:             A          2      89      89
+##  3:             A          3      85      75
+##  4:             A          4     100      79
+##  5:             A          5      84      94
+##  6:             B          1      80      89
+##  7:             B          2      83      91
+##  8:             B          3      76      96
+##  9:             B          4      97      93
+## 10:             B          5      99      97
+## 11:             B          6      87      93</code></pre>
 <p><br> Notice that I need to include <em>both</em> <code>class_section</code> and <code>student_id</code> in order to effectively merge my dataset, because it’s only the <em>combination of those two</em> that uniquely identify a student. Let’s see what happens when I try to merge with just one of those columns:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;student_id&quot;))</code></pre>
 <pre><code>##     student_id class_section.x score_1 class_section.y score_2
-##  1:          1               A      98               A      88
-##  2:          1               A      98               B      81
-##  3:          1               B      85               A      88
-##  4:          1               B      85               B      81
-##  5:          2               A      83               A      80
-##  6:          2               A      83               B      94
-##  7:          2               B      87               A      80
-##  8:          2               B      87               B      94
-##  9:          3               A      82               A      82
-## 10:          3               A      82               B      87
-## 11:          3               B      95               A      82
-## 12:          3               B      95               B      87
-## 13:          4               A      72               A      76
-## 14:          4               A      72               B      73
-## 15:          4               B      88               A      76
-## 16:          4               B      88               B      73
-## 17:          5               A      70               A      76
-## 18:          5               A      70               B      91
-## 19:          5               B      92               A      76
-## 20:          5               B      92               B      91
-## 21:          6               B      92               B      71
+##  1:          1               A      76               A      79
+##  2:          1               A      76               B      89
+##  3:          1               B      80               A      79
+##  4:          1               B      80               B      89
+##  5:          2               A      89               A      89
+##  6:          2               A      89               B      91
+##  7:          2               B      83               A      89
+##  8:          2               B      83               B      91
+##  9:          3               A      85               A      75
+## 10:          3               A      85               B      96
+## 11:          3               B      76               A      75
+## 12:          3               B      76               B      96
+## 13:          4               A     100               A      79
+## 14:          4               A     100               B      93
+## 15:          4               B      97               A      79
+## 16:          4               B      97               B      93
+## 17:          5               A      84               A      94
+## 18:          5               A      84               B      97
+## 19:          5               B      99               A      94
+## 20:          5               B      99               B      97
+## 21:          6               B      87               B      93
 ##     student_id class_section.x score_1 class_section.y score_2</code></pre>
 <p><br> Whoa, that’s not what we wanted! That’s some weird mix of stacking and merging and it’s not useful. Be careful!</p>
-<p>There’s one more argument type you should be aware of in <code>merge()</code>: the <code>all</code>, <code>all.x</code>, and <code>all.y</code> arguments. To understand why they’re useful, let’s say that a new class section was added between exams 1 and 2, so you <code>scores_exam_2</code> actually looks like this:</p>
+<p>There’s one more argument type you should be aware of in <code>merge()</code>: the <code>all</code>, <code>all.x</code>, and <code>all.y</code> arguments. To understand why they’re useful, let’s say that a new class section was added between exams 1 and 2, so you <code>scores_exam_2</code> has a class section, “C”, that <code>scores_exam_1</code> lacks:</p>
 <pre class="r"><code>scores_exam_2 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 5), rep(&quot;B&quot;, 6), rep(&quot;C&quot;, 4)),
                             student_id=c(1:5, 1:6, 1:4),
                             score_2=sample(70:100, 15, replace=T))
 print(scores_exam_2)</code></pre>
 <pre><code>##     class_section student_id score_2
-##  1:             A          1      89
-##  2:             A          2      82
-##  3:             A          3      82
-##  4:             A          4      71
-##  5:             A          5      78
-##  6:             B          1      92
-##  7:             B          2      90
-##  8:             B          3      96
-##  9:             B          4      94
-## 10:             B          5      88
-## 11:             B          6      92
-## 12:             C          1      81
-## 13:             C          2      86
-## 14:             C          3      83
-## 15:             C          4      98</code></pre>
-<p><br> By default, the <code>merge</code> command will keep <em>only rows that are found in both datasets</em>. So running the <code>merge</code> command we ran before will get us the same outcome we had before:</p>
+##  1:             A          1      84
+##  2:             A          2      95
+##  3:             A          3      91
+##  4:             A          4      95
+##  5:             A          5      92
+##  6:             B          1      71
+##  7:             B          2      80
+##  8:             B          3      72
+##  9:             B          4      98
+## 10:             B          5      76
+## 11:             B          6      83
+## 12:             C          1      84
+## 13:             C          2      90
+## 14:             C          3      79
+## 15:             C          4      70</code></pre>
+<p><br> By default, the <code>merge</code> command will keep <em>only rows that are found in both datasets</em>. So running our original <code>merge</code> command will get us the same outcome we had before:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;))</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      98      89
-##  2:             A          2      83      82
-##  3:             A          3      82      82
-##  4:             A          4      72      71
-##  5:             A          5      70      78
-##  6:             B          1      85      92
-##  7:             B          2      87      90
-##  8:             B          3      95      96
-##  9:             B          4      88      94
-## 10:             B          5      92      88
-## 11:             B          6      92      92</code></pre>
-<p><br> But what if we wanted to keep the rows from <code>scores_exam_2</code>, and just fill in with missing values for exam 1 scores? We could do that by instructing <code>merge</code> to keep <em>all</em> the rows from the <em>y</em> dataset, by setting the argument <code>all.y</code> equal to <code>TRUE</code>:</p>
+##  1:             A          1      76      84
+##  2:             A          2      89      95
+##  3:             A          3      85      91
+##  4:             A          4     100      95
+##  5:             A          5      84      92
+##  6:             B          1      80      71
+##  7:             B          2      83      80
+##  8:             B          3      76      72
+##  9:             B          4      97      98
+## 10:             B          5      99      76
+## 11:             B          6      87      83</code></pre>
+<p><br> But what if we wanted to keep <em>all</em> the rows from <code>scores_exam_2</code>, and just fill in with missing values for exam 1 scores? We could do that by instructing <code>merge</code> to keep <em>all</em> the rows from the <em>y</em> dataset, by setting the argument <code>all.y</code> equal to <code>TRUE</code>:</p>
 <pre class="r"><code>merge(scores_exam_1, scores_exam_2, by=c(&quot;class_section&quot;, &quot;student_id&quot;), all.y=TRUE)</code></pre>
 <pre><code>##     class_section student_id score_1 score_2
-##  1:             A          1      98      89
-##  2:             A          2      83      82
-##  3:             A          3      82      82
-##  4:             A          4      72      71
-##  5:             A          5      70      78
-##  6:             B          1      85      92
-##  7:             B          2      87      90
-##  8:             B          3      95      96
-##  9:             B          4      88      94
-## 10:             B          5      92      88
-## 11:             B          6      92      92
-## 12:             C          1      NA      81
-## 13:             C          2      NA      86
-## 14:             C          3      NA      83
-## 15:             C          4      NA      98</code></pre>
+##  1:             A          1      76      84
+##  2:             A          2      89      95
+##  3:             A          3      85      91
+##  4:             A          4     100      95
+##  5:             A          5      84      92
+##  6:             B          1      80      71
+##  7:             B          2      83      80
+##  8:             B          3      76      72
+##  9:             B          4      97      98
+## 10:             B          5      99      76
+## 11:             B          6      87      83
+## 12:             C          1      NA      84
+## 13:             C          2      NA      90
+## 14:             C          3      NA      79
+## 15:             C          4      NA      70</code></pre>
 <p><br> Now let’s imagine that additionally, there’s a student in section A (id number 6) who dropped after the first exam, so he doesn’t show up in dataset 2:</p>
 <pre class="r"><code>scores_exam_1 &lt;- data.table(class_section=c(rep(&quot;A&quot;, 6), rep(&quot;B&quot;, 6)),
                             student_id=c(1:6, 1:6),
@@ -274,19 +274,25 @@ print(scores_exam_2)</code></pre>
 
 print(scores_exam_1)</code></pre>
 <pre><code>##     class_section student_id score_1
-##  1:             A          1      96
-##  2:             A          2      96
-##  3:             A          3      73
-##  4:             A          4      80
-##  5:             A          5      71
-##  6:             A          6      76
-##  7:             B          1      70
-##  8:             B          2      79
-##  9:             B          3      98
-## 10:             B          4      76
-## 11:             B          5      94
-## 12:             B          6      76</code></pre>
-<p><br> You can include <em>just</em> this extra student (and nobody in section C from the other dataset), by running the <code>merge</code> command with <code>all.x</code> equal to <code>TRUE</code>. Or, if you wanted to keep all the extra rows, you could run with both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. It’s common enough to want to do this that <code>merge</code> has an <code>all</code> argument that, when set to <code>TRUE</code>, is equivalent to setting both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. Try it yourself!</p>
+##  1:             A          1     100
+##  2:             A          2      70
+##  3:             A          3      79
+##  4:             A          4      76
+##  5:             A          5      92
+##  6:             A          6      97
+##  7:             B          1      90
+##  8:             B          2      85
+##  9:             B          3      76
+## 10:             B          4     100
+## 11:             B          5      71
+## 12:             B          6      94</code></pre>
+<p><br> You can include <em>just</em> this extra student (and nobody in section C from the other dataset), by running the <code>merge</code> command with <code>all.x</code> equal to <code>TRUE</code>. Or, if you wanted to keep all the extra rows in <em>both</em> datasets, you could run with both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. It’s common enough to want to do this that <code>merge</code> has an <code>all</code> argument that, when set to <code>TRUE</code>, is equivalent to setting both <code>all.x</code> and <code>all.y</code> equal to <code>TRUE</code>. Try it yourself!</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Note: No relation to the<code>by</code> argument you use within <code>data.table</code> commands!<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>
 
 

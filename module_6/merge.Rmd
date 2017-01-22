@@ -3,7 +3,7 @@ title: "Merging"
 output: html_document
 ---
 
-In addition to the data manipulation gymnastics we learned last week, there are two other core tools you should have in your data wrangling toolkit: *merging* two datasets together, and *reshaping* datasets into a different format. 
+In addition to the data manipulation gymnastics we learned last week, there are two other core proficiencies you should have in your data wrangling toolkit: *merging* two datasets together, and *reshaping* datasets into a different format. Let's start with merging.
 
 As always, I start out by loading some relevant libraries:
 ```{r}
@@ -17,7 +17,7 @@ Let's say I have two datasets about students' test scores, named `scores_exam_1`
 ## note: this is how you make a data.table from scratch! The values to the left of the "=" are column names, the vectors to the right are the values. You should recognize most of these functions, except "sample". Type ?sample into your console to learn what it does.
 scores_exam_1 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
                             student_id=c(1:5, 1:6),
-                            score_1=sample(70:100, 11, replace=T))
+                            score_1=sample(70:100, 11, replace=T)) # randomly generate some plausible test scores
 print(scores_exam_1)
 
 scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
@@ -34,7 +34,9 @@ Let's take a look back up at our datasets. Each one has three columns: `student_
 merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
 ```
 
-`merge()` takes three main arguments: `x`, `y`, and `by`. `x` and `y` are the datasets you want to merge together, while `by` is a vector of the column names the two datasets have in *common*. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do: 
+`merge()` takes three main arguments: `x`, `y`, and `by`[^1]. `x` and `y` are the datasets you want to merge together, while `by` is a vector of the column names the two datasets have in *common*. This is how R knows which row to line up with which in any given dataset. So, to merge my two datasets together, I would do: 
+
+[^1]: Note: No relation to the`by` argument you use within `data.table` commands!
 ```{r}
 merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
 ```
@@ -46,7 +48,7 @@ merge(scores_exam_1, scores_exam_2, by=c("student_id"))
 <br>
 Whoa, that's not what we wanted! That's some weird mix of stacking and merging and it's not useful. Be careful! 
 
-There's one more argument type you should be aware of in `merge()`: the `all`, `all.x`, and `all.y` arguments. To understand why they're useful, let's say that a new class section was added between exams 1 and 2, so you `scores_exam_2` actually looks like this:
+There's one more argument type you should be aware of in `merge()`: the `all`, `all.x`, and `all.y` arguments. To understand why they're useful, let's say that a new class section was added between exams 1 and 2, so you `scores_exam_2` has a class section, "C", that `scores_exam_1` lacks:
 ```{r}
 scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6), rep("C", 4)),
                             student_id=c(1:5, 1:6, 1:4),
@@ -54,12 +56,12 @@ scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6), rep("C", 4
 print(scores_exam_2)
 ```
 <br>
-By default, the `merge` command will keep *only rows that are found in both datasets*. So running the `merge` command we ran before will get us the same outcome we had before:
+By default, the `merge` command will keep *only rows that are found in both datasets*. So running our original `merge` command will get us the same outcome we had before:
 ```{r}
 merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"))
 ```
 <br>
-But what if we wanted to keep the rows from `scores_exam_2`, and just fill in with missing values for exam 1 scores? We could do that by instructing `merge` to keep *all* the rows from the *y* dataset, by setting the argument `all.y` equal to `TRUE`:
+But what if we wanted to keep *all* the rows from `scores_exam_2`, and just fill in with missing values for exam 1 scores? We could do that by instructing `merge` to keep *all* the rows from the *y* dataset, by setting the argument `all.y` equal to `TRUE`:
 ```{r}
 merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"), all.y=TRUE)
 ```
@@ -73,6 +75,6 @@ scores_exam_1 <- data.table(class_section=c(rep("A", 6), rep("B", 6)),
 print(scores_exam_1)
 ```
 <br>
-You can include *just* this extra student (and nobody in section C from the other dataset), by running the `merge` command with `all.x` equal to `TRUE`. Or, if you wanted to keep all the extra rows, you could run with both `all.x` and `all.y` equal to `TRUE`. It's common enough to want to do this that `merge` has an `all` argument that, when set to `TRUE`, is equivalent to setting both `all.x` and `all.y` equal to  `TRUE`. Try it yourself!
+You can include *just* this extra student (and nobody in section C from the other dataset), by running the `merge` command with `all.x` equal to `TRUE`. Or, if you wanted to keep all the extra rows in *both* datasets, you could run with both `all.x` and `all.y` equal to `TRUE`. It's common enough to want to do this that `merge` has an `all` argument that, when set to `TRUE`, is equivalent to setting both `all.x` and `all.y` equal to  `TRUE`. Try it yourself!
 
 
