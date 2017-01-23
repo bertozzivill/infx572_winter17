@@ -3,9 +3,17 @@ title: "Reshaping"
 output: html_document
 ---
 
-```{r}
+```{r, echo=F}
 library(data.table)
+scores_exam_1 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
+                            student_id=c(1:5, 1:6),
+                            score_1=sample(70:100, 11, replace=T))
+
+scores_exam_2 <- data.table(class_section=c(rep("A", 5), rep("B", 6)),
+                            student_id=c(1:5, 1:6),
+                            score_2=sample(70:100, 11, replace=T))
 ```
+Note: This lecture follows directly on from the "merge" page. The datasets I use here are ones that I created last lecture. 
 
 ## Reshaping
 Let's go ahead and actually make a new dataset that merges the original `scores_exam_1` and `scores_exam_2`
@@ -24,7 +32,7 @@ scores <- merge(scores_exam_1, scores_exam_2, by=c("class_section", "student_id"
 print(scores)
 ```
 <br>
-What if I wanted a new column with the mean score for each exam, by class section? I could do this:
+What if I wanted a new column with the mean score for each exam, by class section? I could do this (remember our `data.table` syntax!):
 ```{r, eval=F}
 scores[, mean_score_1:= mean(score_1), by=list(class_section)]
 scores[, mean_score_2:=mean(score_2), by=list(class_section)]
@@ -35,7 +43,7 @@ scores[, mean_score_2:=mean(score_2), by=list(class_section)]
 ```{r, echo=F}
 melt(scores, id.vars=c("student_id", "class_section"), variable.name="exam", value.name="score")
 ```
-If my dataset were in that format, I could just run one quick "by" command and be done with it! (Test yourself: what command would I run on the dataset above to get the mean score by exam and class section?) 
+If my dataset were in that format, I could just run one quick "by" command and be done with it! (Test yourself: what command would I run on the dataset above to get the *mean* score *by* exam and class section?) 
 
 ### Melting
 
@@ -51,20 +59,31 @@ The `melt` function requires two arguments: `data`, the dataset you want to resh
 
 If you don't want your new columns to be named `variable` and `value`, you can change those names with the `variable.name` and `value.name` arguments to `melt`, respectively. That's what I did in my original example of a reshaped dataset. 
 
-Let's look at another example-- a real-life dataset from the `MASS` library, about nutritional value of US cereals. Let's start by loading in the data and doing a little cleaning (remember to install the `MASS` dataset if you haven't already!)
+Let's look at another example-- a real-life dataset from the `MASS` library, about nutritional value of US cereals. Let's start by loading in the data and doing a little cleaning (remember to install the `MASS` library if you haven't already!)
 ```{r, results='hide'}
+# load MASS library and UScereal dataset
 library(MASS)
-data(UScereal) # load UScereal dataset
-UScereal$cereal_name <- rownames(UScereal) # this saves the names of cereals as an actual row, instead of an index value. not super important right now.
-UScereal <- data.table(UScereal) # convert to a data.table
+data(UScereal)
+
+# save the names of cereals as an actual row, instead of an index value
+UScereal$cereal_name <- rownames(UScereal) 
+
+# convert to a data.table
+UScereal <- data.table(UScereal) 
+
+# clean up some column values
 UScereal[, shelf:=NULL] # we won't need that column
 UScereal[, sodium:= sodium/1000] # this converts the units of the "sodium" column from milligrams to grams
+
+# rearrange the column order
+setcolorder(UScereal, c("cereal_name", "mfr", "vitamins", "calories", "protein", "fat", "sodium", "fibre", "carbo", "sugars", "potassium"))
 ```
 ```{r}
 print(head(UScereal))
 ```
 <br>
 As we can see, this dataset has multiple columns. `cereal_name` is the name brand of the cereal, `mfr` is the first initial of the manufacturer, `vitamins` is the vitamin/mineral content of the cereal (equal to either "none", "enriched", or "100%"), and all the other columns are numeric. Most of these represent the grams of protein, fat, etc. in one portion of cereal, while `calories` indicates the calories in one portion of cereal. 
+
 What if we wanted to reshape this dataset so that all the numeric values were in one column? This would leave only the `cereal_name`, `mfr`, and `vitamins` columns separate. Try to work it out yourself before looking at the solution.
 
 Ready?
@@ -74,10 +93,12 @@ To reshape this dataset as described, you would do:
 melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
 ```
 <br>
-Does that make sense? every column I put in the `id.vars section stays separate, while the rest get compressed into just two columns. So now, if I wanted to (for example) take the mean value of every different type of nutritional factor across all cereals, I wouldn't have to write out eight new column names. I could just do: 
+Does that make sense? every column I put in the `id.vars` section stays separate, while the rest get compressed into just two columns. So now, if I wanted to (for example) take the mean value of every different type of nutritional factor across all cereals, I wouldn't have to write out eight new column names. I could just do: 
 ```{r}
 # save the melted dataset to a new data.frame object so we can make further changes
 melted_UScereal <- melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
+
+# find the mean value for each nutritional category (calories, protein, etc.)
 melted_UScereal[, list(mean_value=mean(value)), by=list(variable)]
 ```
 <br>
@@ -93,7 +114,7 @@ Ok, I've droned on for a *long* time about melting now-- take a break, watch a g
 
 ### Casting
 
-Ok, so now we have this new dataset called `melted_UScereal` (not the most appetizing name, but stick with me):
+So now we have this new dataset called `melted_UScereal` (not the most appetizing name, but stick with me):
 ```{r}
 print(melted_UScereal)
 ```
@@ -129,7 +150,7 @@ dcast(melted_scores, student_id + class_section ~ variable, value.var="value")
 <br>
 Excellent, now we're back to where we started.
 
-You can use casting to do more than simply reverse the effects of a melting operation. You can reshape wide on any variable you want. For example, what if I wanted a new column for each class section, instead of each exam? Can you work out the code for that?
+You can use casting to do more than simply reverse the effects of a melting operation. You can reshape wide on any variable you want. For example, what if I wanted a new column for each *class section*, instead of each exam? Can you work out the code for that?
 
 When you're ready, here's the solution:
 ```{r}
