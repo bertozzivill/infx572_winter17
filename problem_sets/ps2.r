@@ -23,7 +23,7 @@
 ## ------------------------------------------------------------------------------------
 ## Section 3: data.table commands  ----------------------------------------------------
 
-## Convert this dataset into a data.table. Remember to *assign* it to an object named "Suicide"!
+## Convert the "Suicide" dataset into a data.table. Remember to *assign* it to an object named "Suicide"!
 
 ## Delete the "method2" and "age.group" columns from your dataset. 
 
@@ -37,6 +37,7 @@
 
 ## Delete the column "mean.freq".
 
+## ------------------------------------------------------------------------------------
 ## Section 4: Merging  ---------------------------------------------------------
 
 ## Run the code below to generate a new dataset with the frequency of suicides in neighboring East Germany:
@@ -50,13 +51,20 @@ setnames(Suicide, "Freq", "Freq.west")
 
 ## If you rerun the command above, but with the argument "all" set to true, do you get a different result? Why or why not?
 
-
+## ------------------------------------------------------------------------------------
 ## Section 5: Reshaping -----------------------------------------------------
 
 ## Melt the "suicide.all" dataset so that the "Freq.west" and "Freq.east" columns are collapsed into a single column. 
 ## Save the result of this operation to a new dataset called "melted.suicide". 
 
 ## Cast the "melted.suicide" dataset so that there is a column for each sex, which contains the death count for that sex. 
+
+
+## ------------------------------------------------------------------------------------
+## Section 6: Contemplation -----------------------------------------------------
+## You've just been working with a dataset of suicides. We've been treating them like they're just 
+## any old numbers. Is this an appropriate method of working with this dataset? How do you, as a newfangled 
+## data scientist, feel about needing to work with depressing or sensitive information?
 
 
 
