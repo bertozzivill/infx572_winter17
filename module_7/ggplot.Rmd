@@ -99,10 +99,77 @@ layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
 print(layer_1)
 ```
 <br>
-Either way, hopefully it doesn't surprise you what the `layer_1$mapping` attribute looks like. 
 
 ### Layer 2: Best-Fit Lines 
-Ok, so now I've made this nice scatterplot, and the general trend seems to be that more years since Ph.D corresponds to a higher salary. I'd like to verify this by putting one of those nice "best-fit lines"[^1] through my data.
+Ok, so now I've made this nice scatterplot, and the general trend seems to be that more years since Ph.D corresponds to a higher salary. I'd like to verify this by putting one of those nice "best-fit lines"[^1] through my data. There are rigorous ways to do this that we'll get to shortly, but a nice shortcut is a function called `geom_smooth()`. By default, `geom_smooth` will fit a curve called a `loess` to the data, so if we want to fit a straight line, we need to pass it the `method` argument `"lm"`, for "linear model":
 
 [^1]: Much much more on these next module. 
+
+```{r}
+layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm")
+print(layer_2)
+```
+<br>
+If you do `layer_2$layers`, you'll see that we've added a second layer to our `ggplot` object, for our best-fit line. 
+
+I don't love that this line is blue-- it interferes with the blue of the points behind it. I want to change it to black. Should this be inside an `aes()` function, or not?
+
+Hopefully, you said no-- I'm not trying to *map* any column of my dataset to the color of the line, I just want to change the color of the line. I can do that directly inside my `geom_smooth` function, no `aes()` needed:
+```{r}
+layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm", color="black")
+print(layer_2)
+```
+<br>
+
+### Faceting
+Remember faceting? It's another term for making subplots by splitting your dataset based on some column in the dataset. So, for example, if I wanted to split my data by `sex`, and make a subplot for each, I would do:
+```{r}
+faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm", color="black") +
+          facet_wrap(~sex)
+print(faceting)
+```
+<br>
+Notice the format of the argument to `facet_wrap`-- does it look familiar? It's a `formula` object, just like what we used for reshaping last lecture, except that there's nothing on the left side of the `~`.
+
+You can also facet in *two different directions*, using the `facet_grid` function. This is where the fact that the argument is a formula starts to make sense: the subplots are split into "rows"" by whatever is to the left of the `~`, and into columns by whatever is to the right of it: 
+```{r}
+faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm", color="black") +
+          facet_grid(discipline~sex)
+print(faceting)
+```
+<br>
+You can add the argument `scales="free"` to ether facet function to remove the imposition of shared scales:
+```{r}
+faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm", color="black") +
+          facet_grid(discipline~sex, scales="free")
+print(faceting)
+```
+
+### Labels
+The default labels that come with this plot aren't the most clear-- there's no title, and my axis labels are just my column names, which aren't super readable. I can change all three of those things with the `labs()` function: 
+```{r}
+labels <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) +
+          geom_smooth(method="lm", color="black") +
+          facet_wrap(~sex)+
+          labs(title="Years Since Ph.D and Salary, by Sex, Discipline and Rank",
+               x="Years Since Ph.D",
+               y="Salary (USD)")
+print(labels)
+```
+<br> 
+And that there is a clean, attractive, layered, faceted, mapped, and labeled ggplot object! We've made a nice plot.
+
+In this example I've just explored one geom type: `geom_point`. But there are literally dozens of others! Play around with them yourself, try starting with a simple plot and building up to a complex one. the ggplot cheat sheet and the R for Data Science chapter on plotting will both help you, especially with tricky geoms like `geom_bar`. 
+
 
