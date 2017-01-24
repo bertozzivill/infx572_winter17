@@ -1,0 +1,108 @@
+---
+title: "ggplot"
+output: 
+  html_document
+---
+
+Start off by reading this paper on the motivations and structure behind the ggplot library. This paper should give you an excellent background for how to think about a `ggplot` object, as well as introductions into common terms. 
+
+##  A Layered Grammar
+I love this paper, and the `ggplot2` package, because it presents a very different philosophy of data visualization than many of us think about. We're trained to think about graphics as "scatter plots", or "bar charts", or "coxcomb diagrams", when in reality what we're seeing is a set of *shapes* that *correspond to* some *data*, overlaid on top of a common *scheme for understanding that data*. A plot is, very literally, nothing but shapes stacked on top of each other, and thinking about them in that way allows you an immense amount of freedom in how you design them. `ggplot` strikes an excellent balance between allowing you the freedom to do whatever you like with your visualizations and providing you with excellent defaults if you don't want to get too far into the weeds. 
+
+Now that you know some theory, let's put it into practice! This page is designed to give you some basics of plotting in `ggplot2`. Whenever you print a plot, it will show up in the `Plots` tab in the panel to the bottom right of your page.
+
+`ggplot` functions are unlike anything else you'll see in R, because they work by *adding* functions to each other. You literally layer things on top of each other, using the `+` sign to add a new layer. Get used to this grammar!
+
+## Plotting Salaries
+
+### Loading Libraries and Data
+As always, we need to start by loading libraries: in this case we want `car` to load our data, `data.table` to wrangle it, and `ggplot2` to plot it. What would we do to load those libraries, and the "Salaries" dataset and convert it to a `data.table`? Hopefully, you remember:
+
+```{r}
+library(car)
+library(data.table)
+library(ggplot2)
+
+data(Salaries)
+Salaries <- data.table(Salaries)
+```
+
+Say we want to make a scatterplot, with `yrs.since.phd` on the x-axis and `salary` on the y-axis. Let's walk through this, piece by piece.
+
+### Layer 0: Bare `ggplot`
+Every `ggplot` command will begin with the function `ggplot()`. This will create an object of type `ggplot`, to which you can then add the rest of your layers. Let's start by making a completely empty `ggplot` object:
+
+```{r}
+layer_0 <- ggplot()
+print(layer_0)
+```
+<br> 
+This is... nothing. Just a grey background. But you'll notice that we've now created an object called `layer_0`, of type `ggplot`, that has some properties:
+```{r}
+class(layer_0) # what type of object is this?
+layer_0$layers # No layers so far, just an empty list
+layer_0$data # No data associated with it 
+layer_0$mapping # Nothing is "mapped" onto this dataset yet
+```
+<br>
+Our first step should be to associate some data with this plot-- `data` is the first argument to `ggplot()`
+```{r}
+layer_0 <- ggplot(data=Salaries)
+print(layer_0)
+```
+<br>
+Still no change to what we see, but look at `layer_0`'s `data` attribute now:
+```{r}
+layer_0$data
+```
+<br>
+There's data there now! We just need to tell `ggplot` what to do with it!
+
+We use the sub-function `aes()` to create **mappings** within `ggplot`. Any time you want to take the *values of a column* in your dataset and *represent them on your plot* somehow, that's called a mapping. In this case, we said that we want to map `yrs.since.phd` to the *x-axis position*, and `salary` to the *y-axis position*. So, we include an `aes` function as an argument in our `ggplot` function:
+```{r}
+layer_0 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary))
+print(layer_0)
+```
+<br> 
+Now we're getting somewhere! We've imposed a range to the axes, which comes with some default labeling and grid lines. Our `layer_0$data` attribute still looks the same, and now we also have a couple of *mappings*: 
+```{r}
+layer_0$mapping
+```
+
+### Layer 1: Points
+We've said that we want a scatterplot, but where's the "scatter"? Well, up to this point we haven't told `ggplot` *how* we want to represent our data, so it hasn't drawn anything. We need to use one of our many **geoms** to describe how we want to draw the data on the page. For a scatterplot, we use a function called `geom_point()`. This is a new layer, so it gets added on top of our `ggplot` function with a `+` sign:
+```{r}
+layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point()
+print(layer_1)
+```
+<br>
+Hey-o! That looks like a real plot! Let's see what the `layers` look like on this one:
+```{r}
+layer_1$layers
+```
+<br> 
+These are some details for a `geom_point` layer.
+
+### A New Mapping: Color
+What if we wanted each of these points to be a different color, based on the rank of each professor? Well, we have a column named `rank`, and we want to *map* it to color, so we need to put it in an `aes()` function:
+```{r}
+layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary, color=rank)) +
+          geom_point()
+print(layer_1)
+```
+<br>
+I personally prefer to associate colors with specific layers, so I would actually do something like this:
+```{r}
+layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
+          geom_point(aes(color=rank)) # notice how I associate this mapping with the *layer*, not the plot as a whole
+print(layer_1)
+```
+<br>
+Either way, hopefully it doesn't surprise you what the `layer_1$mapping` attribute looks like. 
+
+### Layer 2: Best-Fit Lines 
+Ok, so now I've made this nice scatterplot, and the general trend seems to be that more years since Ph.D corresponds to a higher salary. I'd like to verify this by putting one of those nice "best-fit lines"[^1] through my data.
+
+[^1]: Much much more on these next module. 
+
