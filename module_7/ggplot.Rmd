@@ -4,6 +4,10 @@ output:
   html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(tidy = TRUE)
+```
+
 Start off by reading this paper on the motivations and structure behind the ggplot library. This paper should give you an excellent background for how to think about a `ggplot` object, as well as introductions into common terms. 
 
 ##  A Layered Grammar
@@ -29,44 +33,46 @@ Salaries <- data.table(Salaries)
 
 Say we want to make a scatterplot, with `yrs.since.phd` on the x-axis and `salary` on the y-axis. Let's walk through this, piece by piece.
 
-### Layer 0: Bare `ggplot`
+Note that even though `ggplot` is referred to as a "layered" grammar, within plots themselves the term "layer" refers specifically to a particular `geom` drawn on the screen. The other components-- mappings, labels, coordinate systems, facets-- are each added separately. So "modular" is perhaps a better term than "layered". That's why, in the steps below, even though we modify some aspect of the plot at every step, only a few of these are actually called "layers". 
+
+### Bare `ggplot`
 Every `ggplot` command will begin with the function `ggplot()`. This will create an object of type `ggplot`, to which you can then add the rest of your layers. Let's start by making a completely empty `ggplot` object:
 
 ```{r}
-layer_0 <- ggplot()
-print(layer_0)
+base_plot <- ggplot()
+print(base_plot)
 ```
 <br> 
-This is... nothing. Just a grey background. But you'll notice that we've now created an object called `layer_0`, of type `ggplot`, that has some properties:
+This is... nothing. Just a grey background. But you'll notice that we've now created an object called `base_plot`, of type `ggplot`, that has some properties:
 ```{r}
-class(layer_0) # what type of object is this?
-layer_0$layers # No layers so far, just an empty list
-layer_0$data # No data associated with it 
-layer_0$mapping # Nothing is "mapped" onto this dataset yet
+class(base_plot) # what type of object is this?
+base_plot$layers # No layers so far, just an empty list
+base_plot$data # No data associated with it 
+base_plot$mapping # Nothing is "mapped" onto this dataset yet
 ```
 <br>
 Our first step should be to associate some data with this plot-- `data` is the first argument to `ggplot()`
 ```{r}
-layer_0 <- ggplot(data=Salaries)
-print(layer_0)
+base_plot <- ggplot(data=Salaries)
+print(base_plot)
 ```
 <br>
-Still no change to what we see, but look at `layer_0`'s `data` attribute now:
+Still no change to what we see, but look at `base_plot`'s `data` attribute now:
 ```{r}
-layer_0$data
+base_plot$data
 ```
 <br>
 There's data there now! We just need to tell `ggplot` what to do with it!
 
 We use the sub-function `aes()` to create **mappings** within `ggplot`. Any time you want to take the *values of a column* in your dataset and *represent them on your plot* somehow, that's called a mapping. In this case, we said that we want to map `yrs.since.phd` to the *x-axis position*, and `salary` to the *y-axis position*. So, we include an `aes` function as an argument in our `ggplot` function:
 ```{r}
-layer_0 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary))
-print(layer_0)
+base_plot <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary))
+print(base_plot)
 ```
 <br> 
-Now we're getting somewhere! We've imposed a range to the axes, which comes with some default labeling and grid lines. Our `layer_0$data` attribute still looks the same, and now we also have a couple of *mappings*: 
+Now we're getting somewhere! We've imposed a range to the axes, which comes with some default labeling and grid lines. Our `base_plot$data` attribute still looks the same, and now we also have a couple of *mappings*: 
 ```{r}
-layer_0$mapping
+base_plot$mapping
 ```
 
 ### Layer 1: Points
@@ -172,4 +178,56 @@ And that there is a clean, attractive, layered, faceted, mapped, and labeled ggp
 
 In this example I've just explored one geom type: `geom_point`. But there are literally dozens of others! Play around with them yourself, try starting with a simple plot and building up to a complex one. the ggplot cheat sheet and the R for Data Science chapter on plotting will both help you, especially with tricky geoms like `geom_bar`. 
 
+## Examples of Common `ggplot` Geoms
 
+I haven't included labels/titles in these to make them as simple as possible. Also see the `ggplot` cheat sheet for many more details.
+
+### Bar Plots & Relatives
+```{r}
+## Notice two things about this code. 
+## First of all, I use the `fill` argument to `aes` instead of `color`, because I want to *fill* in the bar. Using the `color` argument will only color the outline of the bar. 
+## Secondly, I don't specify a "y" aesthetic By default, `geom_bar` makes a histogram, which counts how many rows there are in each element and plots that as the "y" value.
+ggplot(Salaries, aes(x=rank)) +
+  geom_bar(aes(fill=rank))
+
+
+## Here I want to specify what my "y" value is. I do this by adding a `y` aesthetic, but I also have to change the `stat` argument in `geom_bar` so it knows to expect that `y` argument.
+## Notice also that I *collapse* my dataset down to mean values in order to make this plot make sense. What would happen if I ran this code on the entire dataset?
+ggplot(Salaries[, list(mean.salary=mean(salary)), by=list(rank)], aes(x=rank, y=mean.salary))+
+  geom_bar(aes(fill=rank), stat="identity")
+```
+
+### Line plots
+
+There isn't a natural use for a line plot in the data as it stands, because we're not tracking individuals over time (or any other variable)-- our data is *cross-sectional*. To prove it to you, here's what happens if I try to make a line plot with the data as it stands:
+```{r}
+ggplot(Salaries, aes(x=yrs.service, y=salary)) +
+  geom_line()
+
+```
+<br>
+Yikes, what a mess! It would be better to take the *mean value* across our x-value first:
+```{r}
+mean_salary_by_service <- Salaries[, list(mean.salary=mean(salary)), by=list(yrs.service)]
+ggplot(mean_salary_by_service, aes(x=yrs.service, y=mean.salary))+
+  geom_line()
+```
+<br>
+That's better! It would be nice to include a scatter plot of the original data behind it, so we can see what data we're taking the mean of. This involves attaching a different dataset and different aesthetics to each geom:
+```{r}
+ggplot() +
+  ## The 'alpha' argument denotes *transparency*: 1 is fully dark, 0 is invisible
+  geom_point(data=Salaries, aes(y=salary, x=yrs.service), alpha=0.7)+ 
+  geom_line(data=mean_salary_by_service, aes(y=mean.salary, x=yrs.service))
+```
+
+### Density Plot
+Density plots are kind of like smooth histograms-- they show you the *distribution* of a single value in your dataset. 
+```{r}
+ggplot(Salaries, aes(x=salary)) +
+  # notice the use of both "fill" and "alpha" here:
+  geom_density(aes(fill=sex), alpha=0.5) 
+```
+
+
+## Reshaping and `ggplot`.
