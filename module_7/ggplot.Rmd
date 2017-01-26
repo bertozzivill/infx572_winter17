@@ -5,22 +5,24 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(tidy = TRUE)
+knitr::opts_chunk$set(tidy = F)
 ```
 
-Start off by reading this paper on the motivations and structure behind the ggplot library. This paper should give you an excellent background for how to think about a `ggplot` object, as well as introductions into common terms. 
+Start off by reading this paper on the motivations and structure behind the ggplot library. It should give you an excellent background for how to think about a `ggplot` object, as well as introductions into common terms. 
 
 ##  A Layered Grammar
 I love this paper, and the `ggplot2` package, because it presents a very different philosophy of data visualization than many of us think about. We're trained to think about graphics as "scatter plots", or "bar charts", or "coxcomb diagrams", when in reality what we're seeing is a set of *shapes* that *correspond to* some *data*, overlaid on top of a common *scheme for understanding that data*. A plot is, very literally, nothing but shapes stacked on top of each other, and thinking about them in that way allows you an immense amount of freedom in how you design them. `ggplot` strikes an excellent balance between allowing you the freedom to do whatever you like with your visualizations and providing you with excellent defaults if you don't want to get too far into the weeds. 
 
-Now that you know some theory, let's put it into practice! This page is designed to give you some basics of plotting in `ggplot2`. Whenever you print a plot, it will show up in the `Plots` tab in the panel to the bottom right of your page.
+Now that you know some theory, let's put it into practice! This page is designed to give you some basics of plotting in `ggplot2`. Whenever you print a plot, it will show up in the `Plots` tab in the panel to the bottom right of your RStudio session.
 
-`ggplot` functions are unlike anything else you'll see in R, because they work by *adding* functions to each other. You literally layer things on top of each other, using the `+` sign to add a new layer. Get used to this grammar!
+A quick note about terminology: Wickham described `ggplot` as "a layered grammar", but to avoid confusion I think "modular" might be a better term. As you'll notice when we're constructing a plot below, "layer" actually has a specific meaning in `ggplot`: it's an instance of a single `geom` function (that is, something that actually draws data onto the screen in the form of some shape). The other plot components, like labels and faceting and coordinates, are *added on* in the same way `geoms` are, but they are *not* referred to as "layers". For clarity, I'll refer to any modularized plot component as a "component", and only to layers specifically as "layers".
+
+`ggplot` functions are unlike anything else you'll see in R, because they work by *adding* functions to each other. You literally stack things on top of each other, using the `+` sign to add a new component. Get used to this grammar!
 
 ## Plotting Salaries
 
 ### Loading Libraries and Data
-As always, we need to start by loading libraries: in this case we want `car` to load our data, `data.table` to wrangle it, and `ggplot2` to plot it. What would we do to load those libraries, and the "Salaries" dataset and convert it to a `data.table`? Hopefully, you remember:
+As always, we need to start by loading libraries: in this case we want `car` to load our data, `data.table` to wrangle it, and `ggplot2` to plot it. What would we do to load those libraries, load the "Salaries" dataset, and convert that dataset to a `data.table`? Hopefully, you remember:
 
 ```{r}
 library(car)
@@ -33,10 +35,9 @@ Salaries <- data.table(Salaries)
 
 Say we want to make a scatterplot, with `yrs.since.phd` on the x-axis and `salary` on the y-axis. Let's walk through this, piece by piece.
 
-Note that even though `ggplot` is referred to as a "layered" grammar, within plots themselves the term "layer" refers specifically to a particular `geom` drawn on the screen. The other components-- mappings, labels, coordinate systems, facets-- are each added separately. So "modular" is perhaps a better term than "layered". That's why, in the steps below, even though we modify some aspect of the plot at every step, only a few of these are actually called "layers". 
 
 ### Bare `ggplot`
-Every `ggplot` command will begin with the function `ggplot()`. This will create an object of type `ggplot`, to which you can then add the rest of your layers. Let's start by making a completely empty `ggplot` object:
+Every `ggplot` command will begin with the function `ggplot()`. This will create an object of type `ggplot`, to which you can then add the rest of your plot components. Let's start by making a completely empty `ggplot` object:
 
 ```{r}
 base_plot <- ggplot()
@@ -51,7 +52,9 @@ base_plot$data # No data associated with it
 base_plot$mapping # Nothing is "mapped" onto this dataset yet
 ```
 <br>
-Our first step should be to associate some data with this plot-- `data` is the first argument to `ggplot()`
+
+#### Data
+Our first step should be to associate some data with this plot-- `data` is the first argument to `ggplot()`:
 ```{r}
 base_plot <- ggplot(data=Salaries)
 print(base_plot)
@@ -64,7 +67,8 @@ base_plot$data
 <br>
 There's data there now! We just need to tell `ggplot` what to do with it!
 
-We use the sub-function `aes()` to create **mappings** within `ggplot`. Any time you want to take the *values of a column* in your dataset and *represent them on your plot* somehow, that's called a mapping. In this case, we said that we want to map `yrs.since.phd` to the *x-axis position*, and `salary` to the *y-axis position*. So, we include an `aes` function as an argument in our `ggplot` function:
+#### Mappings
+We use the sub-function `aes()` to create **mappings** within `ggplot`. ("aes" stands for "aesthetic".) Any time you want to take the *values of a column* in your dataset and *represent them on your plot* somehow, that's called a *mapping*, or an *aesthetic*. In this case, we said that we want to map `yrs.since.phd` to the *x-axis position*, and `salary` to the *y-axis position*. So, we include an `aes` function as an argument in our `ggplot` function:
 ```{r}
 base_plot <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary))
 print(base_plot)
@@ -76,8 +80,8 @@ base_plot$mapping
 ```
 
 ### Layer 1: Points
-We've said that we want a scatterplot, but where's the "scatter"? Well, up to this point we haven't told `ggplot` *how* we want to represent our data, so it hasn't drawn anything. We need to use one of our many **geoms** to describe how we want to draw the data on the page. For a scatterplot, we use a function called `geom_point()`. This is a new layer, so it gets added on top of our `ggplot` function with a `+` sign:
-```{r}
+We've said that we want a scatterplot, but where's the "scatter"? Well, up to this point we haven't told `ggplot` *how* we want to represent our data, so it hasn't drawn anything. We need to use one of our many **geoms** to describe how we want to draw the data on the page. For a scatterplot, we use a function called `geom_point()`. This is a new plot component, so it gets added on top of our `ggplot` function with a `+` sign:
+```{r, tidy=F}
 layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point()
 print(layer_1)
@@ -99,9 +103,10 @@ print(layer_1)
 ```
 <br>
 I personally prefer to associate colors with specific layers, so I would actually do something like this:
-```{r}
+```{r, tidy=F}
 layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
-          geom_point(aes(color=rank)) # notice how I associate this mapping with the *layer*, not the plot as a whole
+          # notice how I associate this mapping with the *layer*, not the plot as a whole
+          geom_point(aes(color=rank)) 
 print(layer_1)
 ```
 <br>
@@ -111,7 +116,7 @@ Ok, so now I've made this nice scatterplot, and the general trend seems to be th
 
 [^1]: Much much more on these next module. 
 
-```{r}
+```{r, tidy=F}
 layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm")
@@ -122,10 +127,11 @@ If you do `layer_2$layers`, you'll see that we've added a second layer to our `g
 
 I don't love that this line is blue-- it interferes with the blue of the points behind it. I want to change it to black. Should this be inside an `aes()` function, or not?
 
-Hopefully, you said no-- I'm not trying to *map* any column of my dataset to the color of the line, I just want to change the color of the line. I can do that directly inside my `geom_smooth` function, no `aes()` needed:
+Hopefully, you said "no"-- I'm not trying to *map* any column of my dataset to the color of the line, I just want to change the color of the line. I can do that directly inside my `geom_smooth` function, no `aes()` needed:
 ```{r}
 layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
+          # notice the *absence* of an aes() function below
           geom_smooth(method="lm", color="black")
 print(layer_2)
 ```
@@ -137,6 +143,7 @@ Remember faceting? It's another term for making subplots by splitting your datas
 faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
+          # adding a facet_wrap component
           facet_wrap(~sex)
 print(faceting)
 ```
@@ -148,6 +155,7 @@ You can also facet in *two different directions*, using the `facet_grid` functio
 faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
+          # here's a facet_grid component instead
           facet_grid(discipline~sex)
 print(faceting)
 ```
@@ -168,15 +176,16 @@ labels <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
           facet_wrap(~sex)+
+          # adding labels
           labs(title="Years Since Ph.D and Salary, by Sex, Discipline and Rank",
                x="Years Since Ph.D",
                y="Salary (USD)")
 print(labels)
 ```
 <br> 
-And that there is a clean, attractive, layered, faceted, mapped, and labeled ggplot object! We've made a nice plot.
+And that there is a clean, attractive, layered, faceted, mapped, and labeled ggplot object! We've made a nice plot, and explored how each component of it is *modular*, *removable*, and *customizeable*.
 
-In this example I've just explored one geom type: `geom_point`. But there are literally dozens of others! Play around with them yourself, try starting with a simple plot and building up to a complex one. the ggplot cheat sheet and the R for Data Science chapter on plotting will both help you, especially with tricky geoms like `geom_bar`. 
+In this example I've just explored one geom type: `geom_point`. But there are literally dozens of others! Play around with them yourself, try starting with a simple plot and building up to a complex one. the [ggplot cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) and the [R for Data Science chapter on `ggplot`](http://r4ds.had.co.nz/data-visualisation.html) will both help you, especially with tricky geoms like `geom_bar`. 
 
 ## Examples of Common `ggplot` Geoms
 
@@ -185,14 +194,22 @@ I haven't included labels/titles in these to make them as simple as possible. Al
 ### Bar Plots & Relatives
 ```{r}
 ## Notice two things about this code. 
-## First of all, I use the `fill` argument to `aes` instead of `color`, because I want to *fill* in the bar. Using the `color` argument will only color the outline of the bar. 
-## Secondly, I don't specify a "y" aesthetic By default, `geom_bar` makes a histogram, which counts how many rows there are in each element and plots that as the "y" value.
+## First of all, I use the `fill` argument to `aes` instead of `color`,
+## because I want to *fill* in the bar. Using the `color` argument will only color the outline of the bar. 
+
+## Secondly, I don't specify a "y" aesthetic.
+## By default, `geom_bar` makes a histogram, which counts how many rows there are in each element 
+## and plots that as the "y" value.
 ggplot(Salaries, aes(x=rank)) +
   geom_bar(aes(fill=rank))
 
 
-## Here I want to specify what my "y" value is. I do this by adding a `y` aesthetic, but I also have to change the `stat` argument in `geom_bar` so it knows to expect that `y` argument.
-## Notice also that I *collapse* my dataset down to mean values in order to make this plot make sense. What would happen if I ran this code on the entire dataset?
+## Here I want a bar plot with a `y` compoent that I specify: the mean salary, by rank.  
+## I do this by adding a `y` aesthetic, but I also have to change the `stat` argument in `geom_bar`
+## so it knows to expect that `y` argument.
+
+## Notice also that I *aggregate* my dataset down to mean values in order to make this plot make sense. 
+## What would happen if I ran this code on the entire dataset?
 ggplot(Salaries[, list(mean.salary=mean(salary)), by=list(rank)], aes(x=rank, y=mean.salary))+
   geom_bar(aes(fill=rank), stat="identity")
 ```
@@ -220,6 +237,9 @@ ggplot() +
   geom_point(data=Salaries, aes(y=salary, x=yrs.service), alpha=0.7)+ 
   geom_line(data=mean_salary_by_service, aes(y=mean.salary, x=yrs.service))
 ```
+<br>
+Notice how different my plotting code looks here. My `ggplot` object is completely empty, and I have a different `data` argument and different `aes` components for each `geom`. In general, the `ggplot` functions should contain whatever arguments and aesthetics you want to apply to the *entire* dataset, and the `geom` functions should contain only those things that apply to a single `geom` specifically.
+
 
 ### Density Plot
 Density plots are kind of like smooth histograms-- they show you the *distribution* of a single value in your dataset. 
@@ -253,9 +273,9 @@ setcolorder(UScereal, c("cereal_name", "mfr", "vitamins", "calories", "protein",
 ```{r}
 print(head(UScereal))
 ```
-Let's say I want to make a density plot for each of the numeric column values, colored by vitamin type. I could write eight different plots, or I could put them into a loop, but what if there were some way to make each one into a subplot of one bit plot? 
+Let's say I want to make a density plot for each of the numeric column values, colored by vitamin type. I could write eight different plots, or I could write a loop that creates plots, but it would be great if there were some way to plot all of them all at once.
 
-Well, I can't use `facet_wrap` right now, because that only works when there's one column that has *the names of the categories I want to facet on* and one column that has *the values of those categories*. Why does that data structure sound familiar...?
+`facet_wrap` seems like an obvious choice, but I can't use it with the dataset as it stands. `facet_wrap` only works when there's one column that has *the names of the categories I want to facet on* and one column that has *the values of those categories*. Why does that data structure sound familiar...? 
 
 Let's see how we can easily make this plot:
 ```{r}
@@ -272,3 +292,5 @@ ggplot(melted_UScereal, aes(x=value)) +
 <br>
 So much better than a loop, or eight completely individual plots! Reshaping is incredibly useful for plotting.
 
+
+This is a lot of information, and `ggplot` takes some getting used to, but it's just about the best plotting library I've found in any programming language. I encourage you to practice on your own and see what you can come up with-- the [ggplot cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf), [Wickham's `ggplot` chapter in "R for Data Science"](http://r4ds.had.co.nz/data-visualisation.html), and the Internet's forums are all there to help you when you get stuck. 
