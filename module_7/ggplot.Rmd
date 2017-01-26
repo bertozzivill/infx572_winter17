@@ -230,4 +230,45 @@ ggplot(Salaries, aes(x=salary)) +
 ```
 
 
-## Reshaping and `ggplot`.
+## Reshaping and `ggplot`
+Why did I spend all that time last lecture telling you about reshaping? When is it useful? Well, let's take a look back at that cereal dataset:
+```{r, results='hide'}
+# load MASS library and UScereal dataset
+library(MASS)
+data(UScereal)
+
+# save the names of cereals as an actual row, instead of an index value
+UScereal$cereal_name <- rownames(UScereal) 
+
+# convert to a data.table
+UScereal <- data.table(UScereal) 
+
+# clean up some column values
+UScereal[, shelf:=NULL] # we won't need that column
+UScereal[, sodium:= sodium/1000] # this converts the units of the "sodium" column from milligrams to grams
+
+# rearrange the column order
+setcolorder(UScereal, c("cereal_name", "mfr", "vitamins", "calories", "protein", "fat", "sodium", "fibre", "carbo", "sugars", "potassium"))
+```
+```{r}
+print(head(UScereal))
+```
+Let's say I want to make a density plot for each of the numeric column values, colored by vitamin type. I could write eight different plots, or I could put them into a loop, but what if there were some way to make each one into a subplot of one bit plot? 
+
+Well, I can't use `facet_wrap` right now, because that only works when there's one column that has *the names of the categories I want to facet on* and one column that has *the values of those categories*. Why does that data structure sound familiar...?
+
+Let's see how we can easily make this plot:
+```{r}
+# melt all numeric columns of the dataset
+melted_UScereal <- melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
+
+print(head(melted_UScereal))
+
+# plot this melted dataset, faceting on the "variable" column
+ggplot(melted_UScereal, aes(x=value)) +
+  geom_density(aes(fill=vitamins), alpha=0.5)+
+  facet_wrap(~variable, scales="free")
+```
+<br>
+So much better than a loop, or eight completely individual plots! Reshaping is incredibly useful for plotting.
+
