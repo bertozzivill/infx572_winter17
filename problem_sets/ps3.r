@@ -50,8 +50,8 @@ Fair[, rate:=as.factor(rate)]
 ## the y-axis is how many times that rating appears in the dataset (hint: this is the default setup for bar plots!)
 ## Color this by rating. 
 
-## Modify this bar plot so that the y-axis is the mean number of affairs, by rate. You'll have to make a new dataset
-## for this and perform an aggregation. Label it (x, y,title)
+## Modify this bar plot so that the y-axis is the mean number of affairs, by rate. You'll have to perform an aggregation. 
+## Remember to label it (x, y,title)!
 
 
 ## Subsection 3: Freestyle ---------------------------------------
