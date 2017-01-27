@@ -21,11 +21,61 @@ Now, I know you've all seen this regression line, often colloquially called a "b
 
 Remember, a line in 2D space is defined by just *two* variables: an **intercept**, which is what y-value the line has when the x-variable equals zero; and a **slope**, which refers to how steep the line is. The slope tells you how far *up* (or down) you go in the y-direction for every single unit you move to the right in the x-direction.
 
-Let's look back up at that regression line. If the *intercept* were about \$90,000, and the *slope* were about \$1,000, what we would be claiming about the relationship between the two variables is this: **"A professor with zero years since his/her Ph.D is expected to make about \$90,000 dollars, and every additional year since Ph.D adds \$1,000 to that profesor's expected salary."**
+Let's look back up at that regression line. If the *intercept* were about \$90,000, and the *slope* were about \$1,000, what we would be claiming about the relationship between the two variables is this: 
+
+**"A professor with zero years since his/her Ph.D is expected to make about \$90,000 dollars, and every additional year since Ph.D adds \$1,000 to that profesor's expected salary."**
+
+Usually the thing people are most interested in is the *slope* variable, since that's what really describes the nature of the relationship. It's often referred to as the regression *effect* or *effect size*. So, in our example above, the effect size of Years Since Ph.D on Salary is $1000 per year. 
+
+## What We Want to Do: Prove Causality. What We Can Never Actually Do: Prove Causality
+We wouldn't be running this regression if we didn't think there were a relationship between the two variables. Usually, we believe that one variable (the one on the x-axis, called the **predictor** or **independent** variable) *directly affects* the other variable (the one on the y-axis, called the **outcome** or **dependent** variable). However, in almost all cases regressions alone can never definitively prove **causation**-- they can only show whether or not two variables are **associated**-- that is, whether or not they change together. Usefully, regressions can also tell us both how *strong* and how *significant* that association is (more on significance later). 
+
+It's left to us, by way of written arguments, to try to *convince* our audience that one variable causes another. If two variables are *strongly* and *significantly* associated, and there is a *plausible and well-studied* relationship between the two variables, you can make a strong argument that the relationship is causal. 
+
+The only time that regressions *can* be used to show causation are in the cases of well-designed experimental setups that include both a *control* and an *intervention* group. For bench science, this is common-- if you want to know whether or not a drug affects cancer cells, you throw the drug onto a petri dish full of cancer cells, and see how many more cells die that a petri dish that *didn't* get the drug. Regression methods can tell you whether or not the two petri dishes had significantly different outcomes. 
+
+For data that involves humans, just about the only way to prove causation is through a *randomized control trial*, which is the same thing as the experiment described above, but with people instead of petri dishes: Take a random sample of people with cancer, give half of them a drug and half of them a placebo, and see who dies more. You also see a lot of randomized trials in advertisement and A/B testing in businesses. Outside of those realms, though, assume that you can never prove causation. 
+
+## Significance and Uncertainty
+See the slightly shaded area surrounding our regression line in the plot above? That's the **95% confidence interval** of your data. Since we're working in a Frequentist framework right now, what that means is that if you were to resample your data from the population 100 more times, 95 of those times your regression line should still fall within that shaded interval. Since any regression result is by definition an *estimate*, it's extremely important to include *uncertainty* values like confidence intervals around your estimates so you understand how strong of a signal you're capturing. If those shaded areas stretched across a huge band of salaries, we should be less trusting of our regression estimate. 
+
+A component of the regression that you *can't* see on the plot is its **significance**. Ever heard of a **p-value**? That's how statistical significance is described. 
+
+### p-value Overview
+One of the most intuitive and common ways to think of a p-value is as "the probability that your regression estimate is wrong". If your p-value is low, there's a low chance you're wrong. Awesome! 
+
+This definition of a p-value, unfortunately, is extremely **incorrect**. Here's the complete definition of a p-value:
+
+**The *p-value* is the probability of obtaining a regressinon effect greater than or equal to the effect you actually observed, if the null hypothesis is true.**
+
+Let's break this down. First off, what the heck is the null hypothesis, and what does it mean for it to be true? 
+
+The **null hypothesis** is the negation of your experimental hypothesis. In our salaries example, our hypothesis was "Years Since Ph.D is associated with Salary". So, the null hypothesis is "Years Since Ph.D has no association with Salary". The null hypothesis is always an effect size of zero. 
+
+Now, remember that in Frequentist statistics you're always imagining that there are infinitely many worlds in which you can sample data and run regressions infinitely many times. So, let's imagine that in reality, there really is no association between years since Ph.D and salary. When you sample data from professors and run a regression, in most cases you'll get an effect size very close to zero. But, because sampling is a random process and all random processes are described by *distributions*, sometimes, out of sheer bad luck, you'll sample a bunch of data that *does* show an association between years since Ph.D and salary.
+
+Imagine a normal distribution with a mean at zero. Here, the x-axis represents the effect size of our regression. Remember, the height of the curve at any given point corresponds to your probability of finding a value of *exactly that point*. If you want to know the probability of obtaining a value *greater than or equal to* a particular value, you have to take the *area under the curve* from that point to infinity.
+
+Ok, with that null hypothesis and distribution information in mind, let's review our p-value hypothesis again:
+
+**The *p-value* is the probability of obtaining a regressinon effect greater than or equal to the effect you actually observed, if the null hypothesis is true.**
+
+What this definition is saying is: Imagine a world in which the null hypothesis is true, and the true effect size is zero. If we ran this data collection and regression infinitely many times, we would get a distribution of effect sizes that maybe looks something like this:
+
+[insert normal distribution plot]
+
+Under that paradigm, it would be **extremely** unlikely that we, in the world we inhabit would randomly sample a dataset that gave us an effect size greater than or equal to $1000. (Exactly how unlikely that is is defined by the p-value.) Therefore, we can say that we probbaly don't live in a world where the null hypothesis is true. That is, we can **reject** the null hypothesis. 
+
+There's an arbitrary cutoff in statistics for when you're allowed to reject the null hypothesis: When the p-value is equal to or smaller than 0.05. That is, if there's less than a 5% chance that you'd see the effect size you got if the null hypothesis were true, you're allowed to say that your effect is **statistically significant**. We'll talk more about the problems with such a cutoff later in the course. 
+
+As a quick note: when the p-value is greater than 0.05, it **does not** mean that you "accept" the null hypothesis. You never accept the null hypothesis, you just fail to reject it. 
+
+Now that you have some understanding of what we're trying to accomplish with a regression and what metrics we use to judge how well we do, let's get into some of the details (and math) behind Ordinary Least Squares!
 
 
-## What We Want to Do: Prove Causality
 
-## What We Can Never Actually Do: Prove Causality
+
+
+
 
 
