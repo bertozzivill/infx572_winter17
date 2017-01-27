@@ -12,6 +12,8 @@
 
 ## Load the "data.table", "ggplot2", and "Ecdat" libraries. Don't have "Ecdat" installed yet? You should know what to do.
 
+
+
 ## ---------------------------------------------------------------------------------
 ## Section 2: Loading Data  ---------------------------------------------------------
 
@@ -23,6 +25,8 @@
 ## What do the values in the "religious" column indicate?
 
 ## The documentation isn't very helpful about the "education" column-- what do you think its values represent?
+
+
 
 ## ---------------------------------------------------------------------------------
 ## Section 3: Plotting  ---------------------------------------------------------
@@ -40,6 +44,7 @@
 ## Give that plot some labels (x axis, y axis, and title) that accurately describe what the plot is showing. 
 
 
+
 ## Subsection 2: Number of affairs, by marriage satisfaction ---------------------------------------
 
 ## Even though the "rate" column refers to a category, right now R thinks it's numeric. 
@@ -51,7 +56,9 @@ Fair[, rate:=as.factor(rate)]
 ## Color this by rating. 
 
 ## Modify this bar plot so that the y-axis is the mean number of affairs, by rate. You'll have to perform an aggregation. 
-## Remember to label it (x, y,title)!
+## Remember to label it (x, y, title)!
+
+
 
 
 ## Subsection 3: Freestyle ---------------------------------------

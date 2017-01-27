@@ -6,6 +6,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(tidy = F)
+out_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_7/images/"
 ```
 
 Start off by reading this paper on the motivations and structure behind the ggplot library. It should give you an excellent background for how to think about a `ggplot` object, as well as introductions into common terms. 
@@ -39,9 +40,15 @@ Say we want to make a scatterplot, with `yrs.since.phd` on the x-axis and `salar
 ### Bare `ggplot`
 Every `ggplot` command will begin with the function `ggplot()`. This will create an object of type `ggplot`, to which you can then add the rest of your plot components. Let's start by making a completely empty `ggplot` object:
 
-```{r}
+```{r, result='hide'}
 base_plot <- ggplot()
 print(base_plot)
+```
+
+```{r, include=F}
+png(paste0(out_dir, "base_plot.png"))
+print(base_plot)
+graphics.off()
 ```
 <br> 
 This is... nothing. Just a grey background. But you'll notice that we've now created an object called `base_plot`, of type `ggplot`, that has some properties:
@@ -55,9 +62,15 @@ base_plot$mapping # Nothing is "mapped" onto this dataset yet
 
 #### Data
 Our first step should be to associate some data with this plot-- `data` is the first argument to `ggplot()`:
-```{r}
+```{r, result='hide'}
 base_plot <- ggplot(data=Salaries)
 print(base_plot)
+```
+
+```{r, include=F}
+png(paste0(out_dir, "base_plot_2.png"))
+print(base_plot)
+graphics.off()
 ```
 <br>
 Still no change to what we see, but look at `base_plot`'s `data` attribute now:
@@ -69,9 +82,14 @@ There's data there now! We just need to tell `ggplot` what to do with it!
 
 #### Mappings
 We use the sub-function `aes()` to create **mappings** within `ggplot`. ("aes" stands for "aesthetic".) Any time you want to take the *values of a column* in your dataset and *represent them on your plot* somehow, that's called a *mapping*, or an *aesthetic*. In this case, we said that we want to map `yrs.since.phd` to the *x-axis position*, and `salary` to the *y-axis position*. So, we include an `aes` function as an argument in our `ggplot` function:
-```{r}
+```{r, result='hide'}
 base_plot <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary))
 print(base_plot)
+```
+```{r, include=F}
+png(paste0(out_dir, "base_plot_3.png"))
+print(base_plot)
+graphics.off()
 ```
 <br> 
 Now we're getting somewhere! We've imposed a range to the axes, which comes with some default labeling and grid lines. Our `base_plot$data` attribute still looks the same, and now we also have a couple of *mappings*: 
@@ -81,10 +99,15 @@ base_plot$mapping
 
 ### Layer 1: Points
 We've said that we want a scatterplot, but where's the "scatter"? Well, up to this point we haven't told `ggplot` *how* we want to represent our data, so it hasn't drawn anything. We need to use one of our many **geoms** to describe how we want to draw the data on the page. For a scatterplot, we use a function called `geom_point()`. This is a new plot component, so it gets added on top of our `ggplot` function with a `+` sign:
-```{r, tidy=F}
+```{r, tidy=F, result='hide'}
 layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point()
 print(layer_1)
+```
+```{r, include=F}
+png(paste0(out_dir, "layer_1.png"))
+print(layer_1)
+graphics.off()
 ```
 <br>
 Hey-o! That looks like a real plot! Let's see what the `layers` look like on this one:
@@ -96,18 +119,28 @@ These are some details for a `geom_point` layer.
 
 ### A New Mapping: Color
 What if we wanted each of these points to be a different color, based on the rank of each professor? Well, we have a column named `rank`, and we want to *map* it to color, so we need to put it in an `aes()` function:
-```{r}
+```{r, result='hide'}
 layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary, color=rank)) +
           geom_point()
 print(layer_1)
 ```
+```{r, include=F}
+png(paste0(out_dir, "layer_1_2.png"))
+print(layer_1)
+graphics.off()
+```
 <br>
 I personally prefer to associate colors with specific layers, so I would actually do something like this:
-```{r, tidy=F}
+```{r, tidy=F, result='hide'}
 layer_1 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           # notice how I associate this mapping with the *layer*, not the plot as a whole
           geom_point(aes(color=rank)) 
 print(layer_1)
+```
+```{r, include=F}
+png(paste0(out_dir, "layer_1_3.png"))
+print(layer_1)
+graphics.off()
 ```
 <br>
 
@@ -116,11 +149,16 @@ Ok, so now I've made this nice scatterplot, and the general trend seems to be th
 
 [^1]: Much much more on these next module. 
 
-```{r, tidy=F}
+```{r, tidy=F, result='hide'}
 layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm")
 print(layer_2)
+```
+```{r, include=F}
+png(paste0(out_dir, "layer_2.png"))
+print(layer_2)
+graphics.off()
 ```
 <br>
 If you do `layer_2$layers`, you'll see that we've added a second layer to our `ggplot` object, for our best-fit line. 
@@ -128,18 +166,23 @@ If you do `layer_2$layers`, you'll see that we've added a second layer to our `g
 I don't love that this line is blue-- it interferes with the blue of the points behind it. I want to change it to black. Should this be inside an `aes()` function, or not?
 
 Hopefully, you said "no"-- I'm not trying to *map* any column of my dataset to the color of the line, I just want to change the color of the line. I can do that directly inside my `geom_smooth` function, no `aes()` needed:
-```{r}
+```{r, result='hide'}
 layer_2 <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           # notice the *absence* of an aes() function below
           geom_smooth(method="lm", color="black")
 print(layer_2)
 ```
+```{r, include=F}
+png(paste0(out_dir, "layer_2_2.png"))
+print(layer_2)
+graphics.off()
+```
 <br>
 
 ### Faceting
 Remember faceting? It's another term for making subplots by splitting your dataset based on some column in the dataset. So, for example, if I wanted to split my data by `sex`, and make a subplot for each, I would do:
-```{r}
+```{r, result='hide'}
 faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
@@ -147,11 +190,16 @@ faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           facet_wrap(~sex)
 print(faceting)
 ```
+```{r, include=F}
+png(paste0(out_dir, "faceting.png"))
+print(faceting)
+graphics.off()
+```
 <br>
 Notice the format of the argument to `facet_wrap`-- does it look familiar? It's a `formula` object, just like what we used for reshaping last lecture, except that there's nothing on the left side of the `~`.
 
 You can also facet in *two different directions*, using the `facet_grid` function. This is where the fact that the argument is a formula starts to make sense: the subplots are split into "rows"" by whatever is to the left of the `~`, and into columns by whatever is to the right of it: 
-```{r}
+```{r, result='hide'}
 faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
@@ -159,19 +207,29 @@ faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           facet_grid(discipline~sex)
 print(faceting)
 ```
+```{r, include=F}
+png(paste0(out_dir, "faceting_2.png"))
+print(faceting)
+graphics.off()
+```
 <br>
 You can add the argument `scales="free"` to ether facet function to remove the imposition of shared scales:
-```{r}
+```{r, result='hide'}
 faceting <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
           facet_grid(discipline~sex, scales="free")
 print(faceting)
 ```
+```{r, include=F}
+png(paste0(out_dir, "faceting_3.png"))
+print(faceting)
+graphics.off()
+```
 
 ### Labels
 The default labels that come with this plot aren't the most clear-- there's no title, and my axis labels are just my column names, which aren't super readable. I can change all three of those things with the `labs()` function: 
-```{r}
+```{r, result='hide'}
 labels <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
           geom_point(aes(color=rank)) +
           geom_smooth(method="lm", color="black") +
@@ -181,6 +239,11 @@ labels <- ggplot(data=Salaries, aes(x=yrs.since.phd, y=salary)) +
                x="Years Since Ph.D",
                y="Salary (USD)")
 print(labels)
+```
+```{r, include=F}
+png(paste0(out_dir, "labels.png"))
+print(labels)
+graphics.off()
 ```
 <br> 
 And that there is a clean, attractive, layered, faceted, mapped, and labeled ggplot object! We've made a nice plot, and explored how each component of it is *modular*, *removable*, and *customizeable*.
@@ -192,7 +255,7 @@ In this example I've just explored one geom type: `geom_point`. But there are li
 I haven't included labels/titles in these to make them as simple as possible. Also see the `ggplot` cheat sheet for many more details.
 
 ### Bar Plots & Relatives
-```{r}
+```{r, result='hide'}
 ## Notice two things about this code. 
 ## First of all, I use the `fill` argument to `aes` instead of `color`,
 ## because I want to *fill* in the bar. Using the `color` argument will only color the outline of the bar. 
@@ -200,8 +263,9 @@ I haven't included labels/titles in these to make them as simple as possible. Al
 ## Secondly, I don't specify a "y" aesthetic.
 ## By default, `geom_bar` makes a histogram, which counts how many rows there are in each element 
 ## and plots that as the "y" value.
-ggplot(Salaries, aes(x=rank)) +
-  geom_bar(aes(fill=rank))
+bar_1<- ggplot(Salaries, aes(x=rank)) +
+        geom_bar(aes(fill=rank))
+print(bar_1)
 
 
 ## Here I want a bar plot with a `y` compoent that I specify: the mean salary, by rank.  
@@ -210,32 +274,66 @@ ggplot(Salaries, aes(x=rank)) +
 
 ## Notice also that I *aggregate* my dataset down to mean values in order to make this plot make sense. 
 ## What would happen if I ran this code on the entire dataset?
-ggplot(Salaries[, list(mean.salary=mean(salary)), by=list(rank)], aes(x=rank, y=mean.salary))+
-  geom_bar(aes(fill=rank), stat="identity")
+bar_2 <- ggplot(Salaries[, list(mean.salary=mean(salary)), by=list(rank)], aes(x=rank, y=mean.salary))+
+    geom_bar(aes(fill=rank), stat="identity")
+print(bar_2)
 ```
+```{r, include=F}
+png(paste0(out_dir, "bar_1.png"))
+print(bar_1)
+graphics.off()
+
+png(paste0(out_dir, "bar_2.png"))
+print(bar_2)
+graphics.off()
+```
+
 
 ### Line plots
 
 There isn't a natural use for a line plot in the data as it stands, because we're not tracking individuals over time (or any other variable)-- our data is *cross-sectional*. To prove it to you, here's what happens if I try to make a line plot with the data as it stands:
-```{r}
-ggplot(Salaries, aes(x=yrs.service, y=salary)) +
-  geom_line()
+```{r, result='hide'}
+line_1<- ggplot(Salaries, aes(x=yrs.service, y=salary)) +
+      geom_line()
+print(line_1)
+```
 
+```{r, include=F}
+png(paste0(out_dir, "line_1.png"))
+print(line_1)
+graphics.off()
 ```
 <br>
 Yikes, what a mess! It would be better to take the *mean value* across our x-value first:
-```{r}
+```{r, result='hide'}
 mean_salary_by_service <- Salaries[, list(mean.salary=mean(salary)), by=list(yrs.service)]
-ggplot(mean_salary_by_service, aes(x=yrs.service, y=mean.salary))+
-  geom_line()
+line_2 <- ggplot(mean_salary_by_service, aes(x=yrs.service, y=mean.salary))+
+          geom_line()
+print(line_2)
+```
+```{r, include=F}
+png(paste0(out_dir, "line_1.png"))
+print(line_1)
+graphics.off()
+
+png(paste0(out_dir, "line_2.png"))
+print(line_2)
+graphics.off()
 ```
 <br>
 That's better! It would be nice to include a scatter plot of the original data behind it, so we can see what data we're taking the mean of. This involves attaching a different dataset and different aesthetics to each geom:
-```{r}
-ggplot() +
-  ## The 'alpha' argument denotes *transparency*: 1 is fully dark, 0 is invisible
-  geom_point(data=Salaries, aes(y=salary, x=yrs.service), alpha=0.7)+ 
-  geom_line(data=mean_salary_by_service, aes(y=mean.salary, x=yrs.service))
+```{r, result='hide'}
+line_scatter <- ggplot() +
+      ## The 'alpha' argument denotes *transparency*: 1 is fully dark, 0 is invisible
+      geom_point(data=Salaries, aes(y=salary, x=yrs.service), alpha=0.7)+ 
+      geom_line(data=mean_salary_by_service, aes(y=mean.salary, x=yrs.service))
+print(line_scatter)
+```
+
+```{r, include=F}
+png(paste0(out_dir, "line_scatter.png"))
+print(line_scatter)
+graphics.off()
 ```
 <br>
 Notice how different my plotting code looks here. My `ggplot` object is completely empty, and I have a different `data` argument and different `aes` components for each `geom`. In general, the `ggplot` functions should contain whatever arguments and aesthetics you want to apply to the *entire* dataset, and the `geom` functions should contain only those things that apply to a single `geom` specifically.
@@ -243,12 +341,18 @@ Notice how different my plotting code looks here. My `ggplot` object is complete
 
 ### Density Plot
 Density plots are kind of like smooth histograms-- they show you the *distribution* of a single value in your dataset. 
-```{r}
-ggplot(Salaries, aes(x=salary)) +
-  # notice the use of both "fill" and "alpha" here:
-  geom_density(aes(fill=sex), alpha=0.5) 
+```{r, result='hide'}
+density <- ggplot(Salaries, aes(x=salary)) +
+            # notice the use of both "fill" and "alpha" here:
+            geom_density(aes(fill=sex), alpha=0.5) 
+print(density)
 ```
 
+```{r, include=F}
+png(paste0(out_dir, "density.png"))
+print(density)
+graphics.off()
+```
 
 ## Reshaping and `ggplot`
 Why did I spend all that time last lecture telling you about reshaping? When is it useful? Well, let's take a look back at that cereal dataset:
@@ -278,16 +382,23 @@ Let's say I want to make a density plot for each of the numeric column values, c
 `facet_wrap` seems like an obvious choice, but I can't use it with the dataset as it stands. `facet_wrap` only works when there's one column that has *the names of the categories I want to facet on* and one column that has *the values of those categories*. Why does that data structure sound familiar...? 
 
 Let's see how we can easily make this plot:
-```{r}
+```{r, result='hide'}
 # melt all numeric columns of the dataset
 melted_UScereal <- melt(UScereal, id.vars=c("cereal_name", "mfr", "vitamins"))
 
 print(head(melted_UScereal))
 
 # plot this melted dataset, faceting on the "variable" column
-ggplot(melted_UScereal, aes(x=value)) +
-  geom_density(aes(fill=vitamins), alpha=0.5)+
-  facet_wrap(~variable, scales="free")
+cereal <- ggplot(melted_UScereal, aes(x=value)) +
+          geom_density(aes(fill=vitamins), alpha=0.5)+
+          facet_wrap(~variable, scales="free")
+print(cereal)
+```
+
+```{r, include=F}
+png(paste0(out_dir, "cereal.png"))
+print(cereal)
+graphics.off()
 ```
 <br>
 So much better than a loop, or eight completely individual plots! Reshaping is incredibly useful for plotting.
