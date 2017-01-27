@@ -1,0 +1,31 @@
+---
+title: 'Regressions: Theory'
+output: html_document
+---
+
+Let's look back at that plot we made last module, the one showing "Years Since Ph.D"" vs Salary from the `Salaries` dataset:
+
+[insert plot here]
+
+Our human brains clearly see a pattern here: although there are some exceptions to the rule, in general it seems that the longer it's been since you got your Ph.D, the higher your salary as a professor is likely to be. However, it's a pretty hand-wavey argument to just show someone the plot and say "See? They go together!" What you really want is a rigorous statistical way to describe *how* those two variables change together, and how much of the change in one can be *attributed* to the change in the other. By far the most widespread way to achieve this goal is through **regression** methods. 
+
+## What's a Regression?
+
+Put very simply, a regression is a way of drawing this line:
+
+[insert simple regression plot]
+
+The method that we used to draw that line is called **Ordinary Least Squares** or OLS, and is one of the simplest and most powerful tools in statistics. We'll go over all its strengths and shortcomings in great detail next lecture. 
+
+Now, I know you've all seen this regression line, often colloquially called a "best-fit line", before. It's a common plotting device. But I want you to take a minute to think about what exactly it means. What we're claiming, by the act of drawing that line, is that *the relationship between Years Since Ph.D and Salary is a linear one*. *Specifically*, we're claiming that it's a **linear** relationship governed by whatever equation we used to draw that line. 
+
+Remember, a line in 2D space is defined by just *two* variables: an **intercept**, which is what y-value the line has when the x-variable equals zero; and a **slope**, which refers to how steep the line is. The slope tells you how far *up* (or down) you go in the y-direction for every single unit you move to the right in the x-direction.
+
+Let's look back up at that regression line. If the *intercept* were about \$90,000, and the *slope* were about \$1,000, what we would be claiming about the relationship between the two variables is this: **"A professor with zero years since his/her Ph.D is expected to make about \$90,000 dollars, and every additional year since Ph.D adds \$1,000 to that profesor's expected salary."**
+
+
+## What We Want to Do: Prove Causality
+
+## What We Can Never Actually Do: Prove Causality
+
+
