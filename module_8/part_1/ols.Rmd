@@ -64,4 +64,22 @@ Assumptions 1-3 are extremely important and there's a lot written about them, bu
 
 ## Other Regression Output: Standard Errors, p-Values
 
+When we learn how to run regressions in R next lecture, you'll see a lot of different regression outputs. Other than the beta values, the ones I want you to pay attention to specifically are the **standard errors** and the **p-values**. $\beta_0$ and $\beta_1$ will each have their own standard error and p-Value. We've already talked at length about p-values, but haven't mentioned standard errors yet.
+
+### Standard Errors
+Remember how, when we imagined the null hypothesis, we thought about a distribution of possible $\beta$ values, centered around 0? Well, our regression outputs can be thought of as distributions in the same way, but this time they're centered around the main $\beta$ estimate, and they have a standard deviation equal to the standard error the regression spits out. Imagine my Salaries regression has a $\beta_1$ of 1,000 and a standard error for $\beta_1$ of 100. That would mean that, based on the data we see, if we were to resample and rerun the regression infinitely many times, we would tend to always get $\beta_1$ values pretty close to 1,000:
+
+[insert narrow plot]
+
+If, on the other hand, we had a standard error of 1000, for $\beta_1$, our probability distribution of beta values would look like this :
+
+[insert wide plot]. 
+
+Standard errors are an excellent measure of *model uncertainty*. With a wide standard error, we can be much less sure that our model result is actually telling us anything. 
+
+Since the $\beta_0$ value is just an intercept, we don't usually worry about its standard error or p-value. Focus on the betas associated with variables!
+
+
+Ready to draw your own cool lines through data? Fire up your RStudio, it's time to run some regressions!
+
 
