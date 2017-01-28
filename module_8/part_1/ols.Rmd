@@ -1,0 +1,67 @@
+---
+title: "OLS"
+output: html_document
+---
+
+Ok, so you saw the cool line I got to draw through my data last lecture, and you want to know how to draw cool lines too. It's totally understandable. Let's get to it. 
+
+
+## Specifying Regressions
+As I said last lecture, what we're doing in linear regression is claiming that the relationship between our two variables is well-represented by a straight line. Last time I described that line in words. Here's how we describe it mathematically: 
+
+$$y = \beta_0 + \beta_1x + \varepsilon$$
+
+You'd read that as "y equals beta naught plus beta one times x, plus epsilon." This is just the equation for a line ($y=mx+b$), with slightly different notation. The intercept $b$ turns into $\beta_0$, the slope $m$ turns into $\beta_1$, and we add an **error term** $\varepsilon$ ("epsilon") to account for the fact that our data doesn't fall perfectly onto our regression line. We won't worry too much about the error term in this class, but we'll go over them briefly in a moment.
+
+The only information *you* have to give to a regression like this one is what variables you want to *regress*.  In the example we were using last lecture, we wanted to look at the relationship between `yrs.since.phd` (x-variable) and `salary` (y-variable). So, the equation we write would look like:
+
+$$salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
+
+What this equation says is, "I think that there's a linear relationship between `yrs.since.phd` and `salary`, but I don't know  the slope or intercept of the line that describes that relationship." You use a regression method like 0LS to find that line for you. 
+
+
+## Ordinary Least Squares
+
+Ordinary Least Squares, or "OLS", is by far the most common statistical method for calculating $\beta$ parameters. It finds those parameters by **minimizing the sum of the squares of the residuals** of the model. Stay with me, I'll explain. 
+
+Clearly, our regression line doesn't perfectly strike every point in the dataset. It would be impossible for a line to do that, unless our data itself were perfectly linear. So, for each data point, there will be some difference between the *y-value that point actually shows* and the *y-value predicted by the model*. This difference is known as the **residual**. As an example, let's look back at our regression plot from last lecture:
+
+[insert regression plot]
+
+Look at the data point at the bottom right corner of that plot. That professor has over 45 years since his Ph.D[^1], and he makes just over \$50,000 a year. However, the regression line predicts that a professor with that many years since their Ph.D should be making about \$140,000 a year. This data point has a *large residual*. Now, look at those three data points right around the 40-years-since-Ph.D range that fall almost exactly under the regression line. Those data points have *small residuals*. 
+
+[^1]: I checked, it's a man. 
+
+You can calculate the residual for every data point in your dataset by subtracting its value from the value of your hypothetical regression line:
+
+[insert residuals plot]
+
+Now, imagine *squaring* each of those residual values, then *adding them all together*. You'd get a single number describing the magnitude of all the squared residuals. OLS finds the combination of $\beta_0$ and $\beta_1$ that makes that number as small as it can possibly be given the data that you have. How it does this is quite simple if you know a little linear algebra, but we're not going to get into it here. 
+
+So, you specify your regression equation, feed that equation into a statistical software like R, and that software will perform OLS and give you back estimates of $\beta_0$ and $\beta_1$. In our example from last time, $\beta_0$ was about \$90,000 and $\beta_1$ was about \$1,000. So, our final relationship is described by this equation:
+
+$$salary = 90,000 + 1,000yrs.since.phd + \varepsilon$$
+
+Where we hang on to that error term because it reminds us that our datapoints do not fall perfectly onto the line we described-- they still have *residuals*.
+
+We can now use this equation to *predict* salaries for professors given their years since Ph.D (you ignore the error term when predicting). For example, if there were a professor with 30 years since their Ph.D, this regression would predict a salary of:
+
+$$salary = 90,000 + 1,000*30 = 120,000$$
+
+## OLS: Assumptions Were Made
+
+OLS is such a versatile and widely used algorithm because, when its assumptions are fulfilled, it guarantees an **unbiased** estimate of the true relationship. However, the assumptions OLS makes are quite strong, and are rarely fully fullfilled in real life. Specifically, OLS assumes:
+
+1. **Exogeneity**: This means that the residuals should not themselves be correlated with your predictor variable, and that the residuals should have a mean value of zero. This assumption is most often violated when there's reverse causation between the outcome and predictor variables.
+2. **No Linear Dependence**: This is only relevant when you have multiple predictor variables (see next week's material), and put simply means that you can't have two predictors that are exact multiples of each other.
+3. **Spherical Errors**: This assumption has two components:
+  + **Homoscedasticity**: This means that the variation in your data should stay constant across the x-axis. Data that's more pinched at one end and wide at the other end, like the data in our Salaries example, is *heteroscedastic* and violates this assumption.
+  + No **autocorrelation**: Autocorrelation is when one data point can be predicted from a data point immediately next to it. This happens almost exclusively in time series data. 
+4. **Correct specification**: You have to have included all relevant variables in your model. 
+
+Assumptions 1-3 are extremely important and there's a lot written about them, but it's beyond the scope of this class to explore them in much more detail. Concerns about correct model specification, however, are right down our alley. We'll talk about those extensively next week. 
+
+
+## Other Regression Output: Standard Errors, p-Values
+
+
