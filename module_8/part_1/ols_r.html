@@ -137,6 +137,143 @@ $(document).ready(function () {
 ## 395:     Prof          A            42          25 Male 101738
 ## 396:     Prof          A            25          15 Male  95329
 ## 397: AsstProf          A             8           4 Male  81035</code></pre>
+<p><br> Again, we want to regress <code>yrs.since.phd</code> on <code>salary</code>. The function that you use to run a linear regression is called <code>lm()</code>, for “linear model”. The two main arguments that <code>lm()</code> needs are a <code>formula</code> argument <em>specifying</em> the regression, and a <code>data</code> argument telling it what dataset to work with.</p>
+<div id="specifying-the-model-with-formula" class="section level3">
+<h3>Specifying the model with <code>formula</code></h3>
+<p>Remember formulas? We used them to reshape datasets and to facet plots. They’re the ones with the <code>~</code>. Also, remember how last lecture we wrote that equation that <em>specified</em> our formula? The one that had the variables we wanted to include, but didn’t have values for <span class="math inline">\(\beta_0\)</span> or <span class="math inline">\(\beta_1\)</span> yet:</p>
+<p><span class="math display">\[salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon\]</span></p>
+<p>In R, we use <code>formula</code>s to specify our model exactly the same way. A regression formula in R will always be of the format: <br> <code>y_variable ~ x_variable_1 + x_variable_2 + x_variable_3...</code> <br></p>
+<p>Where <code>y_variable</code>, <code>x_variable_1</code>, etc. are all column names in your dataset. <strong>There will never be more than one variable on the left side of the <code>~</code></strong>: You can only regress on one outcome variable at once. Today, we’re only going to have one x variable to the right side of the <code>~</code>, but in theory you could have many: we’ll get to that next week.</p>
+<p>Again, remember, <strong>outcome variable goes to the left, predictor variable(s) go to the right</strong>.</p>
+<p>The formula for the regression we want to run, then, is <code>salary ~ yrs.since.phd</code>.</p>
+<p>Notice that this is considerably more parsimonious than the big honking equation we wrote above– it doesn’t have any <span class="math inline">\(\beta\)</span>s in it, and we haven’t written out either our error term <span class="math inline">\(\varepsilon\)</span> or our intercept term <span class="math inline">\(\beta_0\)</span>. This is because a good regression will <em>always</em> include an intercept, and <em>must</em> by definition allow some room for error, so both of these terms are generated automatically by the <code>lm</code> function. We’ll still get an output for the estimated value of our <span class="math inline">\(\beta_0\)</span> even though we didn’t write out an intercept term.</p>
+<p>Similarly, we don’t have to write out any <span class="math inline">\(\beta\)</span>s explicity because there’s the assumption that, if you’re including something in the model, you <em>must</em> want to associate a <span class="math inline">\(\beta\)</span> with it. So, what the <code>lm</code> function interprets when it sees <code>salary ~ yrs.since.phd</code> is “Run a linear regression with an outcome variable of <code>salary</code> and a predictor variable of <code>yrs.since.phd</code>. Return <span class="math inline">\(\beta\)</span> values both for <code>yrs.since.phd</code> and for the intercept.”</p>
+</div>
+<div id="pointing-to-data-with-data" class="section level3">
+<h3>Pointing to data with <code>data</code></h3>
+<p>The data argument is easy, it’s just the name of your dataset.</p>
+</div>
+<div id="putting-it-together" class="section level3">
+<h3>Putting it Together</h3>
+<p>It’s finally time to run our first regression. The <code>formula</code> argument comes before the <code>data</code> one, so we write:</p>
+<pre class="r"><code>regression_output &lt;- lm(salary ~ yrs.since.phd, data=Salaries)
+print(regression_output)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = salary ~ yrs.since.phd, data = Salaries)
+## 
+## Coefficients:
+##   (Intercept)  yrs.since.phd  
+##       91718.7          985.3</code></pre>
+<p><br> And there we have it! This linear regression predicts an intercept value (<span class="math inline">\(\beta_0\)</span>) of $91,718.70, and a coefficient on <code>yrs.since.phd</code> (i.e. a <span class="math inline">\(\beta_1\)</span>) of $985.30. Remember how to interpret these regression outputs from our first regression lecture?</p>
+<p><strong>“A professor with zero years since his/her Ph.D is expected to make $91,718.70, and every additional year since Ph.D adds $985.30 to that profesor’s expected salary.”</strong></p>
+<p>Just printing out the output of a regression gives you the bare minimum of information about it: what regression you ran, and what your <span class="math inline">\(\beta\)</span> values were. You can get much richer information by calling <code>summary</code> on your regression output, but it can be kind of hard to interpret. Let’s review it below.</p>
+</div>
+</div>
+<div id="interpreting-regression-output" class="section level2">
+<h2>Interpreting Regression Output</h2>
+<p>Running <code>print(regression_output)</code> gave us results that were easy to interpret, but which didn’t contain much information. Let’s try this instead:</p>
+<pre class="r"><code>summary(regression_output)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = salary ~ yrs.since.phd, data = Salaries)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -84171 -19432  -2858  16086 102383 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    91718.7     2765.8  33.162   &lt;2e-16 ***
+## yrs.since.phd    985.3      107.4   9.177   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 27530 on 395 degrees of freedom
+## Multiple R-squared:  0.1758, Adjusted R-squared:  0.1737 
+## F-statistic: 84.23 on 1 and 395 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><br> Whoa! That’s a lot more information! Let’s walk through each section at a time.</p>
+<div id="call" class="section level3">
+<h3><code>Call</code></h3>
+<p>This is the same as when you use your <code>print</code> command– just an echo of specifically what code you ran to generate this regression output. Useful for reference.</p>
+</div>
+<div id="residuals" class="section level3">
+<h3><code>Residuals</code></h3>
+<p>Remember what residuals are? They’re the difference between every data point and the predicted regression line. If you do <code>regression_output$residuals</code>, you’ll see that the residuals are a <em>vector</em> with as many entries as there are rows in the dataset, specifying the residual for each data point in turn. The summarized output just shows you some range values for your residuals. Residuals are calculated by subtracting the value of the <em>regression output</em> from the value of the <em>data point</em>. So, in the regression we just ran, our predicted line is at maximum $84,171 <em>higher</em> than the data points it predicts for, and at minimum $102,383 <em>lower</em> than the data points it predicts for.</p>
+</div>
+<div id="coefficients" class="section level3">
+<h3>Coefficients</h3>
+<p>This is the main section of interest for us– it tells us about our <span class="math inline">\(\beta\)</span> values, their standard errors, and their p-values. The leftmost column is a list of all the variables that were included in the regression. Again, notice that even though we didn’t specify an Intercept term, one was generated for us automatically.</p>
+<p>The <code>Estimate</code> column gives us the estimated <span class="math inline">\(\beta\)</span> value for that variable. This is analogous to the simple output we see when we run <code>print(regression_output)</code>.</p>
+<p>The <code>Std. Error</code> column gives us the estimated standard errors for each variable. Thinking back to the distributions we made last time, we see that the standard error for the <code>yrs.since.phd</code> variable is pretty small, meaning that there’s not much uncertainty about the value of this coefficient.</p>
+<p>The <code>t value</code> column is used in the calculation of p-values, beyond the scope of this class.</p>
+<p>The confusingly-named <code>Pr(&gt;|t|)</code> column gives us p-values for each variable. The asterisks next to them, as explained in the <code>Signif. codes</code> section underneath the table, indicates how statistically significant each coefficient is. For very small numbers, p-values are specified in <em>scientific notation</em>. So <code>2e-16</code> means <span class="math inline">\(2*10^{-16}\)</span>, or <span class="math inline">\(0.0000000000000002\)</span>. That’s really, really small! Way below <span class="math inline">\(0.05\)</span>, the classic cutoff for statistical significance. You’ll see the <code>&lt;2e-16</code> p-value often: it’s what R uses when the p-value is to small to represent any other way.</p>
+</div>
+<div id="others" class="section level3">
+<h3>Others</h3>
+<p>The final three lines of this output give us some useful statistics for the regression as a whole. The only one of these I want you to pay attention to is the Adjusted R-squared value. R-squared, along with p-value, is another common statistic for assessing the goodness-of-fit of your model. the R-squared value will tell you <em>how much variation in your outcome variable can be predicted by your predictor variable</em>. If the data were a straight line, the R-squared value would be 1. If the data were random noise, R-squared would be close to zero (or could, in some cases, even be negative). Here we have an adjusted R-squared of 0.1737, meaning that only about 17% of the variance in <code>salary</code> can be explained by <code>yrs.since.phd</code>.</p>
+</div>
+<div id="some-things-to-note-about-regression-outputs" class="section level3">
+<h3>Some Things to Note About Regression Outputs:</h3>
+<ul>
+<li>The last line of the regression output specifies a p-value for the regression as a whole. <strong>IGNORE THIS VALUE</strong>. We’re only interested in p-values in the context of specific variables.</li>
+<li>The regression gives standard error and p-values for the Intercept term, but we rarely or never report these, as they don’t have much meaning. For the intercept, we’re really only interested in the <code>Estimate</code> value. For all other variables, however, you always want to report the mean (“Estimate”) value, the SE, <em>and</em> the p-value.</li>
+<li>The <code>Estimate</code> values are always in units of whatever the <em>outcome</em> variable is in units of. So everything in the <code>Estimate</code> column is in units of dollars, because the outcome variable <code>salary</code> is in units of dollars.</li>
+</ul>
+</div>
+</div>
+<div id="predicting-from-regression-outputs" class="section level2">
+<h2>Predicting From Regression Outputs</h2>
+<p>Remember our motivations for statistical analysis: inference and prediction. The regression outputs as they stand tell us everything we need to know about inference, but what about prediction? How do we guess what a person’s salary is, based on their years since Ph.D? For that, we use the <code>predict</code> function.</p>
+<p><code>predict</code> by default takes only one argument– the output of the linear regression you run. So, if we ran <code>predict(regression_output)</code> we would get a vector of predicted salary values for each professor in our dataset. It’s common to save this as a column in the dataset itself:</p>
+<pre class="r"><code>Salaries[, predicted_salary:= predict(regression_output)]</code></pre>
+<pre><code>##          rank discipline yrs.since.phd yrs.service  sex salary
+##   1:     Prof          B            19          18 Male 139750
+##   2:     Prof          B            20          16 Male 173200
+##   3: AsstProf          B             4           3 Male  79750
+##   4:     Prof          B            45          39 Male 115000
+##   5:     Prof          B            40          41 Male 141500
+##  ---                                                          
+## 393:     Prof          A            33          30 Male 103106
+## 394:     Prof          A            31          19 Male 150564
+## 395:     Prof          A            42          25 Male 101738
+## 396:     Prof          A            25          15 Male  95329
+## 397: AsstProf          A             8           4 Male  81035
+##      predicted_salary
+##   1:        110440.19
+##   2:        111425.53
+##   3:         95660.05
+##   4:        136059.08
+##   5:        131132.37
+##  ---                 
+## 393:        124234.98
+## 394:        122264.29
+## 395:        133103.05
+## 396:        116352.24
+## 397:         99601.42</code></pre>
+<p><br> See? Now we have a new column in our dataset specifying our <em>predicted</em> salaries. All that the <code>predict</code> function does is the arithmetic we did by hand last lecture: If <span class="math inline">\(\beta_0\)</span> is $91,718.70, <span class="math inline">\(\beta_1\)</span> is $985.30, and the first professor in the dataset has 19 years since his Ph.D, then his predicted salary is <span class="math inline">\(91,718.70 + 985.30*19\)</span>, or $110,440.</p>
+<p>If, instead, we want to predict salaries for <em>new</em> professors who weren’t included in the dataset, we can use the argument <code>newdata</code> to <code>predict</code> to accomplish that. First, we need to make a new dataset of professors for whom we want to predict salaries. It <em>must</em> include columns with <em>exactly the same names</em> as all our <em>predictor</em> variables. So, in this case, it <em>must</em> have a column called “yrs.since.phd”, and any other columns are optional. I’ll make a small dataset that just lists some ID value for each professor, and their yrs.since.phd:</p>
+<pre class="r"><code>new_salaries &lt;- data.table(prof.id=1:5,
+                           yrs.since.phd=c(13, 25, 3, 27, 9))
+print(new_salaries)</code></pre>
+<pre><code>##    prof.id yrs.since.phd
+## 1:       1            13
+## 2:       2            25
+## 3:       3             3
+## 4:       4            27
+## 5:       5             9</code></pre>
+<p><br> Great! Now to predict salaries for these individuals I just need to do:</p>
+<pre class="r"><code>predict(regression_output, newdata=new_salaries)</code></pre>
+<pre><code>##         1         2         3         4         5 
+## 104528.13 116352.24  94674.71 118322.92 100586.76</code></pre>
+<p><br> Or, to add a new column to this dataset:</p>
+<pre class="r"><code>new_salaries[, predicted_salary:= predict(regression_output, newdata=new_salaries)]</code></pre>
+<pre><code>##    prof.id yrs.since.phd predicted_salary
+## 1:       1            13        104528.13
+## 2:       2            25        116352.24
+## 3:       3             3         94674.71
+## 4:       4            27        118322.92
+## 5:       5             9        100586.76</code></pre>
 </div>
 
 

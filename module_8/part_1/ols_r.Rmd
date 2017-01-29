@@ -65,5 +65,139 @@ Just printing out the output of a regression gives you the bare minimum of infor
 
 ## Interpreting Regression Output
 
+Running `print(regression_output)` gave us results that were easy to interpret, but which didn't contain much information. Let's try this instead:
 
+```{r}
+summary(regression_output)
+```
+<br>
+Whoa! That's a lot more information! Let's walk through each section at a time. 
+
+### `Call`
+This is the same as when you use your `print` command-- just an echo of specifically what code you ran to generate this regression output. Useful for reference. 
+
+### `Residuals`
+Remember what residuals are? They're the difference between every data point and the predicted regression line. If you do `regression_output$residuals`, you'll see that the residuals are a *vector* with as many entries as there are rows in the dataset, specifying the residual for each data point in turn. The summarized output just shows you some range values for your residuals. Residuals are calculated by subtracting the value of the *regression output* from the value of the *data point*. So, in the regression we just ran, our predicted line is at maximum \$84,171 *higher* than the data points it predicts for, and at minimum \$102,383 *lower* than the data points it predicts for. 
+
+### Coefficients
+This is the main section of interest for us-- it tells us about our $\beta$ values, their standard errors, and their p-values. The leftmost column is a list of all the variables that were included in the regression. Again, notice that even though we didn't specify an Intercept term, one was generated for us automatically. 
+
+The `Estimate` column gives us the estimated $\beta$ value for that variable. This is analogous to the simple output we see when we run `print(regression_output)`. 
+
+The `Std. Error` column gives us the estimated standard errors for each variable. Thinking back to the distributions we made last time, we see that the standard error for the `yrs.since.phd` variable is pretty small, meaning that there's not much uncertainty about the value of this coefficient. 
+
+The `t value` column is used in the calculation of p-values, beyond the scope of this class.
+
+The confusingly-named `Pr(>|t|)` column gives us p-values for each variable. The asterisks next to them, as explained in the `Signif. codes` section underneath the table, indicates how statistically significant each coefficient is. For very small numbers, p-values are specified in *scientific notation*. So `2e-16` means $2*10^{-16}$, or $0.0000000000000002$. That's really, really small! Way below $0.05$, the classic cutoff for statistical significance. You'll see the `<2e-16` p-value often: it's what R uses when the p-value is to small to represent any other way. 
+
+### Others
+The final three lines of this output give us some useful statistics for the regression as a whole. The only one of these I want you to pay attention to is the Adjusted R-squared value. R-squared, along with p-value, is another common statistic for assessing the goodness-of-fit of your model. the R-squared value will tell you *how much variation in your outcome variable can be predicted by your predictor variable*. If the data were a straight line, the R-squared value would be 1. If the data were random noise, R-squared would be close to zero (or could, in some cases, even be negative). Here we have an adjusted R-squared of 0.1737, meaning that only about 17% of the variance in `salary` can be explained by `yrs.since.phd`. 
+
+### Some Things to Note About Regression Outputs:
+
+* The last line of the regression output specifies a p-value for the regression as a whole. **IGNORE THIS VALUE**. We're only interested in p-values in the context of specific variables. 
+* The regression gives standard error and p-values for the Intercept term, but we rarely or never report these, as they don't have much meaning. For the intercept, we're really only interested in the `Estimate` value. For all other variables, however, you always want to report the mean ("Estimate") value, the SE, *and* the p-value.
+* The `Estimate` values are always in units of whatever the *outcome* variable is in units of. So everything in the `Estimate` column is in units of dollars, because the outcome variable `salary` is in units of dollars.
+
+
+## Predicting From Regression Outputs
+
+Remember our motivations for statistical analysis: inference and prediction. The regression outputs as they stand tell us everything we need to know about inference, but what about prediction? How do we guess what a person's salary is, based on their years since Ph.D?  For that, we use the `predict` function. 
+
+`predict` by default takes only one argument-- the output of the linear regression you run. So, if we ran `predict(regression_output)` we would get a vector of predicted salary values for each professor in our dataset. It's common to save this as a column in the dataset itself:
+
+```{r}
+Salaries[, predicted_salary:= predict(regression_output)]
+```
+<br>
+See? Now we have a new column in our dataset specifying our *predicted* salaries. All that the `predict` function does is the arithmetic we did by hand last lecture: If $\beta_0$ is \$91,718.70, $\beta_1$ is \$985.30, and the first professor in the dataset has 19 years since his Ph.D, then his predicted salary is $91,718.70 + 985.30*19$, or \$110,440. 
+
+If, instead, we want to predict salaries for *new* professors who weren't included in the dataset, we can use the argument `newdata` to `predict` to accomplish that. First, we need to make a new dataset of professors for whom we want to predict salaries. It *must* include columns with *exactly the same names* as all our *predictor* variables. So, in this case, it *must* have a column called "yrs.since.phd", and any other columns are optional. I'll make a small dataset that just lists some ID value for each professor, and their yrs.since.phd:
+
+```{r}
+new_salaries <- data.table(prof.id=1:5,
+                           yrs.since.phd=c(13, 25, 3, 27, 9))
+print(new_salaries)
+```
+<br>
+Great! Now to predict salaries for these individuals I just need to do:
+```{r}
+predict(regression_output, newdata=new_salaries)
+```
+<br>
+Or, to add a new column to this dataset:
+```{r}
+new_salaries[, predicted_salary:= predict(regression_output, newdata=new_salaries)]
+```
+
+
+## Plotting Regression Outputs
+In the `ggplot` section, we learned a quick and dirty shortcut to plotting a best-fit line using `geom_smooth`. But if we go through the trouble of actually running a regression, we should plot the actual regression outputs, not the `geom_smooth`-ed line. Now that `predict` has already given us a new column in our dataset, we can accomplish this easily: just replace the `geom_smooth` geom with a `geom_line` plotting the `predicted_salary` column. Pay close attention to where I put which aesthetics:
+
+```{r}
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary)) +
+  geom_line(aes(y=predicted_salary), color="blue") +
+  labs(title="Data and Regression Line for Years Since Ph.D and Salary among Professors",
+       x="Years Since Ph.D",
+       y="Salary (USD)")
+```
+
+## Another Example: Cereal
+
+Let's load and clean the `UScereal` dataset again.
+
+```{r, results='hide'}
+# load MASS library and UScereal dataset
+library(MASS)
+data(UScereal)
+
+# save the names of cereals as an actual row, instead of an index value
+UScereal$cereal_name <- rownames(UScereal) 
+
+# convert to a data.table
+UScereal <- data.table(UScereal) 
+
+# clean up some column values
+UScereal[, shelf:=NULL] # we won't need that column
+UScereal[, sodium:= sodium/1000] # this converts the units of the "sodium" column from milligrams to grams
+UScereal[, potassium:=potassium/1000] # converts units of the "potassium" column from milligrams to grams 
+
+# rearrange the column order
+setcolorder(UScereal, c("cereal_name", "mfr", "vitamins", "calories", "protein", "fat", "sodium", "fibre", "carbo", "sugars", "potassium"))
+```
+<br>
+
+Say I'm interested in analyzing whether or not more fat per serving of a cereal corresponds to more calories per serving. I want `calories` to be my outcome variable, and `fat` to be my predictor variable. How would I specify my regression? Try it on your own before looking at the answer.
+
+...
+
+...
+
+Ready?
+
+The code to run this regression is: 
+```{r}
+cereal_output <- lm(calories ~ fat, data=UScereal)
+summary(cereal_output)
+```
+
+Using the `Salaries` example above as a guide, see if you can determine: 
+
+* What the regression coefficients are for both the intercept and the `fat` variable.
+* What the standard error and p-value is for the `fat` variable.
+* What those regression coefficients *mean*--see if you can put them in a sentence, like the one in bold above for `Salaries`.
+* What the adjusted R-squared is for this regression.
+
+Let's plot this regression! Remember, we can create a new column in the dataset with predicted values using `predict`:
+```{r, results='hide'}
+UScereal[, predicted_calories:= predict(cereal_output)]
+
+ggplot(UScereal, aes(x=fat)) +
+  geom_point(aes(y=calories)) +
+  geom_line(aes(y=predicted_calories), color="blue") +
+  labs(title = "Data and Regression Line for Fat and Calories among US Breakfast Cereals",
+       x="Fat (g per Serving)",
+       y="Calories per Serving")
+```
 
