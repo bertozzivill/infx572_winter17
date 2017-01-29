@@ -1,0 +1,69 @@
+---
+title: "OLS in R"
+output: html_document
+---
+
+Refresher: We're wondering how `yrs.since.phd` is associated with `salary` in the `Salaries` dataset from the `car` library. If you haven't already. load the necessary libraries, load this dataset, and convert it to a `data.table`. Also load the `ggplot2` library, we'll need it later.
+
+```{r, echo=F}
+library(data.table)
+library(ggplot2)
+library(car)
+
+data("Salaries")
+Salaries <- data.table(Salaries)
+```
+
+## Running a Regression
+
+Let's take a look at our dataset:
+```{r}
+print(Salaries)
+```
+<br>
+Again, we want to regress `yrs.since.phd` on `salary`. The function that you use to run a linear regression is called `lm()`, for "linear model". The two main arguments that `lm()` needs are a `formula` argument *specifying* the regression, and a `data` argument telling it what dataset to work with. 
+
+### Specifying the model with `formula`
+
+Remember formulas? We used them to reshape datasets and to facet plots. They're the ones with the `~`. Also, remember how last lecture we wrote that equation that *specified* our formula? The one that had the variables we wanted to include, but didn't have values for $\beta_0$ or $\beta_1$ yet:
+
+$$salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
+
+In R, we use `formula`s to specify our model exactly the same way. A regression formula in R will always be of the format:
+<br>
+`y_variable ~ x_variable_1 + x_variable_2 + x_variable_3...`
+<br>
+
+Where `y_variable`, `x_variable_1`, etc. are all column names in your dataset. **There will never be more than one variable on the left side of the `~`**: You can only regress on one outcome variable at once. Today, we're only going to have one x variable to the right side of the `~`, but in theory you could have many: we'll get to that next week. 
+
+Again, remember, **outcome variable goes to the left, predictor variable(s) go to the right**. 
+
+The formula for the regression we want to run, then, is `salary ~ yrs.since.phd`. 
+
+Notice that this is considerably more parsimonious than the big honking equation we wrote above-- it doesn't have any $\beta$s in it, and we haven't written out either our error term $\varepsilon$ or our intercept term $\beta_0$. This is because a good regression will *always* include an intercept, and *must* by definition allow some room for error, so both of these terms are generated automatically by the `lm` function. We'll still get an output for the estimated value of our $\beta_0$ even though we didn't write out an intercept term. 
+
+Similarly, we don't have to write out any $\beta$s explicity because there's the assumption that, if you're including something in the model, you *must* want to associate a $\beta$ with it. So, what the `lm` function interprets when it sees `salary ~ yrs.since.phd` is "Run a linear regression with an outcome variable of `salary` and a predictor variable of `yrs.since.phd`. Return $\beta$ values both for `yrs.since.phd` and for the intercept."
+
+### Pointing to data with `data`
+
+The data argument is easy, it's just the name of your dataset.
+
+### Putting it Together
+
+It's finally time to run our first regression. The `formula` argument comes before the `data` one, so we write:
+
+```{r}
+regression_output <- lm(salary ~ yrs.since.phd, data=Salaries)
+print(regression_output)
+```
+<br> 
+And there we have it! This linear regression predicts an intercept value ($\beta_0$) of \$91,718.70, and a coefficient on `yrs.since.phd` (i.e. a $\beta_1$) of \$985.30. Remember how to interpret these regression outputs from our first regression lecture?
+
+**"A professor with zero years since his/her Ph.D is expected to make \$91,718.70, and every additional year since Ph.D adds \$985.30 to that profesor's expected salary."**
+
+Just printing out the output of a regression gives you the bare minimum of information about it: what regression you ran, and what your $\beta$ values were. You can get much richer information by calling `summary` on your regression output, but it can be kind of hard to interpret. Let's review it below. 
+
+## Interpreting Regression Output
+
+
+
