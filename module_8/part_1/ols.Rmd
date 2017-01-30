@@ -21,6 +21,7 @@ What this equation says is, "I think that there's a linear relationship between 
 
 Some quick terminology: $\beta$ values like $\beta_0$ and $\beta_1$ are known as model **coefficients**.
 
+Also note: For the purposes of this module, we'll be focusing on regressions with just two variables: a *predictor* and an *outcome*. This is known as a **bivariate** regression, and it is the simplest kind. 
 
 ## Ordinary Least Squares
 
