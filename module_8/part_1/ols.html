@@ -125,10 +125,11 @@ $(document).ready(function () {
 <h2>Specifying Regressions</h2>
 <p>As I said last lecture, what we’re doing in linear regression is claiming that the relationship between our two variables is well-represented by a straight line. Last time I described that line in words. Here’s how we describe it mathematically:</p>
 <p><span class="math display">\[y = \beta_0 + \beta_1x + \varepsilon\]</span></p>
-<p>You’d read that as “y equals beta naught plus beta one times x, plus epsilon.” This is just the equation for a line (<span class="math inline">\(y=mx+b\)</span>), with slightly different notation. The intercept <span class="math inline">\(b\)</span> turns into <span class="math inline">\(\beta_0\)</span>, the slope <span class="math inline">\(m\)</span> turns into <span class="math inline">\(\beta_1\)</span>, and we add an <strong>error term</strong> <span class="math inline">\(\varepsilon\)</span> (“epsilon”) to account for the fact that our data doesn’t fall perfectly onto our regression line. We won’t worry too much about the error term in this class, but we’ll go over them briefly in a moment.</p>
+<p>You’d read that as “y equals beta naught plus beta one times x, plus epsilon.” This is just the equation for a line (<span class="math inline">\(y=mx+b\)</span>), with slightly different notation. The intercept <span class="math inline">\(b\)</span> turns into <span class="math inline">\(\beta_0\)</span>, the slope <span class="math inline">\(m\)</span> turns into <span class="math inline">\(\beta_1\)</span>, and we add an <strong>error term</strong> <span class="math inline">\(\varepsilon\)</span> (“epsilon”) to account for the fact that our data doesn’t fall perfectly onto our regression line.</p>
 <p>The only information <em>you</em> have to give to a regression like this one is what variables you want to <em>regress</em>. In the example we were using last lecture, we wanted to look at the relationship between <code>yrs.since.phd</code> (x-variable) and <code>salary</code> (y-variable). So, the equation we write would look like:</p>
 <p><span class="math display">\[salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon\]</span></p>
-<p>What this equation says is, “I think that there’s a linear relationship between <code>yrs.since.phd</code> and <code>salary</code>, but I don’t know the slope or intercept of the line that describes that relationship.” You use a regression method like 0LS to find that line for you.</p>
+<p>What this equation says is, “I think that there’s a linear relationship between <code>yrs.since.phd</code> and <code>salary</code>, but I don’t know the slope or intercept of the line that describes that relationship.” You use a regression method like OLS to find that line for you.</p>
+<p>Some quick terminology: <span class="math inline">\(\beta\)</span> values like <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are known as model <strong>coefficients</strong>.</p>
 </div>
 <div id="ordinary-least-squares" class="section level2">
 <h2>Ordinary Least Squares</h2>
@@ -140,14 +141,14 @@ $(document).ready(function () {
 <p>[insert residuals plot]</p>
 <p>Now, imagine <em>squaring</em> each of those residual values, then <em>adding them all together</em>. You’d get a single number describing the magnitude of all the squared residuals. OLS finds the combination of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that makes that number as small as it can possibly be given the data that you have. How it does this is quite simple if you know a little linear algebra, but we’re not going to get into it here.</p>
 <p>So, you specify your regression equation, feed that equation into a statistical software like R, and that software will perform OLS and give you back estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. In our example from last time, <span class="math inline">\(\beta_0\)</span> was about $90,000 and <span class="math inline">\(\beta_1\)</span> was about $1,000. So, our final relationship is described by this equation:</p>
-<p><span class="math display">\[salary = 90,000 + 1,000yrs.since.phd + \varepsilon\]</span></p>
+<p><span class="math display">\[salary = 90,000 + 1,000*yrs.since.phd + \varepsilon\]</span></p>
 <p>Where we hang on to that error term because it reminds us that our datapoints do not fall perfectly onto the line we described– they still have <em>residuals</em>.</p>
 <p>We can now use this equation to <em>predict</em> salaries for professors given their years since Ph.D (you ignore the error term when predicting). For example, if there were a professor with 30 years since their Ph.D, this regression would predict a salary of:</p>
 <p><span class="math display">\[salary = 90,000 + 1,000*30 = 120,000\]</span></p>
 </div>
 <div id="ols-assumptions-were-made" class="section level2">
 <h2>OLS: Assumptions Were Made</h2>
-<p>OLS is such a versatile and widely used algorithm because, when its assumptions are fulfilled, it guarantees an <strong>unbiased</strong> estimate of the true relationship. However, the assumptions OLS makes are quite strong, and are rarely fully fullfilled in real life. Specifically, OLS assumes:</p>
+<p>OLS is such a versatile and widely used algorithm because, when its assumptions are fulfilled, it guarantees an <strong>unbiased</strong> estimate of the true relationship between variables. However, the assumptions OLS makes are quite strong, and are rarely fully fullfilled in real life. Specifically, OLS assumes:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Exogeneity</strong>: This means that the residuals should not themselves be correlated with your predictor variable, and that the residuals should have a mean value of zero. This assumption is most often violated when there’s reverse causation between the outcome and predictor variables.</li>
 <li><strong>No Linear Dependence</strong>: This is only relevant when you have multiple predictor variables (see next week’s material), and put simply means that you can’t have two predictors that are exact multiples of each other.</li>
@@ -158,12 +159,23 @@ $(document).ready(function () {
 <li>No <strong>autocorrelation</strong>: Autocorrelation is when one data point can be predicted from a data point immediately next to it. This happens almost exclusively in time series data.</li>
 </ul>
 <ol start="4" style="list-style-type: decimal">
-<li><strong>Correct specification</strong>: You have to have included all relevant variables in your model.</li>
+<li><strong>Correct specification</strong>: The relationship you’re modeling should actually be <em>linear</em>, and you have to have included all relevant variables in your model.</li>
 </ol>
 <p>Assumptions 1-3 are extremely important and there’s a lot written about them, but it’s beyond the scope of this class to explore them in much more detail. Concerns about correct model specification, however, are right down our alley. We’ll talk about those extensively next week.</p>
 </div>
 <div id="other-regression-output-standard-errors-p-values" class="section level2">
 <h2>Other Regression Output: Standard Errors, p-Values</h2>
+<p>When we learn how to run regressions in R next lecture, you’ll see a lot of different regression outputs. Other than the coefficient values, the ones I want you to pay attention to specifically are the <strong>standard errors</strong> and the <strong>p-values</strong>. <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> will each have their own standard error and p-Value. We’ve already talked at length about p-values, but haven’t mentioned standard errors yet.</p>
+<div id="standard-errors" class="section level3">
+<h3>Standard Errors</h3>
+<p>Remember how, when we imagined the null hypothesis, we thought about a distribution of possible <span class="math inline">\(\beta\)</span> values, centered around 0? Well, our regression outputs can be thought of as distributions in the same way, but this time they’re centered around the main <span class="math inline">\(\beta\)</span> estimate, and they have a standard deviation equal to the standard error the regression spits out. Imagine my Salaries regression has a <span class="math inline">\(\beta_1\)</span> of 1,000 and a standard error for <span class="math inline">\(\beta_1\)</span> of 100. That would mean that, based on the data we see, if we were to resample and rerun the regression infinitely many times, we would tend to always get <span class="math inline">\(\beta_1\)</span> values pretty close to 1,000:</p>
+<p>[insert narrow plot]</p>
+<p>If, on the other hand, we had a standard error of 1000, for <span class="math inline">\(\beta_1\)</span>, our probability distribution of beta values would look like this :</p>
+<p>[insert wide plot].</p>
+<p>Standard errors are an excellent measure of <em>model uncertainty</em>. With a wide standard error, we can be much less sure that our model result is actually telling us anything.</p>
+<p>Since the <span class="math inline">\(\beta_0\)</span> value is just an intercept, we don’t usually worry about its standard error or p-value.</p>
+<p>Ready to draw your own cool lines through data? Fire up your RStudio, it’s time to run some regressions!</p>
+</div>
 </div>
 <div class="footnotes">
 <hr />

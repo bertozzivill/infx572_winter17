@@ -46,7 +46,7 @@ Similarly, we don't have to write out any $\beta$s explicity because there's the
 
 ### Pointing to data with `data`
 
-The data argument is easy, it's just the name of your dataset.
+The `data` argument to `lm` is easy, it's just the name of your dataset.
 
 ### Putting it Together
 
@@ -77,12 +77,12 @@ Whoa! That's a lot more information! Let's walk through each section at a time.
 This is the same as when you use your `print` command-- just an echo of specifically what code you ran to generate this regression output. Useful for reference. 
 
 ### `Residuals`
-Remember what residuals are? They're the difference between every data point and the predicted regression line. If you do `regression_output$residuals`, you'll see that the residuals are a *vector* with as many entries as there are rows in the dataset, specifying the residual for each data point in turn. The summarized output just shows you some range values for your residuals. Residuals are calculated by subtracting the value of the *regression output* from the value of the *data point*. So, in the regression we just ran, our predicted line is at maximum \$84,171 *higher* than the data points it predicts for, and at minimum \$102,383 *lower* than the data points it predicts for. 
+Remember what a residual is? Its' the difference between a given data point and the predicted regression line. If you do `regression_output$residuals`, you'll see that the residuals are a *vector* with as many entries as there are rows in the dataset, specifying the residual for each data point in turn. The summarized output just shows you some range values for your residuals. Residuals are calculated by subtracting the value of the *regression output* from the value of the *data point*. So, in the regression we just ran, our predicted line is at maximum \$84,171 *higher* than the data points it predicts for, and at minimum \$102,383 *lower* than the data points it predicts for. 
 
-### Coefficients
+### `Coefficients`
 This is the main section of interest for us-- it tells us about our $\beta$ values, their standard errors, and their p-values. The leftmost column is a list of all the variables that were included in the regression. Again, notice that even though we didn't specify an Intercept term, one was generated for us automatically. 
 
-The `Estimate` column gives us the estimated $\beta$ value for that variable. This is analogous to the simple output we see when we run `print(regression_output)`. 
+The `Estimate` column gives us the estimated $\beta$, or coefficient, value for that variable. This is analogous to the simple output we see when we run `print(regression_output)`. 
 
 The `Std. Error` column gives us the estimated standard errors for each variable. Thinking back to the distributions we made last time, we see that the standard error for the `yrs.since.phd` variable is pretty small, meaning that there's not much uncertainty about the value of this coefficient. 
 
@@ -189,8 +189,17 @@ Using the `Salaries` example above as a guide, see if you can determine:
 * What those regression coefficients *mean*--see if you can put them in a sentence, like the one in bold above for `Salaries`.
 * What the adjusted R-squared is for this regression.
 
+
+I'll give you the answer to the third question: 
+
+**"A cereal with zero grams of fat is expected to have 117.6 calories,, and every additional gram of fat adds 22.36 to that cereal's expected caloric value."**
+
 Let's plot this regression! Remember, we can create a new column in the dataset with predicted values using `predict`:
 ```{r, results='hide'}
+UScereal[, predicted_calories:= predict(cereal_output)]
+```
+
+```{r, eval=F}
 UScereal[, predicted_calories:= predict(cereal_output)]
 
 ggplot(UScereal, aes(x=fat)) +
@@ -200,4 +209,7 @@ ggplot(UScereal, aes(x=fat)) +
        x="Fat (g per Serving)",
        y="Calories per Serving")
 ```
+<br>
+
+We've just scratched the surface of regressions here-- next time, we'll dig a little deeper into assumptions of linearity and correct model specifications, and learn how to add new variables to regressions.
 

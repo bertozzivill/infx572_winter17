@@ -11,13 +11,15 @@ As I said last lecture, what we're doing in linear regression is claiming that t
 
 $$y = \beta_0 + \beta_1x + \varepsilon$$
 
-You'd read that as "y equals beta naught plus beta one times x, plus epsilon." This is just the equation for a line ($y=mx+b$), with slightly different notation. The intercept $b$ turns into $\beta_0$, the slope $m$ turns into $\beta_1$, and we add an **error term** $\varepsilon$ ("epsilon") to account for the fact that our data doesn't fall perfectly onto our regression line. We won't worry too much about the error term in this class, but we'll go over them briefly in a moment.
+You'd read that as "y equals beta naught plus beta one times x, plus epsilon." This is just the equation for a line ($y=mx+b$), with slightly different notation. The intercept $b$ turns into $\beta_0$, the slope $m$ turns into $\beta_1$, and we add an **error term** $\varepsilon$ ("epsilon") to account for the fact that our data doesn't fall perfectly onto our regression line. 
 
 The only information *you* have to give to a regression like this one is what variables you want to *regress*.  In the example we were using last lecture, we wanted to look at the relationship between `yrs.since.phd` (x-variable) and `salary` (y-variable). So, the equation we write would look like:
 
 $$salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
 
-What this equation says is, "I think that there's a linear relationship between `yrs.since.phd` and `salary`, but I don't know  the slope or intercept of the line that describes that relationship." You use a regression method like 0LS to find that line for you. 
+What this equation says is, "I think that there's a linear relationship between `yrs.since.phd` and `salary`, but I don't know  the slope or intercept of the line that describes that relationship." You use a regression method like OLS to find that line for you. 
+
+Some quick terminology: $\beta$ values like $\beta_0$ and $\beta_1$ are known as model **coefficients**.
 
 
 ## Ordinary Least Squares
@@ -40,7 +42,7 @@ Now, imagine *squaring* each of those residual values, then *adding them all tog
 
 So, you specify your regression equation, feed that equation into a statistical software like R, and that software will perform OLS and give you back estimates of $\beta_0$ and $\beta_1$. In our example from last time, $\beta_0$ was about \$90,000 and $\beta_1$ was about \$1,000. So, our final relationship is described by this equation:
 
-$$salary = 90,000 + 1,000yrs.since.phd + \varepsilon$$
+$$salary = 90,000 + 1,000*yrs.since.phd + \varepsilon$$
 
 Where we hang on to that error term because it reminds us that our datapoints do not fall perfectly onto the line we described-- they still have *residuals*.
 
@@ -50,21 +52,21 @@ $$salary = 90,000 + 1,000*30 = 120,000$$
 
 ## OLS: Assumptions Were Made
 
-OLS is such a versatile and widely used algorithm because, when its assumptions are fulfilled, it guarantees an **unbiased** estimate of the true relationship. However, the assumptions OLS makes are quite strong, and are rarely fully fullfilled in real life. Specifically, OLS assumes:
+OLS is such a versatile and widely used algorithm because, when its assumptions are fulfilled, it guarantees an **unbiased** estimate of the true relationship between variables. However, the assumptions OLS makes are quite strong, and are rarely fully fullfilled in real life. Specifically, OLS assumes:
 
 1. **Exogeneity**: This means that the residuals should not themselves be correlated with your predictor variable, and that the residuals should have a mean value of zero. This assumption is most often violated when there's reverse causation between the outcome and predictor variables.
 2. **No Linear Dependence**: This is only relevant when you have multiple predictor variables (see next week's material), and put simply means that you can't have two predictors that are exact multiples of each other.
 3. **Spherical Errors**: This assumption has two components:
   + **Homoscedasticity**: This means that the variation in your data should stay constant across the x-axis. Data that's more pinched at one end and wide at the other end, like the data in our Salaries example, is *heteroscedastic* and violates this assumption.
   + No **autocorrelation**: Autocorrelation is when one data point can be predicted from a data point immediately next to it. This happens almost exclusively in time series data. 
-4. **Correct specification**: You have to have included all relevant variables in your model. 
+4. **Correct specification**: The relationship you're modeling should actually be *linear*, and you have to have included all relevant variables in your model. 
 
 Assumptions 1-3 are extremely important and there's a lot written about them, but it's beyond the scope of this class to explore them in much more detail. Concerns about correct model specification, however, are right down our alley. We'll talk about those extensively next week. 
 
 
 ## Other Regression Output: Standard Errors, p-Values
 
-When we learn how to run regressions in R next lecture, you'll see a lot of different regression outputs. Other than the beta values, the ones I want you to pay attention to specifically are the **standard errors** and the **p-values**. $\beta_0$ and $\beta_1$ will each have their own standard error and p-Value. We've already talked at length about p-values, but haven't mentioned standard errors yet.
+When we learn how to run regressions in R next lecture, you'll see a lot of different regression outputs. Other than the coefficient values, the ones I want you to pay attention to specifically are the **standard errors** and the **p-values**. $\beta_0$ and $\beta_1$ will each have their own standard error and p-Value. We've already talked at length about p-values, but haven't mentioned standard errors yet.
 
 ### Standard Errors
 Remember how, when we imagined the null hypothesis, we thought about a distribution of possible $\beta$ values, centered around 0? Well, our regression outputs can be thought of as distributions in the same way, but this time they're centered around the main $\beta$ estimate, and they have a standard deviation equal to the standard error the regression spits out. Imagine my Salaries regression has a $\beta_1$ of 1,000 and a standard error for $\beta_1$ of 100. That would mean that, based on the data we see, if we were to resample and rerun the regression infinitely many times, we would tend to always get $\beta_1$ values pretty close to 1,000:
@@ -77,7 +79,7 @@ If, on the other hand, we had a standard error of 1000, for $\beta_1$, our proba
 
 Standard errors are an excellent measure of *model uncertainty*. With a wide standard error, we can be much less sure that our model result is actually telling us anything. 
 
-Since the $\beta_0$ value is just an intercept, we don't usually worry about its standard error or p-value. Focus on the betas associated with variables!
+Since the $\beta_0$ value is just an intercept, we don't usually worry about its standard error or p-value.
 
 
 Ready to draw your own cool lines through data? Fire up your RStudio, it's time to run some regressions!
