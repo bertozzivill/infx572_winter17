@@ -1,0 +1,16 @@
+---
+title: "Confounding and Bias"
+output: html_document
+---
+
+## Example: the Role of the Gender Wage Gap in the Salaries Dataset
+
+## What is Bias?
+
+## Mediators
+
+## Confounders
+
+## Effect Modifiers
+
+## Let's Play a Game: Confounder vs. Effect Modifier

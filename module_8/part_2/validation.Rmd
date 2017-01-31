@@ -1,0 +1,18 @@
+---
+title: "Validation"
+output: html_document
+---
+
+## Thinking about p-values and R-squared
+
+## The Problem with In-Sample Validation
+
+## The Solution: Out-of-Sample Validation
+
+## Types of Out-of-Sample Validation
+
+### Leave-One-Out Cross Validation
+
+### k-Fold Cross Validation
+
+## Estimating Error 
