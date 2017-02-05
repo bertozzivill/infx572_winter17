@@ -3,14 +3,197 @@ title: "Confounding and Bias"
 output: html_document
 ---
 
-## Example: the Role of the Gender Wage Gap in the Salaries Dataset
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = FALSE)
+library(data.table)
+library(ggplot2)
+library(car)
+
+main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_8/part_2/"
+```
+
+## Example: Bias in the Salaries Dataset
+
+Last lecture, we ran a *bivariate* regression on Years Since Ph.D and Salary in the Salaries dataset, and found a covariate on "years since Ph.D" of \$985.30-- that is, for every additional year since a professor's Ph.D, we estimate a \$985.30 increase in his/her salary. 
+
+Now let's say that we have some way of discovering the *true* relationship between these two variables. Ideally, we hope that the two are about the same-- that the true value of the covariate on "years since Ph.D" is right around \$985.30. But what if the true value of the covariate is only \$600? We've messed up-- we estimated the *red* line below, when the true relationship was described by the *blue* line.
+
+```{r}
+data(Salaries)
+Salaries <- data.table(Salaries)
+
+regress <- lm(salary~yrs.since.phd, data=Salaries)
+intercept <- regress$coefficients[["(Intercept)"]]
+
+Salaries[, estimated_relationship:=predict(regress)]
+Salaries[, true_relationship:= intercept + yrs.since.phd*600]
+Salaries <- melt(Salaries, id.vars=c("yrs.since.phd", "salary"), measure.vars = c("estimated_relationship", "true_relationship"))
+Salaries[, variable:= ifelse(variable=="estimated_relationship", "Estimated Relationship", "True Relationship")]
+
+png(paste0(main_dir, "est_true_regression.png"))
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary)) +
+  geom_line(aes(y=value, color=variable), size=2)+
+  labs(title="Estimated and True Coefficient Parameters for Salaries Regression",
+       x="Years Since Ph.D",
+       y="Salaries",
+       color="")
+graphics.off()
+```
+
+[insert scatter with regression line and related line with different slope]
+
+Specifically, our method for estimating our relationship of interest produced an estimator that was **biased**. What is bias, and how do we prevent it?
 
 ## What is Bias?
 
-## Mediators
+Mathematically, bias is simply the difference between the mean coefficient value you estimated and the true value of your parameter. So, in the example above, our bias would be: \$985.30 - \$600 = \$385.30. We *overestimated* the true effect by \$185.30. Notice that if our estimated value had been *lower* than the true value, our bias would be negative. 
 
-## Confounders
+Bias can come from a variety of sources, but most commonly arises either from your data collection method or from the way you set up your model. We'll go over some common sources of bias below. 
 
-## Effect Modifiers
+### Sampling/Selection Bias
 
-## Let's Play a Game: Confounder vs. Effect Modifier
+We already described this category on the "Data Representation" page. Sampling bias occurs when your data is not actually representative of the question you are trying to answer. For example, if we were trying to get a handle on the relationship between "years since Ph.D" and salary for a given university as a whole, but our dataset consisted only of professors in the Economics department, our covariate estimate would be biased no matter how good our regression methodology was.
+
+Other biases centered in the data (rather than the methodology) include self-report bias, binning, and the other sources of measurement error we've already discussed. 
+
+### Omitted Variable Bias 
+
+#### Remembering OLS's Assumptions
+A quantitative tool that allows us to generate an estimate for a covariate is called an **estimator**. OLS is the simplest and most common estimator of classical statistics. When a problem with your estimator (or how you use it) generates bias in your estimates, we say that the *estimator is biased*. If you remember from our OLS page, we said that OLS is mathematically guaranteed to be an unbiased estimator, if the following conditions hold:
+
+1. Exogeneity
+2. No Linear Dependence
+3. Spherical Errors:
+  + Homoscedasticity
+  + No autocorrelation
+4. **Correct model specification**
+
+Again, the top three factors matter, but the fourth one is really fundamental to the concept of regression as a whole. Your **model specification** is the equation that you write to characterize the relationship between (in this case) "years since Ph.D" and salary. For us, that was:
+
+$$salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
+
+To have an *incorrect model specification* means simply this: **the equation you wrote doesn't properly represent the relationship you're trying to capture.**
+
+The most frequent type of incorrect model specification is when you *don't include relevant variables in your equation*. This type of error is so common that it has its own name: **Omitted Variable Bias**. 
+
+#### Omitted Variable Bias: an Example
+
+Let's think about the assumption we made with our "years since Ph.D"-salary regression. The claim that we made when we wrote that equation was that a professors' years since his/her Ph.D is the only thing that might impact his/her salary level. Hopefully, you can immediately see that this is probably not the case. A short list of other factors that might impact salary include:
+
+* Field of research;
+* Number and prestige of publications;
+* Previous salaries at other organizations;
+* Number of classes taught;
+* Amount of time spent at this particular organization;
+
+To that list, we can unfortunately also add factors such as:
+
+* Race;
+* Gender or gender identity;
+* Sexual orientation;
+* Age;
+* etc. 
+
+By excluding any of these variables from our model specification, we're overemphasizing the role that "years since Ph.D" plays in determining salary, resulting in a biased estimate for the effect of "years since Ph.D".  
+
+[possibly: add a more mathematical interpretation, describing covariatce, etc.]
+
+You should be able to guess the solution to omitted variable bias: just include those variables in the regression! This turns our equation from a *bivariate* (two-variable) to a *multivariate* (many-variable) regression, and we'll go over the details of that next week. 
+
+## Causal Pathways and Varaible Inclusion
+
+So you know your simple bivariate regression equation is misspecified, and you're thinking about what other variables you should include in your regression. Unfortunately, most of the variables I've listed above are not included in your dataset, so they're out of the picture--include that in the "weaknesses" section of your publication. The other variables you *do* have available are the following:
+
+* Years of Service;
+* Sex;
+* Rank;
+* Discipline
+
+Should you include all of these in your regression? Just some of them? How do you decide? 
+
+First and foremost, you can exclude any variable that should have no association at all with salary. If there were a "rainfall" variable in this dataset, you could safely exclude it. In this case, all four of those variables are probably associated with salary in some way, so you can't dismiss any of them right off the bat. 
+
+There are three remaining classes a variable might fall into: **confounders**, **effect modifiers**, or **mediators**. To understand these three terms, you need to have a solid idea in your mind of **causal pathways**. 
+
+When you run a regression, you are almost always interested in how just two variables interact: your predictor of interest, and your outcome. In our example, we want to know the effect that "years since Ph.D" has on salary. We think that "years since Ph.D" has an effect on salary, so our proposed causal pathway is this:
+
+yrs.since.phd --> salary 
+
+Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which class they fall into. 
+
+### Confounders
+
+A **confounder** is a variable that is *associated* with **both** your predictor and outcome variable, but that does NOT lie *on the causal pathway between them*. "Number of publications" would be a classic confounder in our salaries regression: how long it's been since your Ph.D is almost certainly associated with how many papers you've published, and the number of papers you've published is likely associated with your salary, but the relationship cannot be describes simply as "It's been longer since my Ph.D, *therefore* I have more publications, *therefore* I have a higher salary." Both "years since Ph.D" and "number of publications" are most likely independently considered in determining someone's salary level. 
+
+Confounders interact with the causal pathway like so:
+
+[insert figure here]
+
+Omitting confounders introduced omitted variable bias into models; you should always include confounders in your analysis. 
+
+### Effect Modifiers
+
+### Mediators
+
+### Let's Play a Game: Confounder vs. Effect Modifier
+
+
+```{r}
+## Pause for lots of plotting
+
+n=50
+reps=3
+example <- data.table(id=rep(1:n, reps))
+example[, random:= rnorm(n=n*reps, sd=50)]
+example[, value:=id^2+random + abs(min(random)-1)]
+
+
+reg <- lm(value~id, data=example)
+example[, predicted:=predict(reg)]
+
+png(paste0(main_dir, "x2_data.png"))
+ggplot(example, aes(x=id)) +
+  geom_point(aes(y=value))+
+  labs(title="Example Data",
+       x="Variable",
+       y="Value")
+graphics.off()
+
+png(paste0(main_dir, "x2_data_with_regression.png"))
+ggplot(example, aes(x=id)) +
+  geom_point(aes(y=value))+
+  geom_line(aes(y=predicted), color="red", size=1) +
+  labs(title="Example Data with Linear Regression",
+       x="Variable",
+       y="Value")
+graphics.off()
+
+
+example[, new_value:=sqrt(value)]
+new_reg <- lm(new_value~id, data=example)
+
+example[, predicted_new:= predict(new_reg)]
+
+png(paste0(main_dir, "x2_data_transformed.png"))
+ggplot(example, aes(x=id)) +
+  geom_point(aes(y=new_value))+
+  labs(title="Example Data, Transformed",
+       x="Variable",
+       y="sqrt(Value)")
+graphics.off()
+
+png(paste0(main_dir, "x2_data_transformed_with_regression.png"))
+ggplot(example, aes(x=id)) +
+  geom_point(aes(y=new_value))+
+  geom_line(aes(y=predicted_new), color="red", size=1) +
+  labs(title="Example Data with Linear Regression, Transformed",
+       x="Variable",
+       y="sqrt(Value)")
+graphics.off()
+
+```
+
+### It's Not Bias, It's Just Wrong: Misspecifying your Functional Form
+
+Finally, we need to describe a common problem in statistics that does *not* fall under the label of "bias". Let's say we have data that looks like this:
