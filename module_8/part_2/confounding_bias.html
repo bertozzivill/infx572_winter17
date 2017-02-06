@@ -170,31 +170,111 @@ $(document).ready(function () {
 </ul>
 <p>To that list, we can unfortunately also add factors such as:</p>
 <ul>
-<li>Rage;</li>
+<li>Race;</li>
 <li>Gender or gender identity;</li>
 <li>Sexual orientation;</li>
 <li>Age;</li>
 <li>etc.</li>
 </ul>
-<p>So far as assumptions 1-3 are concerned, the only issue is that our data is somewhat <em>heteroscedastic</em>. The solution to that is to run OLS with what are called “robust standard errors”, but for the purposes of this class we can ignore that issue. By far the most likely problem with our regression is that we’re violating assumption #4.</p>
+<p>By excluding any of these variables from our model specification, we’re overemphasizing the role that “years since Ph.D” plays in determining salary, resulting in a biased estimate for the effect of “years since Ph.D”.</p>
+<p>You should be able to guess the solution to omitted variable bias: just include those variables in the regression! This turns our equation from a <em>bivariate</em> (two-variable) to a <em>multivariate</em> (many-variable) regression, and we’ll go over the details of that next week.</p>
 </div>
 </div>
 </div>
-<div id="mediators" class="section level2">
-<h2>Mediators</h2>
+<div id="causal-pathways-and-varaible-inclusion" class="section level2">
+<h2>Causal Pathways and Varaible Inclusion</h2>
+<p>So you know your simple bivariate regression equation is misspecified, and you’re thinking about what other variables you should include in your regression. Unfortunately, most of the variables I’ve listed above are not included in your dataset, so they’re out of the picture–include that in the “weaknesses” section of your publication. The other variables you <em>do</em> have available are the following:</p>
+<ul>
+<li>Years of Service;</li>
+<li>Sex;</li>
+<li>Rank;</li>
+<li>Discipline</li>
+</ul>
+<p>Should you include all of these in your regression? Just some of them? How do you decide?</p>
+<p>First and foremost, you can exclude any variable that should have no association at all with salary. If there were a “rainfall” variable in this dataset, you could safely exclude it. In this case, all four of those variables are probably associated with salary in some way, so you can’t dismiss any of them right off the bat.</p>
+<p>There are three remaining classes a variable might fall into: <strong>confounders</strong>, <strong>effect modifiers</strong>, or <strong>mediators</strong>. To understand these three terms, you need to have a solid idea in your mind of <strong>causal pathways</strong>.</p>
+<p>When you run a regression, you are almost always interested in how just two variables interact: your predictor of interest, and your outcome. In our example, we want to know the effect that “years since Ph.D” has on salary. We think that “years since Ph.D” has an effect on salary, so our proposed causal pathway is this:</p>
+<p>yrs.since.phd –&gt; salary</p>
+<p>Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which class they fall into.</p>
+<div id="confounders" class="section level3">
+<h3>Confounders</h3>
+<p>A <strong>confounder</strong> is a variable that is <em>associated</em> with <strong>both</strong> your predictor and outcome variable, but that does NOT lie <em>on the causal pathway between them</em>. “Number of publications” would be a classic confounder in our salaries regression: how long it’s been since your Ph.D is almost certainly associated with how many papers you’ve published, and the number of papers you’ve published is likely associated with your salary, but the relationship cannot be describes simply as “It’s been longer since my Ph.D, <em>therefore</em> I have more publications, <em>therefore</em> I have a higher salary.” Both “years since Ph.D” and “number of publications” are most likely independently considered in determining someone’s salary level.</p>
+<p>Confounders interact with the causal pathway like so:</p>
+<p>[insert figure here]</p>
+<p>Omitting confounders introduced omitted variable bias into models; you should always include confounders in your analysis.</p>
+<p>Of our list above, the strongest confounder is sex. Sex can be associated with “years since Ph.D” several different ways: in some fields, it’s a relatively new phenomenon for women to get doctorates, so women on average will have fewer years since their Ph.D’s. On the other hand, it’s also common for women (and less common for men) to take long leaves of absence mid-career to start and care for families, which might cause their “years since Ph.D” to be longer (for a given salary level) than men’s.</p>
+<p>Sex is also, of course, associated with salary: the gender pay gap is well documented, though its precise causes are disputed.</p>
+<p>Looking at the Salaries dataset, we can see the assocaition between sex and our two variables of interest: women have both a considerably lower mean salary and fewer years since Ph.D compared to men:</p>
+<pre class="r"><code>data(Salaries)
+Salaries &lt;- data.table(Salaries)
+
+Salaries[, list(mean.salary=mean(salary), mean.yrs.since.phd=mean(yrs.since.phd)), by=list(sex)]</code></pre>
+<pre><code>##       sex mean.salary mean.yrs.since.phd
+## 1:   Male    115090.4           22.94693
+## 2: Female    101002.4           16.51282</code></pre>
+<p>Therefore, sex is a confounder and should be included in our regression specification.</p>
 </div>
-<div id="confounders" class="section level2">
-<h2>Confounders</h2>
+<div id="mediators" class="section level3">
+<h3>Mediators</h3>
+<p>The definition of a mediator is very similar to that of a confounder, but the impact is completely different. Like confounders, <strong>mediators</strong> are variables <em>associated with both the predictor and outcome variable</em>, but <em>unlike</em> confounders, mediators <strong>DO lie on the causal pathway between the two</strong>.</p>
+<p>The causal pathway for mediators looks like this:</p>
+<p>[insert]</p>
+<p>Because mediators fall <em>on the causal pathway</em> between your two variables of interest, you don’t have to include them in the model. If you’re interested in how “years since Ph.D” affects salary, you shouldn’t really care <em>how</em> it affects salary. Including a mediator in a regression just includes redundant information.</p>
+<p>“Rank” is a good example of a mediator in our dataset. The number of years since your Ph.D affects your salary precisely <em>because</em> you move up the ranks and gain seniority over time. The more years since your Ph.D, the higher ranking (hopefully) you are, the higher your salary. You wouldn’t need to include “rank” in this regression.</p>
 </div>
-<div id="effect-modifiers" class="section level2">
-<h2>Effect Modifiers</h2>
+<div id="effect-modifiers" class="section level3">
+<h3>Effect Modifiers</h3>
+<p>Finally, we have effect modifiers, which are almost always categorical variables. An <strong>effect modifier</strong> is a variable associated with the <em>outcome</em> of interest, but <strong>NOT</strong> with the predictor variable of interest. Effect modifiers can be thought of as stratification variables more than anything– your overall result won’t necessarily be <em>biased</em> if you leave them out, but you might mask important subgroup patterns.</p>
+<p>[insert causal pathway figure]</p>
+<p>In our dataset, discipline is a great example of a confounding variable. Unless it’s a very new scientific field, what department you’re in is probably not strongly associated with how long it’s been since your Ph.D. However, what department you’re in is surely associated with your salary– some fields are much better paid than others. If we were to exclude discipline from this regression, we would still get an accurate representation of the “years since Ph.D”-salary relationship for <em>the group as a whole</em>, but we would be masking <em>subgroup differences</em> between the disciplines. For that reason, it’s a good idea to include effect modifier in regressions.</p>
 </div>
-<div id="lets-play-a-game-confounder-vs.effect-modifier" class="section level2">
-<h2>Let’s Play a Game: Confounder vs. Effect Modifier</h2>
-<div id="its-not-bias-its-just-wrong-misspecifying-your-functional-form" class="section level3">
-<h3>It’s Not Bias, It’s Just Wrong: Misspecifying your Functional Form</h3>
+<div id="and-then-there-was-one" class="section level3">
+<h3>And Then There Was One</h3>
+<p>There is still one variable left to include or exclude from our regression: “Years of Service”. It’s not a categorical variable, and it’s <em>definitely</em> associated with both “years since Ph.D” and salary, so it’s not an effect modifier. But is it a mediator, or a confounder?</p>
+<p>If it were a mediator, it would be <em>on the causal pathway</em> between “years since Ph.D” and salary. You could make that claim–by definition, the longer your years of service, the longer it’s been since your Ph.D, so by including both variables in your regression you might be unnecessarily repeating information. On the other hand, you could argue that “years of service” is <em>not</em> on the causal pathway of the two variables– it’s tracking how long someone has been at a particular organization, which might be an independent predictor of salary from the “years since Ph.D” variable. You could swing the argument both ways, and whether or not to include such a variable in the regression is left to the discretion of the modeler.</p>
+<p>My personal advice? Try running a regression with “years of service”, and see how big of a difference it makes. Maybe it doesn’t matter much anyway. If it does make a large difference, you’ll need a strong justification if you want to exclude it.</p>
+</div>
+<div id="lets-play-a-game-categorize-the-variable." class="section level3">
+<h3>Let’s Play a Game: Categorize the variable.</h3>
+<div id="arrival-time-at-work-coffee-drinking-and-productiveness" class="section level4">
+<h4>1. Arrival Time at Work, Coffee Drinking, and Productiveness</h4>
+<p>We want to know what effect the time office workers arrive at work has on how productive they are. Our hypothesis is that those who arrive to work earlier are more productive throughout the day. We also track whether or not each person drinks coffee.</p>
+<p>Let’s say we find the following:</p>
+<ol style="list-style-type: decimal">
+<li>Those who arrive earlier are more productive;</li>
+<li>Those who arrive earlier are just as likely to drink coffee as those who arrive later;</li>
+<li>Those who are more productive are more likely to drink coffee.</li>
+</ol>
+<p>Is coffee drinking a confounder, a mediator, or an effect modifier?</p>
+<p>Since this variable is not associated with the predictor (how early people come in) but is associated with the outcome (how productive people are), coffee drinking is likely to be an <strong>effect modifier</strong>.</p>
+</div>
+<div id="smoking-coffee-drinking-and-lung-cancer" class="section level4">
+<h4>2. Smoking, Coffee Drinking, and Lung Cancer</h4>
+<p>We want to know what effect smoking has on lung cancer. Our hypothesis is that smokers have higher rates of lung cancer than nonsmokers. We survey a large group of people on their smoking and coffee drinking status, then track how many of them develop lung cancer over the next ten years. We find the following:</p>
+<ol style="list-style-type: decimal">
+<li>Smokers are more likely to get lung cancer;</li>
+<li>Smokers are more likely to drink coffee;</li>
+<li>Coffee drinkers are more likely to get lung cancer.</li>
+</ol>
+<p>Is coffee drinking a confouunder, a mediator, or an effect modifier?</p>
+<p>Well, coffee drinking is associated with both the predictor and outcome, so it can’t be an effect modifier. The next question we need to ask is: is it on the causal pathway? If it were, we could reasonably make the claim that smoking <em>causes</em> you to drink coffee, which <em>causes</em> lung cancer. That seems hard to back up. It’s more plausible to say that smokers are more likely to be coffee drinkers because smokers are more likely to have addictive personalities, but that coffee drinking is not directly on the causal pathway between smoking and lung cancer. Therefore, coffee drinking is a <strong>confounder</strong> in this case.</p>
+</div>
+<div id="cafe-location-coffee-drinking-and-productiveness" class="section level4">
+<h4>3. Café Location, Coffee Drinking, and Productiveness</h4>
+<p>We want to know whether or not office buildings with coffee shops in their lobbies are more productive. For each office building in downtown Seattle, we log whether or not the building has a café in the lobby, the average per-capita consumption of coffee in the building, and some measure of net productiveness of that building. We find the following:</p>
+<ol style="list-style-type: decimal">
+<li>Buildings with cafés are more productive;</li>
+<li>Buildings with cafés drink more coffee on average;</li>
+<li>Buildings with higher average coffee consumption are more productive.</li>
+</ol>
+<p>Is coffee drinking a confounder, a mediator, or an effect modifier?</p>
+<p>Well, coffee drinking is associated with both the predictor and outcome, so it can’t be an effect modifier. The next question we need to ask is: is it on the causal pathway? If it were, we could reasonably make the claim that having a coffee shop in the lobby <em>causes</em> office employees to drink more coffee, which <em>causes</em> those employees to be more productive. This is a plausible claim to make, so in this case coffee drinking is a <strong>mediator</strong>.</p>
+</div>
+</div>
+</div>
+<div id="its-not-bias-its-just-wrong-misspecifying-your-functional-form" class="section level2">
+<h2>It’s Not Bias, It’s Just Wrong: Misspecifying your Functional Form</h2>
 <p>Finally, we need to describe a common problem in statistics that does <em>not</em> fall under the label of “bias”. Let’s say we have data that looks like this:</p>
-</div>
 </div>
 
 
