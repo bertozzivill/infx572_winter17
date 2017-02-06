@@ -14,7 +14,7 @@ main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_8/part_2/"
 
 ## Example: Bias in the Salaries Dataset
 
-Last lecture, we ran a *bivariate* regression on Years Since Ph.D and Salary in the Salaries dataset, and found a covariate on "years since Ph.D" of \$985.30-- that is, for every additional year since a professor's Ph.D, we estimate a \$985.30 increase in his/her salary. 
+Last lecture, we ran a *bivariate* regression on "years Since Ph.D" and salary in the Salaries dataset, and found a covariate on "years since Ph.D" of \$985.30-- that is, for every additional year since a professor's Ph.D, we estimate a \$985.30 increase in his/her salary. 
 
 Now let's say that we have some way of discovering the *true* relationship between these two variables. Ideally, we hope that the two are about the same-- that the true value of the covariate on "years since Ph.D" is right around \$985.30. But what if the true value of the covariate is only \$600? We've messed up-- we estimated the *red* line below, when the true relationship was described by the *blue* line.
 
@@ -55,18 +55,16 @@ Bias can come from a variety of sources, but most commonly arises either from yo
 
 We already described this category on the "Data Representation" page. Sampling bias occurs when your data is not actually representative of the question you are trying to answer. For example, if we were trying to get a handle on the relationship between "years since Ph.D" and salary for a given university as a whole, but our dataset consisted only of professors in the Economics department, our covariate estimate would be biased no matter how good our regression methodology was.
 
-Other biases centered in the data (rather than the methodology) include self-report bias, binning, and the other sources of measurement error we've already discussed. 
+Other biases centered in the data (rather than the analysis) include self-report bias, binning, and the other sources of measurement error we've already discussed. 
 
 ### Omitted Variable Bias 
 
 #### Remembering OLS's Assumptions
-A quantitative tool that allows us to generate an estimate for a covariate is called an **estimator**. OLS is the simplest and most common estimator of classical statistics. When a problem with your estimator (or how you use it) generates bias in your estimates, we say that the *estimator is biased*. If you remember from our OLS page, we said that OLS is mathematically guaranteed to be an unbiased estimator, if the following conditions hold:
+A quantitative tool that allows us to generate an estimate for a coefficient is called an **estimator**. OLS is the simplest and most common estimator of classical statistics. When a problem with your estimator (or how you use it) generates bias in your estimates, we say that the *estimator is biased*. If you remember from our OLS page, we said that OLS is mathematically guaranteed to be an unbiased estimator, if the following conditions hold:
 
 1. Exogeneity
 2. No Linear Dependence
-3. Spherical Errors:
-  + Homoscedasticity
-  + No autocorrelation
+3. Spherical Errors (homoscedasticity and no autocorrelation)
 4. **Correct model specification**
 
 Again, the top three factors matter, but the fourth one is really fundamental to the concept of regression as a whole. Your **model specification** is the equation that you write to characterize the relationship between (in this case) "years since Ph.D" and salary. For us, that was:
@@ -79,7 +77,7 @@ The most frequent type of incorrect model specification is when you *don't inclu
 
 #### Omitted Variable Bias: an Example
 
-Let's think about the assumption we made with our "years since Ph.D"-salary regression. The claim that we made when we wrote that equation was that a professors' years since his/her Ph.D is the only thing that might impact his/her salary level. Hopefully, you can immediately see that this is probably not the case. A short list of other factors that might impact salary include:
+Let's think about the assumption we made with our "years since Ph.D"-salary regression. The claim that we made when we wrote that equation was that a professor's years since his/her Ph.D is the only thing that might impact his/her salary level. Hopefully, you can immediately see that this is probably not the case. A short list of other factors that might impact salary include:
 
 * Field of research;
 * Number and prestige of publications;
@@ -95,11 +93,11 @@ To that list, we can unfortunately also add factors such as:
 * Age;
 * etc. 
 
-By excluding any of these variables from our model specification, we're overemphasizing the role that "years since Ph.D" plays in determining salary, resulting in a biased estimate for the effect of "years since Ph.D".  
+By excluding any of these variables from our model specification, we're **overemphasizing the role that "years since Ph.D" plays** in determining salary, resulting in a biased estimate for the effect of "years since Ph.D".  
 
 You should be able to guess the solution to omitted variable bias: just include those variables in the regression! This turns our equation from a *bivariate* (two-variable) to a *multivariate* (many-variable) regression, and we'll go over the details of that next week. 
 
-## Causal Pathways and Varaible Inclusion
+## Causal Pathways and Variable Inclusion
 
 So you know your simple bivariate regression equation is misspecified, and you're thinking about what other variables you should include in your regression. Unfortunately, most of the variables I've listed above are not included in your dataset, so they're out of the picture--include that in the "weaknesses" section of your publication. The other variables you *do* have available are the following:
 
@@ -118,11 +116,11 @@ When you run a regression, you are almost always interested in how just two vari
 
 yrs.since.phd --> salary 
 
-Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which class they fall into. 
+Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which of the three classes they fall into. 
 
 ### Confounders
 
-A **confounder** is a variable that is *associated* with **both** your predictor and outcome variable, but that does NOT lie *on the causal pathway between them*. "Number of publications" would be a classic confounder in our salaries regression: how long it's been since your Ph.D is almost certainly associated with how many papers you've published, and the number of papers you've published is likely associated with your salary, but the relationship cannot be describes simply as "It's been longer since my Ph.D, *therefore* I have more publications, *therefore* I have a higher salary." Both "years since Ph.D" and "number of publications" are most likely independently considered in determining someone's salary level. 
+A **confounder** is *a variable that is associated with **both** your predictor and outcome variable, but that does NOT lie on the causal pathway between them*. "Number of publications" would be a classic confounder in our salaries regression: how long it's been since your Ph.D is almost certainly associated with how many papers you've published, and the number of papers you've published is likely associated with your salary, but the relationship cannot be describes simply as "It's been longer since my Ph.D, *therefore* I have more publications, *therefore* I have a higher salary." Both "years since Ph.D" and "number of publications" are independently considered in determining someone's salary level. 
 
 Confounders interact with the causal pathway like so:
 
@@ -154,7 +152,7 @@ The causal pathway for mediators looks like this:
 
 [insert]
 
-Because mediators fall *on the causal pathway* between your two variables of interest, you don't have to include them in the model. If you're interested in how "years since Ph.D" affects salary, you shouldn't really care *how* it affects salary. Including a mediator in a regression just includes redundant information. 
+Because mediators fall *on the causal pathway* between your two variables of interest, you don't have to include them in the model. If you're interested in *the magnitude with which* "years since Ph.D" affects salary, you shouldn't really care *by what mechanism* it affects salary. Including a mediator in a regression just includes redundant information. 
 
 "Rank" is a good example of a mediator in our dataset. The number of years since your Ph.D affects your salary precisely *because* you move up the ranks and gain seniority over time. The more years since your Ph.D, the higher ranking (hopefully) you are, the higher your salary. You wouldn't need to include "rank" in this regression. 
 
@@ -165,17 +163,17 @@ Finally, we have effect modifiers, which are almost always categorical variables
 
 [insert causal pathway figure]
 
-In our dataset, discipline is a great example of a confounding variable. Unless it's a very new scientific field, what department you're in is probably not strongly associated with how long it's been since your Ph.D. However, what department you're in is surely associated with your salary-- some fields are much better paid than others. If we were to exclude discipline from this regression, we would still get an accurate representation of the "years since Ph.D"-salary relationship for *the group as a whole*, but we would be masking *subgroup differences* between the disciplines. For that reason, it's a good idea to include effect modifier in regressions. 
+In our dataset, discipline is a great example of a confounding variable. Unless it's a very new scientific field, what department you're in is probably not strongly associated with how long it's been since your Ph.D. However, what department you're in is surely associated with your salary-- some fields are much better paid than others. If we were to exclude discipline from this regression, we would still get an accurate representation of the "years since Ph.D"-salary relationship for *the group as a whole*, but we would be masking *subgroup differences* between the disciplines. For that reason, it's a good idea to include effect modifiers in regressions. 
 
 ### And Then There Was One
 
-There is still one variable left to include or exclude from our regression: "Years of Service". It's not a categorical variable, and it's *definitely* associated with both "years since Ph.D" and salary, so it's not an effect modifier. But is it a mediator, or a confounder? 
+There is still one variable left to include or exclude from our regression: "years of service". It's not a categorical variable, and it's *definitely* associated with both "years since Ph.D" and salary, so it's not an effect modifier. But is it a mediator, or a confounder? 
 
 If it were a mediator, it would be *on the causal pathway* between "years since Ph.D" and salary. You could make that claim--by definition, the longer your years of service, the longer it's been since your Ph.D, so by including both variables in your regression you might be unnecessarily repeating information. On the other hand, you could argue that "years of service" is *not* on the causal pathway of the two variables-- it's tracking how long someone has been at a particular organization, which might be an independent predictor of salary from the "years since Ph.D" variable. You could swing the argument both ways, and whether or not to include such a variable in the regression is left to the discretion of the modeler.
 
 My personal advice? Try running a regression with "years of service", and see how big of a difference it makes. Maybe it doesn't matter much anyway. If it does make a large difference, you'll need a strong justification if you want to exclude it. 
 
-### Let's Play a Game: Categorize the variable. 
+### Let's Play a Game: Categorize the Variable
 
 #### 1. Arrival Time at Work, Coffee Drinking, and Productiveness
 
@@ -189,7 +187,7 @@ Let's say we find the following:
 
 Is coffee drinking a confounder, a mediator, or an effect modifier?
 
-Since this variable is not associated with the predictor (how early people come in) but is associated with the outcome (how productive people are), coffee drinking is likely to be an **effect modifier**.
+Since this variable is *not* associated with the predictor (how early people come in) but *is* associated with the outcome (how productive people are), coffee drinking is likely to be an **effect modifier**.
 
 #### 2. Smoking, Coffee Drinking, and Lung Cancer
 
@@ -284,23 +282,23 @@ Based on what we've learned so far, if I wanted to know the relationship between
 
 This would of course be wrong, because I'd be trying to fit a line to data that *is not linear*. This is a type of model misspecification called misspecifying the **functional form** of the model. In this case, the data is quadratic (I added some noise to the function $x^2$ and plotted it). 
 
-The correct interpretation of this data would be to say, "Every time that 'variable' increases from $a$ to $b$, 'value' increases by the quantity $b^2 - a^2$". This is *very* different from saying, "Every time that 'variable' increases from a to b, 'value' increases by a fixed value $\beta$", which is what the linear regression interpretation would imply. 
+The correct interpretation of this data would be to say, "Every time that 'variable' increases from $a$ to $b$, 'value' increases by the quantity $b^2 - a^2$". This is *very* different from saying, "Every time that 'variable' increases from $a$ to $b$, 'value' increases by a fixed value $\beta$", which is what the linear regression interpretation would imply. 
 
 You couldn't quantitatively assess the bias of this problem because you would be comparing a linear relationship to a curved relationship, but this is still an incorrect methodology. 
 
-Does this mean that we simply can't use regression methods to assess nonlinear relationships? But so many things follow a nonlinear pattern-- population size, income, country's GDP... can we never analyze these variables?
+But so many things follow a nonlinear pattern-- population size, income, country's GDP...  Does this mean that we simply can't use regression methods to assess nonlinear relationships? 
 
 Not at all! We can still regress on these variables, we just need to **transform** them first. 
 
 A data transformation is any mathematical operation that you perform across all values of a variable. If I had a vector of values from 1 to 10, and I added 3 to each of them, that would be a kind of transformation:
-```{r}
+```{r, include=T}
 example_vector <- 1:10
 transformed_vector <- example_vector + 3
 print(transformed_vector)
 ```
 <br>
 Similarly, if we squared every element in that vector, that would be a different kind of transformation:
-```{r}
+```{r, include=T}
 example_vector <- 1:10
 transformed_vector <- example_vector^2
 print(transformed_vector)

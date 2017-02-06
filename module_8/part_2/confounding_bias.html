@@ -122,7 +122,7 @@ $(document).ready(function () {
 
 <div id="example-bias-in-the-salaries-dataset" class="section level2">
 <h2>Example: Bias in the Salaries Dataset</h2>
-<p>Last lecture, we ran a <em>bivariate</em> regression on Years Since Ph.D and Salary in the Salaries dataset, and found a covariate on “years since Ph.D” of $985.30– that is, for every additional year since a professor’s Ph.D, we estimate a $985.30 increase in his/her salary.</p>
+<p>Last lecture, we ran a <em>bivariate</em> regression on “years Since Ph.D” and salary in the Salaries dataset, and found a covariate on “years since Ph.D” of $985.30– that is, for every additional year since a professor’s Ph.D, we estimate a $985.30 increase in his/her salary.</p>
 <p>Now let’s say that we have some way of discovering the <em>true</em> relationship between these two variables. Ideally, we hope that the two are about the same– that the true value of the covariate on “years since Ph.D” is right around $985.30. But what if the true value of the covariate is only $600? We’ve messed up– we estimated the <em>red</em> line below, when the true relationship was described by the <em>blue</em> line.</p>
 <p>[insert scatter with regression line and related line with different slope]</p>
 <p>Specifically, our method for estimating our relationship of interest produced an estimator that was <strong>biased</strong>. What is bias, and how do we prevent it?</p>
@@ -134,23 +134,17 @@ $(document).ready(function () {
 <div id="samplingselection-bias" class="section level3">
 <h3>Sampling/Selection Bias</h3>
 <p>We already described this category on the “Data Representation” page. Sampling bias occurs when your data is not actually representative of the question you are trying to answer. For example, if we were trying to get a handle on the relationship between “years since Ph.D” and salary for a given university as a whole, but our dataset consisted only of professors in the Economics department, our covariate estimate would be biased no matter how good our regression methodology was.</p>
-<p>Other biases centered in the data (rather than the methodology) include self-report bias, binning, and the other sources of measurement error we’ve already discussed.</p>
+<p>Other biases centered in the data (rather than the analysis) include self-report bias, binning, and the other sources of measurement error we’ve already discussed.</p>
 </div>
 <div id="omitted-variable-bias" class="section level3">
 <h3>Omitted Variable Bias</h3>
 <div id="remembering-olss-assumptions" class="section level4">
 <h4>Remembering OLS’s Assumptions</h4>
-<p>A quantitative tool that allows us to generate an estimate for a covariate is called an <strong>estimator</strong>. OLS is the simplest and most common estimator of classical statistics. When a problem with your estimator (or how you use it) generates bias in your estimates, we say that the <em>estimator is biased</em>. If you remember from our OLS page, we said that OLS is mathematically guaranteed to be an unbiased estimator, if the following conditions hold:</p>
+<p>A quantitative tool that allows us to generate an estimate for a coefficient is called an <strong>estimator</strong>. OLS is the simplest and most common estimator of classical statistics. When a problem with your estimator (or how you use it) generates bias in your estimates, we say that the <em>estimator is biased</em>. If you remember from our OLS page, we said that OLS is mathematically guaranteed to be an unbiased estimator, if the following conditions hold:</p>
 <ol style="list-style-type: decimal">
 <li>Exogeneity</li>
 <li>No Linear Dependence</li>
-<li>Spherical Errors:</li>
-</ol>
-<ul>
-<li>Homoscedasticity</li>
-<li>No autocorrelation</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
+<li>Spherical Errors (homoscedasticity and no autocorrelation)</li>
 <li><strong>Correct model specification</strong></li>
 </ol>
 <p>Again, the top three factors matter, but the fourth one is really fundamental to the concept of regression as a whole. Your <strong>model specification</strong> is the equation that you write to characterize the relationship between (in this case) “years since Ph.D” and salary. For us, that was:</p>
@@ -160,7 +154,7 @@ $(document).ready(function () {
 </div>
 <div id="omitted-variable-bias-an-example" class="section level4">
 <h4>Omitted Variable Bias: an Example</h4>
-<p>Let’s think about the assumption we made with our “years since Ph.D”-salary regression. The claim that we made when we wrote that equation was that a professors’ years since his/her Ph.D is the only thing that might impact his/her salary level. Hopefully, you can immediately see that this is probably not the case. A short list of other factors that might impact salary include:</p>
+<p>Let’s think about the assumption we made with our “years since Ph.D”-salary regression. The claim that we made when we wrote that equation was that a professor’s years since his/her Ph.D is the only thing that might impact his/her salary level. Hopefully, you can immediately see that this is probably not the case. A short list of other factors that might impact salary include:</p>
 <ul>
 <li>Field of research;</li>
 <li>Number and prestige of publications;</li>
@@ -176,13 +170,13 @@ $(document).ready(function () {
 <li>Age;</li>
 <li>etc.</li>
 </ul>
-<p>By excluding any of these variables from our model specification, we’re overemphasizing the role that “years since Ph.D” plays in determining salary, resulting in a biased estimate for the effect of “years since Ph.D”.</p>
+<p>By excluding any of these variables from our model specification, we’re <strong>overemphasizing the role that “years since Ph.D” plays</strong> in determining salary, resulting in a biased estimate for the effect of “years since Ph.D”.</p>
 <p>You should be able to guess the solution to omitted variable bias: just include those variables in the regression! This turns our equation from a <em>bivariate</em> (two-variable) to a <em>multivariate</em> (many-variable) regression, and we’ll go over the details of that next week.</p>
 </div>
 </div>
 </div>
-<div id="causal-pathways-and-varaible-inclusion" class="section level2">
-<h2>Causal Pathways and Varaible Inclusion</h2>
+<div id="causal-pathways-and-variable-inclusion" class="section level2">
+<h2>Causal Pathways and Variable Inclusion</h2>
 <p>So you know your simple bivariate regression equation is misspecified, and you’re thinking about what other variables you should include in your regression. Unfortunately, most of the variables I’ve listed above are not included in your dataset, so they’re out of the picture–include that in the “weaknesses” section of your publication. The other variables you <em>do</em> have available are the following:</p>
 <ul>
 <li>Years of Service;</li>
@@ -195,10 +189,10 @@ $(document).ready(function () {
 <p>There are three remaining classes a variable might fall into: <strong>confounders</strong>, <strong>effect modifiers</strong>, or <strong>mediators</strong>. To understand these three terms, you need to have a solid idea in your mind of <strong>causal pathways</strong>.</p>
 <p>When you run a regression, you are almost always interested in how just two variables interact: your predictor of interest, and your outcome. In our example, we want to know the effect that “years since Ph.D” has on salary. We think that “years since Ph.D” has an effect on salary, so our proposed causal pathway is this:</p>
 <p>yrs.since.phd –&gt; salary</p>
-<p>Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which class they fall into.</p>
+<p>Any other variables you include, you include because they have some impact on this causal pathway, but what type of impact they have depends on which of the three classes they fall into.</p>
 <div id="confounders" class="section level3">
 <h3>Confounders</h3>
-<p>A <strong>confounder</strong> is a variable that is <em>associated</em> with <strong>both</strong> your predictor and outcome variable, but that does NOT lie <em>on the causal pathway between them</em>. “Number of publications” would be a classic confounder in our salaries regression: how long it’s been since your Ph.D is almost certainly associated with how many papers you’ve published, and the number of papers you’ve published is likely associated with your salary, but the relationship cannot be describes simply as “It’s been longer since my Ph.D, <em>therefore</em> I have more publications, <em>therefore</em> I have a higher salary.” Both “years since Ph.D” and “number of publications” are most likely independently considered in determining someone’s salary level.</p>
+<p>A <strong>confounder</strong> is <em>a variable that is associated with <strong>both</strong> your predictor and outcome variable, but that does NOT lie on the causal pathway between them</em>. “Number of publications” would be a classic confounder in our salaries regression: how long it’s been since your Ph.D is almost certainly associated with how many papers you’ve published, and the number of papers you’ve published is likely associated with your salary, but the relationship cannot be describes simply as “It’s been longer since my Ph.D, <em>therefore</em> I have more publications, <em>therefore</em> I have a higher salary.” Both “years since Ph.D” and “number of publications” are independently considered in determining someone’s salary level.</p>
 <p>Confounders interact with the causal pathway like so:</p>
 <p>[insert figure here]</p>
 <p>Omitting confounders introduced omitted variable bias into models; you should always include confounders in your analysis.</p>
@@ -219,23 +213,23 @@ Salaries[, list(mean.salary=mean(salary), mean.yrs.since.phd=mean(yrs.since.phd)
 <p>The definition of a mediator is very similar to that of a confounder, but the impact is completely different. Like confounders, <strong>mediators</strong> are variables <em>associated with both the predictor and outcome variable</em>, but <em>unlike</em> confounders, mediators <strong>DO lie on the causal pathway between the two</strong>.</p>
 <p>The causal pathway for mediators looks like this:</p>
 <p>[insert]</p>
-<p>Because mediators fall <em>on the causal pathway</em> between your two variables of interest, you don’t have to include them in the model. If you’re interested in how “years since Ph.D” affects salary, you shouldn’t really care <em>how</em> it affects salary. Including a mediator in a regression just includes redundant information.</p>
+<p>Because mediators fall <em>on the causal pathway</em> between your two variables of interest, you don’t have to include them in the model. If you’re interested in <em>the magnitude with which</em> “years since Ph.D” affects salary, you shouldn’t really care <em>by what mechanism</em> it affects salary. Including a mediator in a regression just includes redundant information.</p>
 <p>“Rank” is a good example of a mediator in our dataset. The number of years since your Ph.D affects your salary precisely <em>because</em> you move up the ranks and gain seniority over time. The more years since your Ph.D, the higher ranking (hopefully) you are, the higher your salary. You wouldn’t need to include “rank” in this regression.</p>
 </div>
 <div id="effect-modifiers" class="section level3">
 <h3>Effect Modifiers</h3>
 <p>Finally, we have effect modifiers, which are almost always categorical variables. An <strong>effect modifier</strong> is a variable associated with the <em>outcome</em> of interest, but <strong>NOT</strong> with the predictor variable of interest. Effect modifiers can be thought of as stratification variables more than anything– your overall result won’t necessarily be <em>biased</em> if you leave them out, but you might mask important subgroup patterns.</p>
 <p>[insert causal pathway figure]</p>
-<p>In our dataset, discipline is a great example of a confounding variable. Unless it’s a very new scientific field, what department you’re in is probably not strongly associated with how long it’s been since your Ph.D. However, what department you’re in is surely associated with your salary– some fields are much better paid than others. If we were to exclude discipline from this regression, we would still get an accurate representation of the “years since Ph.D”-salary relationship for <em>the group as a whole</em>, but we would be masking <em>subgroup differences</em> between the disciplines. For that reason, it’s a good idea to include effect modifier in regressions.</p>
+<p>In our dataset, discipline is a great example of a confounding variable. Unless it’s a very new scientific field, what department you’re in is probably not strongly associated with how long it’s been since your Ph.D. However, what department you’re in is surely associated with your salary– some fields are much better paid than others. If we were to exclude discipline from this regression, we would still get an accurate representation of the “years since Ph.D”-salary relationship for <em>the group as a whole</em>, but we would be masking <em>subgroup differences</em> between the disciplines. For that reason, it’s a good idea to include effect modifiers in regressions.</p>
 </div>
 <div id="and-then-there-was-one" class="section level3">
 <h3>And Then There Was One</h3>
-<p>There is still one variable left to include or exclude from our regression: “Years of Service”. It’s not a categorical variable, and it’s <em>definitely</em> associated with both “years since Ph.D” and salary, so it’s not an effect modifier. But is it a mediator, or a confounder?</p>
+<p>There is still one variable left to include or exclude from our regression: “years of service”. It’s not a categorical variable, and it’s <em>definitely</em> associated with both “years since Ph.D” and salary, so it’s not an effect modifier. But is it a mediator, or a confounder?</p>
 <p>If it were a mediator, it would be <em>on the causal pathway</em> between “years since Ph.D” and salary. You could make that claim–by definition, the longer your years of service, the longer it’s been since your Ph.D, so by including both variables in your regression you might be unnecessarily repeating information. On the other hand, you could argue that “years of service” is <em>not</em> on the causal pathway of the two variables– it’s tracking how long someone has been at a particular organization, which might be an independent predictor of salary from the “years since Ph.D” variable. You could swing the argument both ways, and whether or not to include such a variable in the regression is left to the discretion of the modeler.</p>
 <p>My personal advice? Try running a regression with “years of service”, and see how big of a difference it makes. Maybe it doesn’t matter much anyway. If it does make a large difference, you’ll need a strong justification if you want to exclude it.</p>
 </div>
-<div id="lets-play-a-game-categorize-the-variable." class="section level3">
-<h3>Let’s Play a Game: Categorize the variable.</h3>
+<div id="lets-play-a-game-categorize-the-variable" class="section level3">
+<h3>Let’s Play a Game: Categorize the Variable</h3>
 <div id="arrival-time-at-work-coffee-drinking-and-productiveness" class="section level4">
 <h4>1. Arrival Time at Work, Coffee Drinking, and Productiveness</h4>
 <p>We want to know what effect the time office workers arrive at work has on how productive they are. Our hypothesis is that those who arrive to work earlier are more productive throughout the day. We also track whether or not each person drinks coffee.</p>
@@ -246,7 +240,7 @@ Salaries[, list(mean.salary=mean(salary), mean.yrs.since.phd=mean(yrs.since.phd)
 <li>Those who are more productive are more likely to drink coffee.</li>
 </ol>
 <p>Is coffee drinking a confounder, a mediator, or an effect modifier?</p>
-<p>Since this variable is not associated with the predictor (how early people come in) but is associated with the outcome (how productive people are), coffee drinking is likely to be an <strong>effect modifier</strong>.</p>
+<p>Since this variable is <em>not</em> associated with the predictor (how early people come in) but <em>is</em> associated with the outcome (how productive people are), coffee drinking is likely to be an <strong>effect modifier</strong>.</p>
 </div>
 <div id="smoking-coffee-drinking-and-lung-cancer" class="section level4">
 <h4>2. Smoking, Coffee Drinking, and Lung Cancer</h4>
@@ -256,7 +250,7 @@ Salaries[, list(mean.salary=mean(salary), mean.yrs.since.phd=mean(yrs.since.phd)
 <li>Smokers are more likely to drink coffee;</li>
 <li>Coffee drinkers are more likely to get lung cancer.</li>
 </ol>
-<p>Is coffee drinking a confouunder, a mediator, or an effect modifier?</p>
+<p>Is coffee drinking a confounder, a mediator, or an effect modifier?</p>
 <p>Well, coffee drinking is associated with both the predictor and outcome, so it can’t be an effect modifier. The next question we need to ask is: is it on the causal pathway? If it were, we could reasonably make the claim that smoking <em>causes</em> you to drink coffee, which <em>causes</em> lung cancer. That seems hard to back up. It’s more plausible to say that smokers are more likely to be coffee drinkers because smokers are more likely to have addictive personalities, but that coffee drinking is not directly on the causal pathway between smoking and lung cancer. Therefore, coffee drinking is a <strong>confounder</strong> in this case.</p>
 </div>
 <div id="cafe-location-coffee-drinking-and-productiveness" class="section level4">
@@ -275,6 +269,30 @@ Salaries[, list(mean.salary=mean(salary), mean.yrs.since.phd=mean(yrs.since.phd)
 <div id="its-not-bias-its-just-wrong-misspecifying-your-functional-form" class="section level2">
 <h2>It’s Not Bias, It’s Just Wrong: Misspecifying your Functional Form</h2>
 <p>Finally, we need to describe a common problem in statistics that does <em>not</em> fall under the label of “bias”. Let’s say we have data that looks like this:</p>
+<p>[insert data picture]</p>
+<p>Based on what we’ve learned so far, if I wanted to know the relationship between these two variables I would run a linear regression, which would look something like this:</p>
+<p>[insert regression picture]</p>
+<p>This would of course be wrong, because I’d be trying to fit a line to data that <em>is not linear</em>. This is a type of model misspecification called misspecifying the <strong>functional form</strong> of the model. In this case, the data is quadratic (I added some noise to the function <span class="math inline">\(x^2\)</span> and plotted it).</p>
+<p>The correct interpretation of this data would be to say, “Every time that ‘variable’ increases from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, ‘value’ increases by the quantity <span class="math inline">\(b^2 - a^2\)</span>”. This is <em>very</em> different from saying, “Every time that ‘variable’ increases from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span>, ‘value’ increases by a fixed value <span class="math inline">\(\beta\)</span>”, which is what the linear regression interpretation would imply.</p>
+<p>You couldn’t quantitatively assess the bias of this problem because you would be comparing a linear relationship to a curved relationship, but this is still an incorrect methodology.</p>
+<p>But so many things follow a nonlinear pattern– population size, income, country’s GDP… Does this mean that we simply can’t use regression methods to assess nonlinear relationships?</p>
+<p>Not at all! We can still regress on these variables, we just need to <strong>transform</strong> them first.</p>
+<p>A data transformation is any mathematical operation that you perform across all values of a variable. If I had a vector of values from 1 to 10, and I added 3 to each of them, that would be a kind of transformation:</p>
+<pre class="r"><code>example_vector &lt;- 1:10
+transformed_vector &lt;- example_vector + 3
+print(transformed_vector)</code></pre>
+<pre><code>##  [1]  4  5  6  7  8  9 10 11 12 13</code></pre>
+<p><br> Similarly, if we squared every element in that vector, that would be a different kind of transformation:</p>
+<pre class="r"><code>example_vector &lt;- 1:10
+transformed_vector &lt;- example_vector^2
+print(transformed_vector)</code></pre>
+<pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
+<p><br> We can use transformations to make nonlinear data into linear data. For example, the dataset I plotted up above followed a quadratic curve (it was generated by the function <span class="math inline">\(y=x^2\)</span>). If I wanted to <em>transform</em> this into the <em>linear</em> function <span class="math inline">\(y=x\)</span>, I would need to take the <em>square root</em> of every y value. The transformed data would look like this:</p>
+<p>[insert transformed plot]</p>
+<p>Now that’s a linear relationship! We can run a linear regression on that:</p>
+<p>[insert transformed regression plot].</p>
+<p>Now we’ve acheived our original goal, but we need to be extremely careful with our interpretation of the results. Our outcome variable is no longer simply “value”, it is the <em>square root</em> of “value”. So our interpretation of this regression would be “For every unit increase in ‘variable’, the square root of ‘value’ increases by <span class="math inline">\(\beta\)</span>.”</p>
+<p>You probably won’t need to worry about transformations for the purpose of this course, but it’s good to be aware of the concept in case you run into it later.</p>
 </div>
 
 
