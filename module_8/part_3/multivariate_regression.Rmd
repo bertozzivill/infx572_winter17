@@ -1,0 +1,80 @@
+---
+title: "Multivariate Regression"
+output: html_document
+---
+
+```{r, include=F}
+library(data.table)
+library(car)
+library(ggplot2)
+
+data(Salaries)
+Salaries <- data.table(Salaries)
+```
+
+
+## Motivation: Bivariate Regression is Often Biased
+
+Last week we learned that including just our two variables of interest in our regression is usually not enough-- there are usually other *confounding factors* or *effect modifiers* that we need to consider in our analysis. This page should help you understand how to design and conceptualize multivariate regressions. 
+
+## The Math of Multivariate Regression: Just Add Variables!
+
+Adding variables to your regression specification is easy-- you very literally just add them. Last lecture we decided that we should definitely include sex and discipline into our Salaries regression, and we should test the inclusion of "year of service". So, we're transforming our regression specification from this:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
+
+Into this:
+
+$$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3rank + \beta_4yrs.service + \varepsilon$$
+
+Writing the math down is easy, but conceptualizing it is a little harder. The sections below are designed to walk you through what this equation *means* now. 
+
+## The Theory of Multivariate Regression
+
+A good way of thinking about a multivariate regression is that we're finding a series of *weights* we can apply to determine how important each of the variables is. Watch this video for an example:
+
+### Video: Thinking of Regression as a Way of Adding Weights (plant-buying examples)
+
+
+You'll notice something a little interesting about our new regression equation: It includes both *continuous* variables (like "years since Ph.D" and "years of service") and *categorical* variables like "sex" and "rank". These are treated very differently by the regression, and have different interpretations. I'll go over them below, using simplified versions of the full regression equation. 
+
+### Continuous Variables: Add a Dimension
+
+Look at our original bivariate regression specification: 
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
+
+Hopefully by this point you could all tell me in your sleep how to interpret this equation: **A professor with zero years since his/her Ph.D is expected to earn a salary of $\beta_0$. Every additional year since Ph.D increases that expected salary by $\beta_1$.**
+
+Now, let's add just the "years of service" variable to the regression equation:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2yrs.service +  \varepsilon$$
+
+The interpretation of this equation is very similar to our additional regression equation. The updated version goes like this: **A professor with zero years since his/her Ph.D is expected to earn a salary of $\beta_0$. Every additional year since Ph.D increases that expected salary by $\beta_1$, *and every additional year of service increases that expected salary by $\beta_2$*.**
+
+To visualize this relationship, you need to think in three dimensions. Before, with our bivariate regression, we could plot the relationship on a 2D graph: "years since Ph.D" on the x-axis, salary on the y-axis. Now, we need to imagine a third dimension, coming out of the screen, for "years of service". The regression line we draw in this 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line. See video for more details.
+
+This is key: **when you add a continuous variable to a regression, you add a second slope, but keep only one intercept**.
+
+### Categorical Variables: Stratify Your Dataset
+
+#### Example 1: Sex
+Instead, let's think about adding just the "sex" variable to our regression equation, so our new multivariate specification is:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex +  \varepsilon$$
+
+What does it mean to include **categorical** variables in a regression? The "sex" column takes values "male" or "female"-- how do you put those in an equation? We can't do multiplication on the word "female"! What are we trying to say here?
+
+When we add a categorical variable to a dataset, we're not adding a new dimension with a new slope, **we're stratifying on the same dimension, and adding a new intercept**. The $\beta_2$ value here isn't a new *slope*, it's a new *intercept* that will bump the regression line up or down from the baseline. 
+
+
+
+
+
+#### Example 2: Rank
+
+### Understanding the Intercept with Categorical Variables (Video)
+
+## Adding Variables Will (Almost) Always Reduce the Effect of Any One of Them
+
+
