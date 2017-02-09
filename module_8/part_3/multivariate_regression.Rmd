@@ -25,7 +25,7 @@ $$ salary = \beta_0 + \beta_1yrs.since.phd + \varepsilon$$
 
 Into this:
 
-$$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3rank + \beta_4yrs.service + \varepsilon$$
+$$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3discipline + \beta_4yrs.service + \varepsilon$$
 
 Writing the math down is easy, but conceptualizing it is a little harder. The sections below are designed to walk you through what this equation *means* now. 
 
@@ -35,8 +35,15 @@ A good way of thinking about a multivariate regression is that we're finding a s
 
 ### Video: Thinking of Regression as a Way of Adding Weights (plant-buying examples)
 
+### Adding Variables Will (Almost) Always Reduce the Effect of Any One of Them
 
-You'll notice something a little interesting about our new regression equation: It includes both *continuous* variables (like "years since Ph.D" and "years of service") and *categorical* variables like "sex" and "rank". These are treated very differently by the regression, and have different interpretations. I'll go over them below, using simplified versions of the full regression equation. 
+## Categorical and Continuous Variables
+
+Back to our newfangled regression equation:
+
+$$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3discipline + \beta_4yrs.service + \varepsilon$$
+
+You'll notice something a little interesting about our new regression equation: It includes both *continuous* variables (like "years since Ph.D" and "years of service") and *categorical* variables like "sex" and "rank". These are treated very differently by the regression, and have different interpretations. Remeber this guideline: **continuous varaiables add slopes, categorical variables add intercepts**. I'll go over them below, using simplified versions of the full regression equation. 
 
 ### Continuous Variables: Add a Dimension
 
@@ -52,9 +59,39 @@ $$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2yrs.service +  \varepsilon$$
 
 The interpretation of this equation is very similar to our additional regression equation. The updated version goes like this: **A professor with zero years since his/her Ph.D is expected to earn a salary of $\beta_0$. Every additional year since Ph.D increases that expected salary by $\beta_1$, *and every additional year of service increases that expected salary by $\beta_2$*.**
 
-To visualize this relationship, you need to think in three dimensions. Before, with our bivariate regression, we could plot the relationship on a 2D graph: "years since Ph.D" on the x-axis, salary on the y-axis. Now, we need to imagine a third dimension, coming out of the screen, for "years of service". The regression line we draw in this 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line. See video for more details.
+```{r, include=F}
+library(plotly)
+
+cont_reg <- lm(salary ~ yrs.since.phd + yrs.service, data=Salaries)
+Salaries[, cont.reg.pred:=predict(cont_reg)]
+
+p <- plot_ly(Salaries) %>%
+  add_trace(x = ~yrs.since.phd, y = ~yrs.service, z = ~salary, name="data", type = 'scatter3d', mode='markers',  opacity=0.5, marker=list(size=3)) %>%
+  add_trace(x= ~yrs.since.phd, y= ~ yrs.service, z=~cont.reg.pred, name="prediction", type= 'scatter3d', mode='lines', line=list(size=3))
+
+```
+
+
+
+To visualize this relationship, you need to think in three dimensions. Before, with our bivariate regression, we could plot the relationship on a 2D graph: "years since Ph.D" on the x-axis, salary on the y-axis.
+
+```{r, include=F}
+biv_reg <- lm(salary~yrs.since.phd, data=Salaries)
+Salaries[, biv.reg:= predict(biv_reg)]
+
+ggplot(Salaries, aes(x=yrs.since.phd)) + 
+  geom_point(aes(y=salary), color="blue", alpha=0.5) +
+  geom_line(aes(y=biv.reg), color="orange", size=1)
+```
+
+
+Now, we need to imagine a third dimension, coming out of the screen, for "years of service". The regression line we draw in this 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line:
+
+[insert 3d screenshot]
 
 This is key: **when you add a continuous variable to a regression, you add a second slope, but keep only one intercept**.
+
+
 
 ### Categorical Variables: Stratify Your Dataset
 
@@ -65,16 +102,66 @@ $$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex +  \varepsilon$$
 
 What does it mean to include **categorical** variables in a regression? The "sex" column takes values "male" or "female"-- how do you put those in an equation? We can't do multiplication on the word "female"! What are we trying to say here?
 
-When we add a categorical variable to a dataset, we're not adding a new dimension with a new slope, **we're stratifying on the same dimension, and adding a new intercept**. The $\beta_2$ value here isn't a new *slope*, it's a new *intercept* that will bump the regression line up or down from the baseline. 
+First, let's think about what a categorical variable represents. When you assign each value in a dataset to a category, you're saying two things:
 
+1. This datapoint is a member of this group; and
+2. This dataoint is *not* a member of any other group in the list of options.
 
+For example, in the "sex" column of the `Salaries` dataset, everyone is assigned one of two sexes: male or female[^1]. If you're female, your'e not male, and vice versa. Thus, instead of thinking about the "sex" column as a *categorical* variable, we could think of it as a *binary* one, with a value of 1 if the datapoint references a male, and 0 if it doesn't. This would transform the dataset we're regressing on from this:
 
+```{r, echo=F}
+Salaries[, list(salary, yrs.since.phd, sex)]
+```
+<br>
+
+to this:
+
+```{r, echo=F}
+Salaries[, list(salary, yrs.since.phd, is.male=ifelse(sex=="Male", 1, 0))]
+```
+
+[^1]: Generally, unless the topic being studied is specifically focused on gender identity issues, data scientists still work in a paradigm where sex and gender are both binary. Some of this has to do with inherent societal biases, but some of it is a small numbers problem: even if you *were* to collect data on non-binary individuals, they would make up such a small subset of the overall sample that it would be almost impossible to say anything statistically relevant about them. This doesn't mean that we shouldn't try, however, and data science is slowly moving toward a less binary perspective. 
+
+We haven't lost any information about our categorical variables, and now we have a dataset that's entirely numeric, so we can run a regression on it. Our new regression equation looks like this: 
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.male +  \varepsilon$$
+
+For concreteness, let's imagine for a moment that I've run this regression, and I've obtained the following regression coefficients:$\beta_0=85,000$, $\beta_1=950$, $\beta_2=8000$. 
+
+Our interpretation of $\beta_1$ hasn't changed. It still says, "For every additional year since Ph.D, the expected salary of a professor increases by \$950."
+However, our interpretation of the *baseline* value is different. Let's say I want to predict salary for a woman who has just gotten her Ph.D. For her, `yrs.since.phd` is 0, and `is.male` is also zero. So we would predict:
+
+$$ salary = 85,000 + 950*yrs.since.phd + 8000*is.male $$
+$$ salary = 85,000 + 950*0 + 8000*0 = 85,000 $$ 
+
+Now let's say I want to predict salary for a man who has just gotten his Ph.D. Everything is the same about this equation, except that `is.male` is now 1. So:
+
+$$ salary = 85,000 + 950*0 + 8000*1 = 93,000 $$
+
+The difference between these two predictions is the value of $\beta_2$: 8,000. This same pattern holds true at other values of `yrs.since.phd`: Let's predict salary for a man and a woman who each have 30 years since their Ph.D's:
+
+$$ salary_{female} = 85,000 + 950*30 + 8000*0 = 113,500 $$
+$$ salary_{male} = 85,000 + 950*30 + 8000*1 = 121,500 $$
+
+Notice, again, that the difference between these two values is simply the value of $\beta_2$. 
+
+When we add a categorical variable to a dataset, we're not adding a new dimension with a new slope, **we're stratifying on the same dimension, and adding a new intercept**. The $\beta_2$ value here isn't a new *slope*, it's a new *intercept* that will bump the regression line up or down from the baseline. Categorical variables split our one regression line into multiple lines, one for every category. All of these lines have the same slope, but have different *intercepts*. You can think of our full regression equation:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.male +  \varepsilon$$
+
+As actually describing two different lines. For women, the line looks exactly the same as our bivariate regression:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd +  \varepsilon$$
+
+Whereas for men, the intercept value is uniformly higher:
+
+$$ salary = (\beta_0 +\beta_2) + \beta_1yrs.since.phd +  \varepsilon$$
 
 
 #### Example 2: Rank
 
 ### Understanding the Intercept with Categorical Variables (Video)
 
-## Adding Variables Will (Almost) Always Reduce the Effect of Any One of Them
+
 
 
