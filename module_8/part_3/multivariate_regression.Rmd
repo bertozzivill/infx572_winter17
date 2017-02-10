@@ -63,11 +63,15 @@ The interpretation of this equation is very similar to our additional regression
 library(plotly)
 
 cont_reg <- lm(salary ~ yrs.since.phd + yrs.service, data=Salaries)
-Salaries[, cont.reg.pred:=predict(cont_reg)]
+
+new_salaries <- data.table(yrs.service=rep(1:60, 60), yrs.since.phd=sort(rep(1:60, 60)))
+new_salaries[, salary:=predict(cont_reg, newdata=new_salaries)]
+
+output_matrix <- matrix(data=new_salaries$salary, nrow=60, ncol=60)
 
 p <- plot_ly(Salaries) %>%
   add_trace(x = ~yrs.since.phd, y = ~yrs.service, z = ~salary, name="data", type = 'scatter3d', mode='markers',  opacity=0.5, marker=list(size=3)) %>%
-  add_trace(x= ~yrs.since.phd, y= ~ yrs.service, z=~cont.reg.pred, name="prediction", type= 'scatter3d', mode='lines', line=list(size=3))
+  add_surface(z= ~output_matrix, showscale=F)
 
 ```
 
@@ -81,22 +85,39 @@ Salaries[, biv.reg:= predict(biv_reg)]
 
 ggplot(Salaries, aes(x=yrs.since.phd)) + 
   geom_point(aes(y=salary), color="blue", alpha=0.5) +
-  geom_line(aes(y=biv.reg), color="orange", size=1)
+  geom_line(aes(y=biv.reg), color="orange", size=1) +
+  labs(title="Bivariate Regression")
 ```
 
 
-Now, we need to imagine a third dimension, coming out of the screen, for "years of service". The regression line we draw in this 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line:
+Now, we need to imagine a third dimension, coming out of the screen, for "years of service".In this space, we find a regression *plane*, not a regression line. This plane in 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line:
 
 [insert 3d screenshot]
 
-This is key: **when you add a continuous variable to a regression, you add a second slope, but keep only one intercept**.
+This is key: **when you add a continuous variable to a regression, you add a second slope, but keep only one intercept**. That intercept value is equal to the corner of the regression surface where both `yrs.since.phd` and `yrs.service` are 0.
+
+It becomes impossible to visualize regressions this way when you add more than two continuous predictor variables, but conceptually the idea is exactly the same-- every time you add a continouous predictor, you're adding a dimension to your regression space, and adding a slope to your regression line. 
+
 
 
 
 ### Categorical Variables: Stratify Your Dataset
 
+Adding a categorical variable to your regression is a different thing entirely. Instead of expanding your line out into another dimension, you're stratifying it--making a different regression line for different values of your predictor variable. You don't wind up with a 3-dimensional plot, you wind up with a 2-D plot with different lines on it. For example, the regression with `yrs.since.phd` and `sex` that we run below can be plotted as:
+
+```{r, include=F}
+reg_cat_sex <- lm(salary~yrs.since.phd+sex, data=Salaries)
+Salaries[, reg.cat.sex:=predict(reg_cat_sex)]
+
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary, color=sex), alpha=0.5) +
+  geom_line(aes(y=reg.cat.sex, color=sex), size=1) +
+  labs(title="Multivariate Regression with Categorical Variables: Sex")
+
+```
+
 #### Example 1: Sex
-Instead, let's think about adding just the "sex" variable to our regression equation, so our new multivariate specification is:
+Let's think about adding just the "sex" variable to our regression equation, so our new multivariate specification is:
 
 $$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex +  \varepsilon$$
 
