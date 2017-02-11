@@ -1,0 +1,99 @@
+---
+title: "Multivariate Regressions in R"
+output: html_document
+---
+
+```{r, include=FALSE}
+library(data.table)
+library(ggplot2)
+library(car)
+
+data(Salaries)
+Salaries <- data.table(Salaries)
+```
+
+## Specifying the Regression
+
+Modifying your regression specification in R is easy-- you just add additonal variables to the **right side** of your formula. So, our original bivariate regression looked like this:
+
+```{r}
+bivariate <- lm(salary~yrs.since.phd, data=Salaries)
+```
+<br>
+And our regression with an additional continuous variable (`yrs.service`) looks like this:
+```{r}
+multivariate_continuous <- lm(salary~yrs.since.phd + yrs.service, data=Salaries)
+```
+<br>
+For categorical variables, the specification is exactly the same-- R does all the converting-to-binary columns under the hood. So our regression with an additional categorical variable (`sex`) looks like this:
+```{r}
+multivariate_categorical <- lm(salary~yrs.since.phd + sex, data=Salaries)
+```
+
+## Interpreting Regression Output
+
+Where things get a little hairier with multivariate regressions is interpreting the output. For continuous variables it's pretty straightforward, but for categorical variables it takes some getting used to. 
+
+### Continuous Variables
+
+Let's take a look at the output of `multivariate_continuous`:
+```{r}
+summary(multivariate_continuous)
+```
+<br>
+If you're comfortable interpreting bivariate regressions, this should look pretty familiar. You still have your intercept and your slope on `yrs.since.phd`, and now you just have an extra value for `yrs.service`. The `Estimate` column for this value is the coefficient on `yrs.service`, exactly the same way that it is for `yrs.since.phd`. 
+
+If we wanted to interpret these regression results in a sentence, we would say "A professor with zero years since his/her Ph.D and zero years of service is expected to have a salary of \$89,912.20. Every additional year since Ph.D *increases* expected salary by \$1,562.90, and every additional year of service *decreases* expected salary by \$629.10."
+
+[insert: explanation of weird `yrs.service` value.]
+
+
+### Categorical Variables 
+Now, let's take a look at the regression output for our `multivariate_categorical` regression:
+```{r}
+summary(multivariate_categorical)
+```
+<br>
+Ok, this looks a little bit different than what we had before. We still have an intercept estimate and a `yrs.since.phd` coefficient, but our third row is now `sexMale`, when you might have expected it to just be `sex`. Remember that for categorical variables, one value is *incorporated into the intercept*, and every other value gets its own coefficient that gets *added* to that intercept. So here, The `(Intercept)` value refers to the regression intercept for *females*, and the `(Intercept)` value **plus** the `sexMale` value gives the regression intercept for *males*. 
+
+You would interpret this regression like so: "A *female* professor with zero years since her Ph.D has an expected salary of \$85,181.80, while a *male* professor with zero years since his Ph.D has an expected salary of (\$85,181.80 + \$7,923.60) = \$93,105.40. Every additional year since Ph.D increases a professor's expected salary by \$958.10."
+
+
+Let's do another example, using rank:
+```{r}
+rank_regression <- lm(salary~yrs.since.phd+rank, data=Salaries)
+summary(rank_regression)
+```
+<br>
+Here, we have four rows of output, even though we only included two variables in the regression. That's because "rank" takes *three* values, and *one* of them gets incorporated into the intercept, so we need *two* rows to fully describe the "rank" component of the regression. If we run `unique(Salaries$rank)` to get all possible values of the `rank` variable, we see that our options are `AsstProf`, `AssocProf`, and `Prof`. We only see regression values for `AssocProf` and `Prof`, which means that the `(Intercept)` value must refer to `AsstProf`.
+
+Can you write up an interpretation for this regression on your own? Try it out.
+
+
+
+Once you've tried it, here's the solution:
+"At zero years since his/her Ph.D, an *assitant professor* has an expected salary of \$81,186.23, an *associate professor* an expected salary of (\$81,186.23 + \$13,932.18) = \$95,118.41, and a *[full] professor* an expected salary of (\$81,186.23 + \$47,860.42) = \$129,046.60. Every additional year since Ph.D *decreases* a professor's expected salary by \$80.37."
+
+Notice that, upon including the `rank` variable, our `yrs.since.phd` variable switched signs and became non-significant. This is a strong indication that `rank` is a mediator-- more multicollinearity issues. 
+
+```{r, include=F}
+ggplot(Salaries, aes(x=rank, y=yrs.since.phd)) + geom_boxplot(aes(fill=rank))
+```
+
+## Combining Continous and Categorical Variables
+
+It's time to step things up to the next level: what happens if we include **both** `yrs.service` and `sex` in our regression?
+
+```{r}
+combined_regression <- lm(salary~yrs.since.phd + yrs.service + sex, data=Salaries)
+summary(combined_regression)
+```
+
+If you're comfortable with the regression interpretations for continuous and categorical variables separately, this output shouldn't be complicated-- the `yrs.since.phd` and `yrs.service` coefficients are just slopes, and the `sexMale` value modifies the intercept, as before. 
+
+Our interpretation is :
+
+*A *female* professor with zero years since her Ph.D and zero years of service has an expected salary of \$82,875.90.
+* A *male* professor with zero years since his Ph.D and zero years of service has an expected salary of (\$82,875.90 + \$8,457.10) = \$91,333. 
+* An extra year since Ph.D *increases* a professor's expected salary by \$1,552.80, and an extra year of service *decreases* it by \$649.80. 
+
