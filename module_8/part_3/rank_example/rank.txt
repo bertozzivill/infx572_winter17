@@ -1,0 +1,128 @@
+Ok, now that we've walked through an example of including sex as a categorical
+variable in our regression, let's look at another categorical variable: rank.
+
+Now, I know that in last week's lecture I said that we shouldn't include rank
+in a regression with 'years since phd' because rank is a mediator in the relationship
+between years since phd and salary. That's still true, but a regression that
+includes rank will be a good learning tool, so we're going to include it just this once.
+
+*click*
+
+Hopefully by now you could write this regression equation out on your own:
+if we want to include rank in a multivariate regression with salary and years since
+phd, we would write: "salary equals beta nought plus beta 1 times years since phd
+plus beta 2 times rank."
+
+*click*
+
+The reason that rank is an interesting variable to include is that it has *three*
+levels, not just two like sex. The three levels here are "assistant professor",
+"associate professor", and just "professor", which refers to a "full" professor.
+
+*click*
+
+In our "sex" example, we assigned the "female" category to have a value of 0 and
+the "male" category to have a value of 1, and thus converted our categorical
+variable into a numeric one. It would follow, then, that if you have a categorical
+variable with *three* levels, you should convert them to values 0, 1, and 2.
+
+*click*
+
+However, this train of thought is INCORRECT. The reason why categorical variables
+work in regressions is that they always take a value of either 1 or 0-- either
+you belong to that category, or you don't!
+
+Instead, when we have more than two categories we have to *add more columns* to
+the regression.
+
+*click*
+
+So, our original dataset looks like this, with all three variables for "rank"
+collapsed into one column.
+
+*click*
+
+Instead, when running a regression we should imagine a dataset that looks like this:
+
+*click*
+
+Here, we have our salary and years since ph.d column as before, but now we also
+have two new columns. One, is.assoc, takes a value of "1" if that row refers to
+an associate professor, and "0" otherwise. The other, is.fullprof, takes a value of "1"
+if that row refers to a full professor, and "0" otherwise.
+
+But wait, you might say-- there were *three* levels in our original column.
+Don't we also need a column that tells us whether or not the row refers to an
+assistant professor?
+
+It turns out that the answer is "no"--our two columns give us all the information
+we need. Since every row *must* belong to one of these three categories, if both
+is.assoc and is.fullprof are zero (like they are on rows 4 and 5), then the professor
+in question *must* be an assistant professor. In the same way that "female" got
+incorporated into the intercept in our "sex" regression, "assistant professor" will
+get incorporated into the intercept here.
+
+*click*
+
+Ok, so our regression equation now looks like this: [read regression equation]
+
+*click*
+
+Let's imagine that we run this regression and come up with a value of $81,000 for
+the intercept, $1,000 for beta 1, $14,000 for beta 2, and $49,000 for beta 3.
+How do we interpret these results?
+
+As always, we can say that an additional year since Ph.D will lead to an estimated
+increase in salary of $1,000. But what about the baseline values?
+
+Let's walk through predicted salaries for three professors, all with zero years
+since their Ph.D, but of different ranks:
+
+*click*
+
+For our assistant professor, beta 1 is reduced to zero because there are zero
+years since phd, beta 2 is reduced to zero because this person is *not* an associate
+professor, and beta 3 is reduced to zero because this person is not a full professor.
+
+The only part of the original equation that remains is the intercept, beta 0, so
+our professors' estimated salary is $81,000, the same value as beta 0.
+
+*click*
+
+For our associate professor, beta 1 is reduced to zero because there are zero
+years since phd, beta 2 stays around because this person *is*  an associate
+professor, so the 'is.associate' value equals 1, and beta 3 is reduced to zero
+because this person is not a full professor.
+
+Therefore, the final equation is the intercept, beta 0, plus the coefficient on
+ is.assoc, beta 2. Our professors' estimated salary is $95,000.
+
+ *click*
+
+ Finally, for our full professor, beta 1 is reduced to zero because there are zero
+ years since phd, beta 2 is reduced to zero because this person is *not*  an associate
+ professor, and beta 3 sticks around because this person *is* a full professor.
+ so the *is.fullprof* value equals 1.
+
+ Therefore, the final equation is the intercept, beta 0, plus the coefficient on
+  is.fullprof, beta 3. Our professors' estimated salary is $129,000.
+
+*click*
+
+As with sex, this regression specification generates a different prediction line
+for each rank. All lines have the **same slope**, but **different intercepts**.
+
+My hope is that this example, combined with the sex example given on the lecture
+page, gives you a solid conceptual and mathematical understanding of how categorical
+variables are used in regressions. Next page we're going to move on to actually
+running regressions in R, and there is one thing I want to stress:
+
+*click*
+
+All of that business we did just now, with creating new binary columns to represent
+categorical variables-- we *don't have to do that manually* when we're specifying
+a regression in R. We can just include categorical variables in our regression equation
+the way we normally would, and R will do all the work of converting those to
+binary variables under the hood.
+
+Alright, thanks for watching. 

@@ -1,7 +1,7 @@
 One way to think about regression coefficients is as a series of weights on your
 different input variables. As an example, let's say I want to buy a plant. *click*
 
-So, I go to the plant store. For any given plant, I can come up with a price that
+For any given plant, I can come up with a price that
 I'd be willing to pay for it. What I want to do is break down that process-- I
 want to answer the question *click* "What factors determine the price I'm willing
 to pay for this plant, and how does each factor influence that price?"
@@ -62,4 +62,4 @@ exactly what a regression does--  model coefficients and weights are
 equivalent here. Some of you might find it easier to think of regressions in
 terms of the equations written in the lecture, some of you might find it easier
 to conceptualize them like this, as a series of weights given to different
-input variables. The two interpretations are equivalent. 
+input variables. The two interpretations are equivalent.
