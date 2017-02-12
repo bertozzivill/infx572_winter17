@@ -216,61 +216,11 @@ Which is how we come up with our updated regression lines:
 
 #### Example 2: Rank
 
-New regression equation:
-
-$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2rank +  \varepsilon$$
-
-But rank has 3 values: 
-
-```{r}
-unique(Salaries$rank)
-```
-
-Original dataset:
-
-```{r, echo=F}
-Salaries[, list(salary, yrs.since.phd, rank)]
-```
-
-
-New dataset:
-
-```{r, echo=F}
-Salaries[, list(salary, yrs.since.phd,
-                is.assoc=ifelse(rank=="AssocProf", 1,0),
-                is.fullprof=ifelse(rank=="Prof", 1, 0)
-                )]
-```
-
-New regression equation:
-
-$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.assoc + \beta3is.fullprof +  \varepsilon$$
-
-let's say $\beta_0$ = \$81,000, $\beta_1$ = \$1000, $\beta_2$ = \$14,000, and $\beta_3$ = \$48,000
-
-
-Prediction for professors with zero years since Ph.D:
-
-**Assistant**:
-
-$$ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*0 $$
-$$ salary = \beta_0 = 81,000 $$
-
-**Associate**:
-
-$$ salary = \beta_0 + \beta_1*0 + \beta_2*1 + \beta3*0 $$
-$$ salary = \beta_0 + \beta_2 = 81,000 + 14,000 = 95,000 $$
-
-**Full**:
-
-$$ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*1 $$
-$$ salary = \beta_0 + \beta_3 = 81,000 + 48,000 = 129,000 $$
-
-Additionally, every additional year since Ph.D adds \$1,000 to expected salary.
-
-Plot looks like this:
+Go to video
 
 ```{r, include=F}
+##code for final rank plot
+
 newdata <- data.table(yrs.since.phd=rep(0:60, 3), 
                       rank=c(rep("AsstProf", 60), rep("AssocProf", 60), rep("Prof", 60))
                       )

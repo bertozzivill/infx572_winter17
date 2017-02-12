@@ -1,0 +1,38 @@
+It's very difficult to visualize 3d space using just screenshots, so I
+built this little interactive view of our 3d regression. I'll move it around a
+lot in this video, but you can also view it yourself at http://rpubs.com/abertozz/regression_3d.
+
+The datapoints in this plot should be pretty straightforward to interpret.
+Where previously we were just visualizing points on two axes, yrs.since.phd and
+salary, now we've added a third dimension: years of service.
+
+If you hover over any of these data values, you can see their coordinates. If you
+pivot the plot such that you're staring straight down the barrel of the "yrs.service"
+axis, you can recreate our familiar "salary" vs "years since phd" plot, and similarly
+by turning the plot the other way, you can view just "salary" vs "yrs.service".
+
+The real question is what this big honking plane is running through our data.
+You can get some intuition for what this plane does by rotating the dataset in
+the way we did before. When we're just looking at yrs.since.phd, the plane
+collapses down into a regression line running through the yrs.since.phd data.
+Similarly, when we rotate the other way we can replicate a regression line
+running through the yrs. service angle.
+
+This regression plane is exactly analogous to our regression line, just in three
+dimensions instead of two. We need to have a predicted value for *any* combination
+of a yrs.service value and a yrs.since.phd value, so we need a plane to cover
+that entire space.
+
+We still just run plain old OLS to get this outcome--
+now, the residuals are computed as the distance from a datapoint to its
+corresponding prediction *on the plane*, not on any one line. The math is exactly
+the same as it was before.
+
+What if we want to add another continuous variable to our regression? We wouldn't
+be able to easily visualize it anymore, but the math for that, again, is trivial.
+We would be doing exactly the same thing-- adding another slope that would transform
+our plane into a *manifold* that could give a predicted salary value for any
+combination of our three predictor variables.
+
+Hopefully this video gave you a good intuition for adding continuous variables
+to regressions, now let's move on to categorical variables!
