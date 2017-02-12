@@ -50,9 +50,9 @@
 ## 4. What is the adjusted R-squared value for this regression? What does that mean?
 ## 5. What are the units of the coefficients in the "Estimate" column?
 
-## Make a new column in your dataset with predicted salary values.
+## Make a new column in your dataset with predicted tip values.
 
-## Make a scatter plot of yrs.service vs. salary, and add a line plot showing the regression predictions. Label it. 
+## Make a scatter plot of total_bill vs. tips, and add a line plot showing the regression predictions. Label it. 
 
 ## Think about the expected relationship between "total_bill" and "tip", according to cultural norms in the US.
 ## How does the coefficient on "total_bill" relate to those cultural norms?
