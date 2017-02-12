@@ -10,6 +10,7 @@ library(car)
 
 data(Salaries)
 Salaries <- data.table(Salaries)
+main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_8/part_3/"
 ```
 
 ## Specifying the Regression
@@ -41,14 +42,15 @@ Let's take a look at the output of `multivariate_continuous`:
 summary(multivariate_continuous)
 ```
 <br>
-If you're comfortable interpreting bivariate regressions, this should look pretty familiar. You still have your intercept and your slope on `yrs.since.phd`, and now you just have an extra value for `yrs.service`. The `Estimate` column for this value is the coefficient on `yrs.service`, exactly the same way that it is for `yrs.since.phd`. 
+If you're comfortable interpreting bivariate regressions, this should look pretty familiar. You still have your intercept, and your slope on `yrs.since.phd`, and now you just have an extra value for `yrs.service`. The `Estimate` column for this value is the coefficient on `yrs.service`, exactly the same way that it is for `yrs.since.phd`. 
 
 If we wanted to interpret these regression results in a sentence, we would say "A professor with zero years since his/her Ph.D and zero years of service is expected to have a salary of \$89,912.20. Every additional year since Ph.D *increases* expected salary by \$1,562.90, and every additional year of service *decreases* expected salary by \$629.10."
 
-[insert: explanation of weird `yrs.service` value.]
 
 
 ### Categorical Variables 
+
+#### Sex
 Now, let's take a look at the regression output for our `multivariate_categorical` regression:
 ```{r}
 summary(multivariate_categorical)
@@ -58,6 +60,38 @@ Ok, this looks a little bit different than what we had before. We still have an 
 
 You would interpret this regression like so: "A *female* professor with zero years since her Ph.D has an expected salary of \$85,181.80, while a *male* professor with zero years since his Ph.D has an expected salary of (\$85,181.80 + \$7,923.60) = \$93,105.40. Every additional year since Ph.D increases a professor's expected salary by \$958.10."
 
+You plot categorical regression outputs the same way that you'd plot bivariate outputs, you just need to be sure to stratify by rank
+somehow (it can be through color, faceting, shape-- whatever you prefer). 
+
+```{r}
+## Generate predicted values from categorical regression
+Salaries[, predicted_salary_sex:= predict(multivariate_categorical, data=Salaries)]
+
+png(paste0(main_dir, "sex_by_color.png"))
+## Plot #1: Group sex by color
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary, color=sex), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_sex, color=sex), size=1) +
+  labs(title="Multivariate Regression with Categorical Variables: Sex",
+       x="Years Since Ph.D",
+       y="Salary")
+graphics.off()
+
+png(paste0(main_dir, "sex_by_facet.png"))
+## Plot #2: Facet on Sex
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_sex), size=1) +
+  facet_grid(.~sex, scales="free") + 
+  labs(title="Multivariate Regression with Categorical Variables: Sex",
+       x="Years Since Ph.D",
+       y="Salary")
+graphics.off()
+
+```
+
+
+#### Rank
 
 Let's do another example, using rank:
 ```{r}
@@ -65,20 +99,43 @@ rank_regression <- lm(salary~yrs.since.phd+rank, data=Salaries)
 summary(rank_regression)
 ```
 <br>
-Here, we have four rows of output, even though we only included two variables in the regression. That's because "rank" takes *three* values, and *one* of them gets incorporated into the intercept, so we need *two* rows to fully describe the "rank" component of the regression. If we run `unique(Salaries$rank)` to get all possible values of the `rank` variable, we see that our options are `AsstProf`, `AssocProf`, and `Prof`. We only see regression values for `AssocProf` and `Prof`, which means that the `(Intercept)` value must refer to `AsstProf`.
+Hopefully this output should look familiar, from our video about interpreting regressions with `rank`. We have four rows of output, even though we only included two variables in the regression. That's because "rank" takes *three* values, and *one* of them gets incorporated into the intercept, so we need *two* rows to fully describe the "rank" component of the regression. If we run `unique(Salaries$rank)` to get all possible values of the `rank` variable, we see that our options are `AsstProf`, `AssocProf`, and `Prof`. We only see regression values for `AssocProf` and `Prof`, which means that the `(Intercept)` value must refer to `AsstProf`.
 
 Can you write up an interpretation for this regression on your own? Try it out.
 
 
 
 Once you've tried it, here's the solution:
-"At zero years since his/her Ph.D, an *assitant professor* has an expected salary of \$81,186.23, an *associate professor* an expected salary of (\$81,186.23 + \$13,932.18) = \$95,118.41, and a *[full] professor* an expected salary of (\$81,186.23 + \$47,860.42) = \$129,046.60. Every additional year since Ph.D *decreases* a professor's expected salary by \$80.37."
+"At zero years since his/her Ph.D, an **assitant professor** has an expected salary of **\$81,186.23**, <br>
+an **associate professor** an expected salary of (\$81,186.23 + \$13,932.18) = **\$95,118.41**, <br>
+and a **[full] professor** an expected salary of (\$81,186.23 + \$47,860.42) = **\$129,046.60**. <br>
+Every additional year since Ph.D **decreases** a professor's expected salary by **\$80.37**."
 
-Notice that, upon including the `rank` variable, our `yrs.since.phd` variable switched signs and became non-significant. This is a strong indication that `rank` is a mediator-- more multicollinearity issues. 
+Notice that, upon including the `rank` variable, our `yrs.since.phd` variable *switched signs*-- it's negative now! It's also not significant anymore. This is a strong indication that `rank` is a mediator. Because the mechanism by which "years since Ph.D" impacts salary is *through* rank, including rank in the regression should almost completely negate any impact that "years since Ph.D" has on salary. This is almost precisely what we see. 
 
-```{r, include=F}
-ggplot(Salaries, aes(x=rank, y=yrs.since.phd)) + geom_boxplot(aes(fill=rank))
+Even though the coefficient on `yrs.since.phd` is no longer significant, it does suggest something pretty interesting (and probably true): *within* any one rank, additional "years since Ph.D" is actually a detriment to your salary. That is, if you spend a long time at one rank level, never being promoted, that bodes poorly for your carreer prospects broadly, and your salary specifically. 
+
+Here's the visualization for the regression with rank as a categorical variable:
+
+```{r}
+
+## Predict salary for the rank regression
+Salaries[, predicted_salary_rank:= predict(rank_regression, data=Salaries)]
+
+png(paste0(main_dir, "rank_predictions.png"))
+## Plot predicted values
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary, color=rank), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_rank, color=rank), size=1) +
+  labs(title="Multivariate Regression with Categorical Variables: Rank",
+       x="Years Since Ph.D",
+       y="Salary")
+graphics.off()
 ```
+<br>
+
+The downward trend in these lines is very slight (again, it's nonsignificant), but compared to the coefficient values we were getting for `yrs.since.phd` previously, the difference is dramatic. 
+
 
 ## Combining Continous and Categorical Variables
 
@@ -93,7 +150,10 @@ If you're comfortable with the regression interpretations for continuous and cat
 
 Our interpretation is :
 
-*A *female* professor with zero years since her Ph.D and zero years of service has an expected salary of \$82,875.90.
-* A *male* professor with zero years since his Ph.D and zero years of service has an expected salary of (\$82,875.90 + \$8,457.10) = \$91,333. 
-* An extra year since Ph.D *increases* a professor's expected salary by \$1,552.80, and an extra year of service *decreases* it by \$649.80. 
+* A **female** professor with zero years since her Ph.D and zero years of service has an expected salary of **\$82,875.90**.
+* A **male** professor with zero years since his Ph.D and zero years of service has an expected salary of (\$82,875.90 + \$8,457.10) = **\$91,333**. 
+* An extra year since Ph.D **increases** a professor's expected salary by \$1,552.80, and an extra year of service **decreases** it by **\$649.80**. 
+
+Visualized, this regression would look a lot like the "Sepal.Length + Sepal.Width + Species" plot in the [multivariate regression visualization](http://shiny.stat.calpoly.edu/3d_regression/): instead of creating just *one* plane through 3D space, now we make three, one for each level of `rank`. 
+
 

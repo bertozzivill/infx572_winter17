@@ -34,5 +34,17 @@ We would be doing exactly the same thing-- adding another slope that would trans
 our plane into a *manifold* that could give a predicted salary value for any
 combination of our three predictor variables.
 
+If you want to play around more with these types of 3d plot, I'd recommend going
+to http://shiny.stat.calpoly.edu/3d_regression/. This is a really nice little app
+that lets you see what happens when you run different regressions in a 3d variable
+space. The first one, sepal.length + sepal.width, creates a plane similar to the
+one we created for the Salaries dataset. I'd also recommend looking at the third
+one, sepal.length + sepal.width + species, which shows what happens when you
+add a *categorical* variable to a regression with two continuous predictors. This
+is a great primer for our next section.
+
+The second and fourth selections show regressions that are a little beyond the
+scope of this class, but you're welcome to take a look at them.
+
 Hopefully this video gave you a good intuition for adding continuous variables
 to regressions, now let's move on to categorical variables!
