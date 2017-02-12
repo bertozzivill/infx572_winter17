@@ -35,6 +35,9 @@ A good way of thinking about a multivariate regression is that we're finding a s
 
 ### Video: Thinking of Regression as a Way of Adding Weights (plant-buying examples)
 
+
+
+
 ### Adding Variables Will (Almost) Always Reduce the Effect of Any One of Them
 
 ## Categorical and Continuous Variables

@@ -1,0 +1,65 @@
+One way to think about regression coefficients is as a series of weights on your
+different input variables. As an example, let's say I want to buy a plant. *click*
+
+So, I go to the plant store. For any given plant, I can come up with a price that
+I'd be willing to pay for it. What I want to do is break down that process-- I
+want to answer the question *click* "What factors determine the price I'm willing
+to pay for this plant, and how does each factor influence that price?"
+
+*click*
+
+As it turns out, there are lots of factors that go into how much I'd pay for a
+plant. These include:
+ *click* the size of the plant, which can be further broken
+down into *click* height and *click* width;
+*click* how rare the plant is;
+*click* whether or not the plant looks healthy; and
+*click* what type of plant it is.
+
+At the moment, these are all pretty vague categories, so let's quantify them.
+
+*click*
+
+*click* For size, both the *click* width of the plant and the *click* height
+of the pot can be measured in inches;
+*click* I can measure rarity by how many times I've seen that particular plant
+species before;
+*click* I can make the plant's health into a binary variable by asking the
+question "does this plant look healthy?";
+*click* And so far as plant type is concerned, all I really care about is
+whether or not the plant is a succulent, so we can make this into a binary
+variable as well.
+
+The simplest assumption I could make about these different plant characteristics
+is that they *all impact my purchasing price equally*-- so an extra
+inch of height would increase the price I'd pay by the same amount that an extra
+inch of width would, and the same amount that an additional sighting of that
+species would. That is, all of my predictor variables would be *weighted equally*
+against each other.
+
+*click* This table gives an example of an equally-weighted set of variables.
+Under this schema, I'd be willing to pay $2 more for an extra inch of plant
+height, $2 more for an extra inch of pot width, $2 more for every additional time
+I'd seen that plant before, $2 more if it looks healthy, and $2 more if it was a
+succulent.
+
+Of course, this schema is't actually how anyone makes purchasing decisions. We
+care more about some factors than others-- or, put another way, we have unequal
+*weights* on our different variables. My personal schema for plant buying, for
+example, looks more like this: *click*
+
+As you can see, my primary interest is in whether or not the plant in question is
+a succulent-- I'm willing to pay a full $5 more for a succulent plant. The next
+biggest contributor is plant rarity-- since I'm more interested in rare plants,
+having seen a plant many times before *reduces* how much money I'd be willing
+to pay for it. I'm willing to pay a couple bucks extra for a healthy plant, and I'd
+pay a little extra for every extra inch of height on a plant. However, I'm low
+on window space in my apartment, so a plant in a wider pot actually *reduces*
+the amount I'd be willing to pay for it by $1 per inch.
+
+Now, I've just made these numbers up, but coming up with these *weights* is
+exactly what a regression does--  model coefficients and weights are
+equivalent here. Some of you might find it easier to think of regressions in
+terms of the equations written in the lecture, some of you might find it easier
+to conceptualize them like this, as a series of weights given to different
+input variables. The two interpretations are equivalent. 
