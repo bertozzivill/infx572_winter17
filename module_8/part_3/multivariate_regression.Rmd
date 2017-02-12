@@ -73,6 +73,10 @@ new_salaries[, salary:=predict(cont_reg, newdata=new_salaries)]
 
 output_matrix <- matrix(data=new_salaries$salary, nrow=60, ncol=60)
 
+just_data <- plot_ly(Salaries) %>%
+  add_trace(x = ~yrs.since.phd, y = ~yrs.service, z = ~salary, name="data", type = 'scatter3d', mode='markers',  opacity=0.5, marker=list(size=3))
+
+
 p <- plot_ly(Salaries) %>%
   add_trace(x = ~yrs.since.phd, y = ~yrs.service, z = ~salary, name="data", type = 'scatter3d', mode='markers',  opacity=0.5, marker=list(size=3)) %>%
   add_surface(z= ~output_matrix, showscale=F)
