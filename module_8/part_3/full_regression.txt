@@ -1,0 +1,94 @@
+Last week, we said that if we wanted to reduce as much bias as possible in our
+"years-since-phd"- salary regression, we should include three additional variables:
+years of service, sex, and discipline. But so far, we've only worked with examples
+looking at a subset of those: just years of service, just sex, or years of service
+*and* sex. Here, we'll walk through the design and interpretation of the **entire**
+regression.
+
+I'm starting with a completely new script-- I've just made a boilerplate here
+at the top with some details about this script and what it does.
+
+As always, I'll start by loading my libraries.
+
+*type type*
+
+Next, I'll load the Salaries dataset and convert it to a data.table
+
+*type type*
+
+Now, remember: our outcome variable here is "salary", and our predictor variables
+are "years.since.phd", "yrs.service", "sex", and "discipline". "years.since.phd"
+and "yrs.service" are both continuous, and "sex" and "discipline" are both categorical,
+each with two levels. Sex takes values "male" and "female", and "discipline" takes
+values "A" and "B".
+
+Our regression equation looks like this:
+
+*type type, while speaking*
+
+Alright, let's look at these regression outputs:
+
+As expected, we have coefficients on yrs.since.phd and yrs.service that we can
+interpret the usual way: an extra year since ph.d increases salary by an estimated
+$1,804.10, and an extra year of service decreases salary by an estimated
+$770.10. Other than that, we have an Intercept value, a coefficient on *male* sex,
+and a coefficient value on discipline *B*. How do we interpret our intercepts
+when there are *two* categorical variables?
+
+Well, now the "Intercept" value refers to a scenario in which *both* sex equals
+"female" and discipline equals "A". using that intercept value, and the other
+two coefficients, we can fully describe intercept values for any combination of
+sex and discipline.
+
+To see how, let's create a new dataset of four professors, all of them with
+zero years since phd and zero years of service, so we don't have to worry about
+those two variables. These four professors will give us all possible combinations
+of the two categorical variables: one each of a male and a female in disciplines
+A and B.
+
+*speak while typing*:
+We do this by constructing a new dataset, names "new_predictions", that has
+the same column names as our predictor variables. So we'll have "yrs.since.phd",
+that's always equal to 0, "yrs.service", also always equal to 0, "sex" equal
+to "female" half the time and "male" the other half, and "discipline" equal to
+"A" and "B", alternatingly.
+
+We can use the "predict" function to generate predicted values for this dataset,
+too-- we just need to give the "predict" function the additional argument "newdata",
+equal to our newly-constructed dataset.
+
+**type type*
+
+Alright, let's pull up the summary of our regress again (type), along with our
+new dataset and regression predictions.
+
+First off, we have a female professor in discipline A. Because she's not a male
+and she's not in discipline B, neither the "sexMale" nor "disciplineB" coefficients
+apply, so her expected salary is precisely the same as the intercept value: $71,325.
+
+Next, we have a female professor in discipline B. She's still not a male, so we
+ignore the "sexMale" variable, but she *is* in discipline B, so we add the
+"discipline B" coefficient to the intercept value, for a salary estimate of
+$71,325 + $16,325 = $87,651.
+
+Next, we have a male professor in discipline A. He *is* a male, so we add the
+"isMale" coefficient to the intercept value, but he is *not* in discipline B,
+so we ignore that coefficient value. This gives us a salary estimate of
+$71,325 + $7,545 = $78,871.
+
+Finally, we have a male professor in discipline B. He's *both* a male *and* in
+discipline B, so we add *both* those coefficient values to the intercept.
+Our salary estimate is $71,325 + $7,545 + $16,325 = $95,196.
+
+So what this regression gives us is *four* different regression planes, all
+parallel to each other, with the intercept values specified in this table.
+
+Notice that all of the coefficients in our model are statistically significant,
+except for "sex". This is probably because there are too few members of one of
+the groups (females) to be able to make a confident statement about how much
+sex matters for salary.
+
+Ok, we've made it! We've walked through, and hopefully demystified, a pretty
+complicated regression. Hopefully now you understand how all the different components
+of a regression interact with each other, and could design and interpret such
+regressions on your own!
