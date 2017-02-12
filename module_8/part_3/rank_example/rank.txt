@@ -33,7 +33,7 @@ work in regressions is that they always take a value of either 1 or 0-- either
 you belong to that category, or you don't!
 
 Instead, when we have more than two categories we have to *add more columns* to
-the regression.
+the regression in order to convert our categorical variable into binary variables.
 
 *click*
 
@@ -110,7 +110,9 @@ Therefore, the final equation is the intercept, beta 0, plus the coefficient on
 *click*
 
 As with sex, this regression specification generates a different prediction line
-for each rank. All lines have the **same slope**, but **different intercepts**.
+for each rank. All lines have the **same slope**, but **different intercepts**,
+and the coefficient for associate and full professors are *added* to the intercept
+value for assistant professors.
 
 My hope is that this example, combined with the sex example given on the lecture
 page, gives you a solid conceptual and mathematical understanding of how categorical
@@ -125,4 +127,4 @@ a regression in R. We can just include categorical variables in our regression e
 the way we normally would, and R will do all the work of converting those to
 binary variables under the hood.
 
-Alright, thanks for watching. 
+Alright, thanks for watching.
