@@ -10,6 +10,8 @@ library(ggplot2)
 
 data(Salaries)
 Salaries <- data.table(Salaries)
+
+main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_8/part_3/"
 ```
 
 
@@ -27,7 +29,7 @@ Into this:
 
 $$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3discipline + \beta_4yrs.service + \varepsilon$$
 
-Writing the math down is easy, but conceptualizing it is a little harder. The sections below are designed to walk you through what this equation *means* now. 
+Now, instead of just *one* variable (`yrs.since.phd`) influencing our expected salary, many different variables contribute to our expected salary values. Each of these variables contributes a different *amount* (as specified by the model coefficient), but the assumption is that you can combine these effects additively to get an estimated salary prediction.
 
 ## The Theory of Multivariate Regression
 
@@ -38,7 +40,6 @@ A good way of thinking about a multivariate regression is that we're finding a s
 
 
 
-### Adding Variables Will (Almost) Always Reduce the Effect of Any One of Them
 
 ## Categorical and Continuous Variables
 
@@ -46,7 +47,7 @@ Back to our newfangled regression equation:
 
 $$salary = \beta_0 + \beta_1yrs.since.phd + \beta_2sex + \beta_3discipline + \beta_4yrs.service + \varepsilon$$
 
-You'll notice something a little interesting about our new regression equation: It includes both *continuous* variables (like "years since Ph.D" and "years of service") and *categorical* variables like "sex" and "rank". These are treated very differently by the regression, and have different interpretations. Remeber this guideline: **continuous varaiables add slopes, categorical variables add intercepts**. I'll go over them below, using simplified versions of the full regression equation. 
+You'll notice something a little interesting about this equation: It includes both *continuous* variables (like "years since Ph.D" and "years of service") and *categorical* variables like "sex" and "rank". These are treated very differently by the regression, and have different interpretations. Remeber this guideline: **continuous varaiables add slopes, categorical variables add intercepts**. I'll go over them below, using simplified versions of the full regression equation. 
 
 ### Continuous Variables: Add a Dimension
 
@@ -60,7 +61,7 @@ Now, let's add just the "years of service" variable to the regression equation:
 
 $$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2yrs.service +  \varepsilon$$
 
-The interpretation of this equation is very similar to our additional regression equation. The updated version goes like this: **A professor with zero years since his/her Ph.D is expected to earn a salary of $\beta_0$. Every additional year since Ph.D increases that expected salary by $\beta_1$, *and every additional year of service increases that expected salary by $\beta_2$*.**
+The interpretation of this equation is very similar to our original regression equation. The updated version goes like this: **A professor with zero years since his/her Ph.D is expected to earn a salary of $\beta_0$. Every additional year since Ph.D increases that expected salary by $\beta_1$, *and every additional year of service increases that expected salary by $\beta_2$*.**
 
 ```{r, include=F}
 library(plotly)
@@ -86,36 +87,54 @@ To visualize this relationship, you need to think in three dimensions. Before, w
 biv_reg <- lm(salary~yrs.since.phd, data=Salaries)
 Salaries[, biv.reg:= predict(biv_reg)]
 
+png(paste0(main_dir, "bivariate.png"))
 ggplot(Salaries, aes(x=yrs.since.phd)) + 
   geom_point(aes(y=salary), color="blue", alpha=0.5) +
   geom_line(aes(y=biv.reg), color="orange", size=1) +
   labs(title="Bivariate Regression")
+graphics.off()
 ```
 
 
-Now, we need to imagine a third dimension, coming out of the screen, for "years of service".In this space, we find a regression *plane*, not a regression line. This plane in 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable. $\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), because it's just one line:
+Now, we need to add a third dimension for "years of service". The datapoints are now in a 3D space of salary, years since Ph.D, and years of service:
+
+[3d plot of just datapoints]
+
+When we run a regression in this space, we find a regression *plane*, not a regression line. This plane in 3D space has two different slopes: the amount it increases when you increase the "years since Ph.D" variable, and the amount it increases when you increase the "years of service" variable:
 
 [insert 3d screenshot]
 
+$\beta_1$ and $\beta_2$ describe those two slopes, but you still only have one intercept ($\beta_0$), which is the value of the plane where it touches the y-axis.
+
 This is key: **when you add a continuous variable to a regression, you add a second slope, but keep only one intercept**. That intercept value is equal to the corner of the regression surface where both `yrs.since.phd` and `yrs.service` are 0.
 
-It becomes impossible to visualize regressions this way when you add more than two continuous predictor variables, but conceptually the idea is exactly the same-- every time you add a continouous predictor, you're adding a dimension to your regression space, and adding a slope to your regression line. 
+It becomes impossible to visualize regressions this way when you add more than two continuous predictor variables, but conceptually the idea is exactly the same-- every time you add a continuous predictor, you're adding a dimension to your regression space, and adding a slope to your regression line. 
 
-
-
+[insert video about 3d regression]
 
 ### Categorical Variables: Stratify Your Dataset
 
-Adding a categorical variable to your regression is a different thing entirely. Instead of expanding your line out into another dimension, you're stratifying it--making a different regression line for different values of your predictor variable. You don't wind up with a 3-dimensional plot, you wind up with a 2-D plot with different lines on it. For example, the regression with `yrs.since.phd` and `sex` that we run below can be plotted as:
+Adding a categorical variable to your regression is a different thing entirely from adding a continuous one. Instead of expanding your line out into another dimension, you're stratifying it--making a different regression line for different values of your predictor variable. You don't wind up with a 3-dimensional plot, you wind up with a 2-D plot with different lines on it. For example, the regression with `yrs.since.phd` and `sex` that we run below can be plotted as:
+
+[insert sex-based plot]
 
 ```{r, include=F}
 reg_cat_sex <- lm(salary~yrs.since.phd+sex, data=Salaries)
 Salaries[, reg.cat.sex:=predict(reg_cat_sex)]
 
-ggplot(Salaries, aes(x=yrs.since.phd)) +
-  geom_point(aes(y=salary, color=sex), alpha=0.5) +
-  geom_line(aes(y=reg.cat.sex, color=sex), size=1) +
-  labs(title="Multivariate Regression with Categorical Variables: Sex")
+newdata<-data.table(yrs.since.phd=rep(0:60, 2),
+                   sex=c(rep("Male", 61), rep("Female", 61))
+                   )
+newdata[, predicted_salary:= predict(reg_cat_sex, newdata=newdata)]
+
+png(paste0(main_dir, "categorical_sex.png"))
+ggplot() +
+  geom_point(data=Salaries, aes(x=yrs.since.phd, y=salary, color=sex), alpha=0.5) +
+  geom_line(data=newdata, aes(x=yrs.since.phd, y=predicted_salary, color=sex), size=1) +
+  labs(title="Multivariate Regression with Categorical Variables: Sex",
+       x="Years Since Ph.D",
+       y="Salary(USD)")
+graphics.off()
 
 ```
 
@@ -129,11 +148,12 @@ What does it mean to include **categorical** variables in a regression? The "sex
 First, let's think about what a categorical variable represents. When you assign each value in a dataset to a category, you're saying two things:
 
 1. This datapoint is a member of this group; and
-2. This dataoint is *not* a member of any other group in the list of options.
+2. This datapoint is *not* a member of any other group in the list of options.
 
 For example, in the "sex" column of the `Salaries` dataset, everyone is assigned one of two sexes: male or female[^1]. If you're female, your'e not male, and vice versa. Thus, instead of thinking about the "sex" column as a *categorical* variable, we could think of it as a *binary* one, with a value of 1 if the datapoint references a male, and 0 if it doesn't. This would transform the dataset we're regressing on from this:
 
 ```{r, echo=F}
+Salaries <- Salaries[order(sex)]
 Salaries[, list(salary, yrs.since.phd, sex)]
 ```
 <br>
@@ -167,9 +187,12 @@ The difference between these two predictions is the value of $\beta_2$: 8,000. T
 $$ salary_{female} = 85,000 + 950*30 + 8000*0 = 113,500 $$
 $$ salary_{male} = 85,000 + 950*30 + 8000*1 = 121,500 $$
 
-Notice, again, that the difference between these two values is simply the value of $\beta_2$. 
+Notice, again, that the difference between these two values is simply the value of $\beta_2$: \$8,000. 
 
-When we add a categorical variable to a dataset, we're not adding a new dimension with a new slope, **we're stratifying on the same dimension, and adding a new intercept**. The $\beta_2$ value here isn't a new *slope*, it's a new *intercept* that will bump the regression line up or down from the baseline. Categorical variables split our one regression line into multiple lines, one for every category. All of these lines have the same slope, but have different *intercepts*. You can think of our full regression equation:
+The full interpretation of this regression is as follows: **A woman with zero years since her Ph.D has an expected salary of \$85,000. A male with zero years since his Ph.D has an expected salary of \$93,000. For every additional year since Ph.D, the expected salary of a professor increases by \$950. **
+
+
+When we add a categorical variable to a dataset, we're not adding a new dimension with a new slope, **we're stratifying on the same dimension, and adding a new intercept**. The $\beta_2$ value here isn't a new *slope*, it's a new *intercept* that will bump the regression line up or down from the baseline. Categorical variables split our one regression line into multiple lines, one for every category. All of these lines have the **same slope**, but have **different intercepts**. You can think of our regression equation:
 
 $$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.male +  \varepsilon$$
 
@@ -177,14 +200,94 @@ As actually describing two different lines. For women, the line looks exactly th
 
 $$ salary = \beta_0 + \beta_1yrs.since.phd +  \varepsilon$$
 
-Whereas for men, the intercept value is uniformly higher:
+Whereas for men, the intercept value is uniformly higher, by a value of $\beta_0$:
 
 $$ salary = (\beta_0 +\beta_2) + \beta_1yrs.since.phd +  \varepsilon$$
 
+Which is how we come up with our updated regression lines:
+
+[insert plot again]
+
+**IMPORTANT NOTE: when youre running regressions with categorical variables in R, you don't have to do the work to actually make a new binary column value. R does that for you. More on that next page.**
 
 #### Example 2: Rank
 
-### Understanding the Intercept with Categorical Variables (Video)
+New regression equation:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2rank +  \varepsilon$$
+
+But rank has 3 values: 
+
+```{r}
+unique(Salaries$rank)
+```
+
+Original dataset:
+
+```{r, echo=F}
+Salaries[, list(salary, yrs.since.phd, rank)]
+```
+
+
+New dataset:
+
+```{r, echo=F}
+Salaries[, list(salary, yrs.since.phd,
+                is.assoc=ifelse(rank=="AssocProf", 1,0),
+                is.fullprof=ifelse(rank=="Prof", 1, 0)
+                )]
+```
+
+New regression equation:
+
+$$ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.assoc + \beta3is.fullprof +  \varepsilon$$
+
+let's say $\beta_0$ = \$81,000, $\beta_1$ = \$1000, $\beta_2$ = \$14,000, and $\beta_3$ = \$48,000
+
+
+Prediction for professors with zero years since Ph.D:
+
+**Assistant**:
+
+$$ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*0 $$
+$$ salary = \beta_0 = 81,000 $$
+
+**Associate**:
+
+$$ salary = \beta_0 + \beta_1*0 + \beta_2*1 + \beta3*0 $$
+$$ salary = \beta_0 + \beta_2 = 81,000 + 14,000 = 95,000 $$
+
+**Full**:
+
+$$ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*1 $$
+$$ salary = \beta_0 + \beta_3 = 81,000 + 48,000 = 129,000 $$
+
+Additionally, every additional year since Ph.D adds \$1,000 to expected salary.
+
+Plot looks like this:
+
+```{r, include=F}
+newdata <- data.table(yrs.since.phd=rep(0:60, 3), 
+                      rank=c(rep("AsstProf", 60), rep("AssocProf", 60), rep("Prof", 60))
+                      )
+newdata[, is.assoc:= ifelse(rank=="AssocProf", 1,0)]
+newdata[, is.fullprof:= ifelse(rank=="Prof", 1, 0)]
+newdata[, predicted_salary:= 81000 + 1000*yrs.since.phd + 14000*is.assoc + 49000*is.fullprof]
+
+png(paste0(main_dir, "categorical_rank.png"))
+ggplot() +
+  geom_point(data=Salaries, aes(x=yrs.since.phd, y=salary, color=rank), alpha=0.5) + 
+  geom_line(data=newdata, aes(x=yrs.since.phd, y=predicted_salary, color=rank), size=1) +
+  labs(title="Multivariate Regression with Categorical Variables: Rank",
+       x="Years Since Ph.D",
+       y="Salary (USD)")
+graphics.off()
+```
+
+
+[video]
+
+
 
 
 
