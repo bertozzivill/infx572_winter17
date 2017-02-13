@@ -226,50 +226,7 @@ $(document).ready(function () {
 </div>
 <div id="example-2-rank" class="section level4">
 <h4>Example 2: Rank</h4>
-<p>New regression equation:</p>
-<p><span class="math display">\[ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2rank +  \varepsilon\]</span></p>
-<p>But rank has 3 values:</p>
-<pre class="r"><code>unique(Salaries$rank)</code></pre>
-<pre><code>## [1] Prof      AssocProf AsstProf 
-## Levels: AsstProf AssocProf Prof</code></pre>
-<p>Original dataset:</p>
-<pre><code>##      salary yrs.since.phd      rank
-##   1: 129000            18      Prof
-##   2: 137000            39      Prof
-##   3:  74830            13 AssocProf
-##   4:  80225             4  AsstProf
-##   5:  77000             5  AsstProf
-##  ---                               
-## 393: 103106            33      Prof
-## 394: 150564            31      Prof
-## 395: 101738            42      Prof
-## 396:  95329            25      Prof
-## 397:  81035             8  AsstProf</code></pre>
-<p>New dataset:</p>
-<pre><code>##      salary yrs.since.phd is.assoc is.fullprof
-##   1: 129000            18        0           1
-##   2: 137000            39        0           1
-##   3:  74830            13        1           0
-##   4:  80225             4        0           0
-##   5:  77000             5        0           0
-##  ---                                          
-## 393: 103106            33        0           1
-## 394: 150564            31        0           1
-## 395: 101738            42        0           1
-## 396:  95329            25        0           1
-## 397:  81035             8        0           0</code></pre>
-<p>New regression equation:</p>
-<p><span class="math display">\[ salary = \beta_0 + \beta_1yrs.since.phd + \beta_2is.assoc + \beta3is.fullprof +  \varepsilon\]</span></p>
-<p>let’s say <span class="math inline">\(\beta_0\)</span> = $81,000, <span class="math inline">\(\beta_1\)</span> = $1000, <span class="math inline">\(\beta_2\)</span> = $14,000, and <span class="math inline">\(\beta_3\)</span> = $48,000</p>
-<p>Prediction for professors with zero years since Ph.D:</p>
-<p><strong>Assistant</strong>:</p>
-<p><span class="math display">\[ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*0 \]</span> <span class="math display">\[ salary = \beta_0 = 81,000 \]</span></p>
-<p><strong>Associate</strong>:</p>
-<p><span class="math display">\[ salary = \beta_0 + \beta_1*0 + \beta_2*1 + \beta3*0 \]</span> <span class="math display">\[ salary = \beta_0 + \beta_2 = 81,000 + 14,000 = 95,000 \]</span></p>
-<p><strong>Full</strong>:</p>
-<p><span class="math display">\[ salary = \beta_0 + \beta_1*0 + \beta_2*0 + \beta3*1 \]</span> <span class="math display">\[ salary = \beta_0 + \beta_3 = 81,000 + 48,000 = 129,000 \]</span></p>
-<p>Additionally, every additional year since Ph.D adds $1,000 to expected salary.</p>
-<p>Plot looks like this:</p>
+<p>Go to video</p>
 <p>[video]</p>
 </div>
 </div>
