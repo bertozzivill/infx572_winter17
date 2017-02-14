@@ -1,0 +1,124 @@
+---
+title: "Infant Mortality Response"
+output: html_document
+---
+
+Hi all,
+
+Thank you for an engaged and respectful dicussion-- it was fascinating to read your thoughts on the paper. 
+
+
+## Clarification
+First off, I'd like to try and clear up some residual confusion about the "detrending" method used by the authors. The argument for detrending is that there are patterns of change in infant mortality *over time* that are independent of the increase/decrease in infant mortality *due to presidential party specifically*, so we need to find some way to eliminate this temporal trend. To be clear, "detrending" refers to the removal of the TIME COMPONENT ONLY. The idea is to run this detrending on both the outcome and all predictor variables in order to remove the time component from all of them, and then to run the regression using these de-trended variables. 
+
+Let's put this in concrete terms. The regression equation they ran was this one:
+
+$$log(mortality\_rate) = \beta_0 + \beta_1presidential\_party + \beta_2*education + \beta_3* unemployment \\ + \beta_4*high\_income + \beta_5*low\_income + \beta_6*smoking +  \varepsilon$$
+
+The problem with this regression as it stands is that all of these variables (except presidential party) have a strong time trend, so any effect of presidential party would get washed out by that much more significant time trend. By *de-trending* the variables, we remove that time trend from *all* the variables. This will make it easier to attribute variation in the data to political party. 
+
+[Notice that this regression does **not** "throw away" or "take out" variables such as poverty, education, or smoking, as some of you suggested! The regression specifically accounts for these variables.]
+
+A more common way to account for strong time trends in variables is simply to include time (in the format of a variable called "year") in the regression:
+
+$$log(mortality\_rate) = \beta_0 + \beta_1presidential\_party + \beta_2*education + \beta_3* unemployment \\ + \beta_4*high\_income + \beta_5*low\_income + \beta_6*smoking + \mathbf{\beta_7year} +  \varepsilon$$ 
+
+In this regression, the `year` coefficient will absorb the time trend of all the other variables, so that the coefficients on the other variables can be interpreted independent of time. My guess as to why the authors didn't just do this is that they wanted to fit a *curve* (a cubic spline) to their time trend, instead of a straight line. 
+
+## Cubic Splines
+I saw some excellent explanations of cubic splines in the discussion section. In many ways, a cubic spline isn't so different from a linear regression-- in both cases, you're drawing some trendline through the data and using an algorithm to find the "best fit". The difference is that with splines you are: 
+
+1. Fitting a curve instead of a line;
+2. You get to tell the line exactly *how many times* to curve;
+3. You get to tell the line exactly *where* to curve. 
+
+The benefit to cubic splines is their flexibility-- they can fit much more closely to the data. But that benefit is also its weakness-- if you allow a spline to vary too much, it can **overfit** to the data at hand, and claim that there's a pattern in what is actually random noise. Additionally, it forces the user to make decisions about what the curve should look like, which encourages arbitrary decision-making at best and intentional number-fudging at worst. 
+
+There was nothing egregiously wrong with the way the spline was used in this paper, but there was no good justification for  *why* a spline should be used instead of just including year in the regression and fitting a line to it. It's a strange and apparently arbitrarty modeling choice.
+
+## Unexplained Decisions
+The choice to run a spline wasn't the only arbitrary decision the authors made. As one or two of you noted, they also used the *natural log* of infant mortality rate as their outcome variable, instead of just infant mortality rate. You might recall from our regressions page that transforming regression variables, especially taking the log of them, is a common practice when your data is *nonlinear* in a specific way, and needs to be converted to a linear trend in order to run linear regression. But there are a few strange things about the decision to take the log of infant mortality:
+
+1. There's no evidence that infant mortality followed a *non-linear* trend (this is not a variable that is commonly logged);
+2. The authors de-trend infant mortality with a curved *spline*, not a line, so it shouldn't matter whether or not the trend is linear;
+3. The authors provide no justification for their decision to log this variable.
+
+In addition, the authors chose to lag their "presidential party" variable by **one year** relative to the infant mortality variable, to allow time for policy decisions to take place. It's reasonable to lag that variable, but the choice of one year is a completely arbitrary one-- why not six months? Why not two years, or three? The authors give us no insight into their decision.
+
+I was first introduced to this paper by a coworker who took the time to replicate this analysis. And it turns out that if you don't log infant mortality, or if you lag by a number of years other than 1, **the effect of presidential party on infant mortality goes away**. Not only were these modeling decisions arbitraty, the results of the study depended heavily on those arbitrary decisions. 
+
+## Staying Skeptical Without Getting Jaded
+I read several threads in the discussion section of people expressing extreme concerns with the variables included or not included in this paper, especially in the context of our recent lecture content. How can you run a valid analysis when many variables might affect the outcome? How do you know when you've included the right variables? How can you ever do it right? 
+
+These are completely valid concerns. As we've seen in this paper, it's very easy (and unfortunately very common) to selectively include, exclude or transform variables until you find a significant result. Researchers almost never do this intentionally or fraudulently, they just don't know or don't understand the statistical implications of what they're doing, and scientific publishing strongly incentivezes them to find "significant" results. And even if you *do* have a strong background in statistics and you *do* understand the implications of your choices, your work will still have weaknesses. Sometimes we just don't have data on a relevant variable, or we're forced to make an arbitrary decision because there's no better modeling option.
+
+But don't lose hope! The fact that all statistical analyses have weaknesses doesn't mean that the entire endeavor is hopeless. It is possible to do good data science. Here are some things to look for when determining whether or not an analysis is any good:
+
+1. **Sensitivity analyses**: If researchers have to make an arbitrary decision, they should test how much that decision matters by running the analysis a few times with different values for that arbitrary parameter, and see how much it affects the results. This is called a sensitivity analysis. The authors claim they did one on the 1-year lag, but don't show the results either in their main paper or in the supplemental materials.
+2. **Acknowledge weaknesses**: Every paper, including this one, has a section in which they describe the weaknesses of their analysis, but this paper does not acknowledge any of the concerns listed above as weaknesses, even though they heavily impact the results of the paper.
+3. **Look for replications**: If a number of different groups have run similar analyses, and found similar results, you can feel much more confident that the result is probably true. Every individual analysis will have a slew of weaknesses, but different groups consistently finding similar results is a good sign that those results are **robust** to different analysis methods, and therefore less likely to be spurious.
+
+## Reflection
+
+Overall, I was surprised at how broadly negative your reactions were to the Black Lives Matter paper, and how comparatively positive your responses were to this paper. I think that the infant mortality paper is a bad analysis in fancy clothes, and the BLM paper is a solid analysis dressed up just a *little* more than it should be. The infant mortality paper is much more hesitant and apologetic about the conclusion it draws, but never actually owns up to the (many) weaknesses in its analysis. 
+
+The BLM paper, on the other hand, is much more analytically solid. It draws somewhat over-enthusiastic conclusions from those results, but it doesn't use sleight of hand to hide its weaknesses. 
+
+I know from the other week's discussion response that many of you disagree with me about this. In particular, you think that the BLM paper makes the following unsubstantiated assumptions:
+
+1. That if all of the "missing" voters were alive, they would vote at the same rates and the same way as those who actually voted.
+2. More egregiously, that *anything* would be the same at all if those people were alive. Their being alive would imply a world in which racism were less rampant and less deadly than it is in this world, and who can say what that hypothetical America would look like, politically or culturally? 
+
+I acknowledge the validity of both of these complaints, but have a rebuttal: That's not the point of the paper. 
+
+The BLM paper is imagining a counterfactual world, yes. Hypothetically, the authors could have imagined any scenario. But the scenario that they actually chose was the **most conservative one possible**. They said, "what would happen if everything is *exactly* the same as it is right now, except that some people who died are still alive?" Choosing this type of counterfactual has two strengths:
+
+1. It *avoids* the necessity of making arbitrary decisions about complicated chains of events. If the Black population votes differently in your counterfactual world, how should they vote? What infulences that decision? If the cultural makeup of the US is different, how does that affect politics? You open the door to dozens of biases if you let yourself go down that road. 
+2. It allows you to make an extremely poignant statement about how much excess mortality matters. If you change *nothing* except how much people die, look at how much of an impact you can have on policy! The more changes you make to your counterfactual world, the harder it gets to drive that message home. 
+
+My hope in having you read both of these papers is that they provoked you to think critically about how scientists choose to conduct and report on their analyses, and how those choices can impact both the results themselves and the way those results are perceived. Try to be aware of your own assumptions and biases in your work, but don't become too discouraged by them-- if you know they're there, you can find ways to work around them. 
+
+
+Best,
+
+--Amelia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
