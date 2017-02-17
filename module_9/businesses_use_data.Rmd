@@ -3,3 +3,39 @@ title: "How Do Businesses Use Your Data?"
 output: html_document
 ---
 
+Now that we have a basic idea of how businesses collect your data, let's look into some common ways they use it. 
+
+## User Interface Design
+Every website or app has to look like something. As I'm sure you've experienced, bad website design can make you want to throw your computer against a wall, while good site design can guide you calmly and happily to wherever you want to go. This different in user experience translates to profits in a very real way-- the better designed the site (or app, etc), the more people are likely to use and promote it. 
+
+The most common method for establishing what user interface customers do and don't enjoy is A/B testing, though surveys are also sometimes used. Another useful metric for user experience is looking at *cohort effects*-- following groups of users through time. For a given group of users who visit the site, how many sign up for an account? Of those who sign up for an account, how many purchase a product (or send messages with it, or edit photos with it, or whatever your service provides). Of those who use your service regularly at first, how many are still using it six months later? Understanding where you're losing large groups of people can help you target *bottlenecks* in people's access to a certain feature, and you can change the design of the site (or your business model) to clear that bottleneck. 
+
+## Recommender Systems
+For businesses whose purpose is largely to deliver third-party content to you (Amazon, Netflix, Etsy, etc), one of the most valuable tasks they can perform is to point you towards material that you want, but might not have found on your own. Amazon wants you to buy more things on Amazon, Netflix wants you to watch more TV on Netflix, etc., etc., so if these organization can utilize information about what you already like to give you more content you like, then they are keeping themselves relevant and useful. 
+
+Probably the most famous recommender system is Netflix's, thanks to the [Netflix Prize](https://en.wikipedia.org/wiki/Netflix_Prize). In 2006, Netflix publicly released an anonymized dataset of over 100 million movie ratings, and offered a $1 million prize to the team who could build the best algorithm to predict future user ratings based on this data. The Prize was awarded in 2009, to an *ensemble model* that combined predictions from several different modeling methods to come up with final recommendations. 
+
+A very analogue sort of recommender system is one you're surrounded by every day-- the layout of your local grocery store. There's a parable about a study done at Wal-Mart that found that men are more likely to purchase beer and diapers at the same time, which prompted the retailer to move those two items closer together in the store. This story itself is (untrue)[http://canworksmart.com/diapers-beer-retail-predictive-analytics/], but it *is* absolutely the case that retailers organize their stores in order to maximize selling power, from putting chips and salsa front-and-center on Superbowl weekend to placing all those tiny tempting candies and deliciously rumor-filled magazines right by the checkout counters. 
+
+Recommender systems range from the very simple to the highly complex (some might say over-engineered), but they are ubiquitous, both online and off. 
+
+## Fraud Detection and Security
+Online retailers sell stuff. That's their bread and butter. So when a scammer successfully takes a product, that's a net loss that the retailer in question would very much like to avoid. Most large retailers have teams whose job it is to detect which transactions are likely to be fraudulent before they go through. These teams use machine learning algorithms and data on purchaser location, purchasing patterns over time, number and speed of purchases, and other factors to build fraud detection algorithms. 
+
+Detection of malicious software is another large concern for prominent online businesses. At any given moment, these websites will be accessed not only by many thousands of humans, but also by many thousands of "bots", or algorithms that have been written to navigate through a website in search of information. Many of these bots are harmless--academic researchers, advertisers, and others all scrape websites for their own analytics-- but some are designed to steal consumer information, slow or crash the website's servers, or otherwise cause mischief. Businesses can use the same tools they use to track human customers (number of visits and number of clicks in particular) to identify and mislead or block these bots. For example, some large web retailers have started placing links in their websites that only work if you click a specific pixel of the screen. A human user would never click on such a link, but a bot scanning the website's HTML for links would click it, and could then be redirected to an infinite loop of other links, making it harmless to the website as a whole.
+
+Fraud detection and security are constantly evolving problems in the data science world-- people are coming up with ways to beat defense systems as quickly as those defense systems are being developed. 
+
+
+## Mad Science (or Standard Science)
+Sometimes, businesses use their data just to do... research. Many organizations have datasets the likes of which academic researchers could only dream of-- data on human behavior and psychology, social networks and response to social cues, physical activity, finance decisions... Increasingly, companies are beginning to analzye this data on their own, and occasionally publish on it. This research does often feed back into strategic decisions made by the organization, but can also be recognized as advancing knowledge in its own right. 
+
+Unfortunately, businesses are not subject to any of the ethics review board requirements that more traditional academic research is, and so sometimes perform studies that are outside of the range of what many people consider appropriate. A famous example of this moral ambiguity is one of this week's readings, in which Facebook intentionally exposed users to more or less positive news feed content in order to detect how those users' own content would change in mood. Whether or not this was an ethical decision is still up for debate, and I hope to read your thoughts in this week's discussion forum. 
+
+
+## Giving Data Back to You
+Businesses don't just collect data-- often, they give it back to you. The sole purpose of many online companies is to aggregate your data and allow you to access and track it in an attractive and convenient way. Mint, for example, will track your credit cards, bank accounts, and investments to give you a one-stop overview of your finances. Goodreads logs your reading habits, FitBit logs your physical activity, Google logs just about everything and gives it back to you in a (usually) useful way. These organizations don't just *do* data analytics, they *are* data analytics-- and they make money by selling the data you give them to other organizations who use that information for marketing. In today's world, data itself is a currency, and we deal in it daily, often without even noticing.  
+
+
+
+
