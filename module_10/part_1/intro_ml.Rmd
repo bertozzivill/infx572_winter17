@@ -1,0 +1,68 @@
+---
+title: "Intro Machine Learning"
+output: html_document
+---
+
+
+## Introduction
+Read Adam Geitgey's excellent blog post introducing you to some basic machine learning concepts.
+
+Did you catch the name of the method he describes to estimate a price for a house? It's our old friend multivariate linear regression!  I can hear you saying "Hold up Amelia, linear regression is the backbone of classical statistics! What business does it have in a machine learning article?" 
+
+Well, despite people trying to make a clear-cut distinction between machine learning and the rest of statistics, the truth is that the two have a lot of overlap. While there are some methods that are used almost exclusively in either field, things like regression fall somewhere in the middle. So I would argue that this article is machine-learny not because of the method used specifically, but rather because it takes a classical statistical method like regression and approached it in a machine-learny way.  Specifically, it:
+
+Focuses on finding a generic algorithm to answer your question of interest, rather than a custom, highly-specified model;
+Focuses entirely on prediction: the goal is not to understand what components make a house valuable just to accurately predict the price of a new house that you plug into the dataset. 
+
+## Machine Learning: Brief History, and Definitions
+
+
+## Where Machine Learning Shines: Classification
+
+## Classes of Machine Learning: Supervised and Unsupervised Learning
+
+## Validation
+
+One other important aspect of the machine-learny mindset, that is not discussed in the article but that I want to describe here, is a focus on out-of-sample validation to determine the quality of a model.
+
+ 
+
+### Overfitting
+Things like p-values (and R2 values, which we haven't talked about but which you may be familiar with), are called in-sample validation methods. What that means is that you estimate the quality of the model using the same data that you used to fit the model. So when you run a linear regression, the p-value is calculated based on how far from the regression line your data points are (remember that more noisy data leads to a higher p-value). If your goal is to minimize the p-value, you want to try to come up with a model that is as close as possible to the datapoints you put into it. 
+
+This may seem like a reasonable goal, but let's imaging for a minute that instead of fitting a line to your data, you fit some super-flexible curve, and you get a model that looks like this (linear regression also shown for comparison):
+
+ 
+
+ 
+
+
+
+ 
+
+The p-value on that blue curve will be extremely extremely low because it fits to the data so well, but it's clearly a dumb model-- it's focusing far too much on the specific data points we included, as opposed to capturing the trend as a whole. This problem is called overfitting, and it's extremely common when you use in-sample methods to validate your models. 
+
+ 
+
+### Out-of-sample validation
+Overfitting is bad, but it can be hard to detect just by eyeballing your model (not everything is as extreme as that blue curve), and if you're running inferential statistics you might not be looking too hard for it. But when you want to run a model for prediction purposes, overfitting is one of your worst enemies: that blue curve will give a totally insane prediction for a value between -5 and -4. What's a modeler to do? 
+
+The solution, hopefully, is obvious: rather than judging the model based on numbers it used to draw its prediction line, judge the model based on how well it predicts data it's never seen before. Here's a common way of doing that, step-by-step:
+
+Randomly shuffle the rows of your dataset, then split it into two datasets: one that has 90% of the rows of data, and one that has 10%. The bigger dataset is called the training set, and the smaller one is the testing set.
+Run your regression on the training set. You run exactly the same commands as you would before, just on a smaller dataset.
+Predict outcome values for the TESTING set. This is the key moment-- when we ask the computer to calculate a value based on a datapoint it's never seen before. 
+Calculate how close your predictions were to the actual values held in your testing set. If your model did a good job at guessing values for data points it hadn't seen before, it's probably not overfit and can safely be used for additional prediction. 
+Note on step 4: the metric you usually use to determine whether a model is good or bad at prediction is called Root Mean Squared Error-- see the coding example for a more thorough description. 
+
+ 
+
+Out of sample validation is a fundamental aspect of machine learning-- no one will take you seriously if you don't use it. Fortunately, it's so fundamental that methods for out-of-sample validation are included in most of the machine learning packages and tools available for R. We'll be talking about two of those tools (k-NN and K-means) next lecture.
+
+ 
+
+Before you go, here is a coding example of using out-of-sample validation to compare two different regression types with the Salaries dataset-- be sure to look through it before next lecture, and practice it on your own!
+
+ 
+
+ 

@@ -1,0 +1,74 @@
+---
+title: "Clustering"
+output: html_document
+---
+
+## What is Clustering?
+
+
+## K-means
+
+K-means is a clustering algorithm, which means that it classifies datapoints based on how close to each other they are in some parameter space. You would use K-means if you wanted to split your data into a predefined number of groups, based on similarities across your variables.
+
+For example: when I was running analyses on US counties, we wanted to compare the life expectancies of twenty different "groups" of counties that were similar based on socioeconomic/demographic variables. So, we ran K-means with a K of twenty and input variables of race, income, poverty, education, etc. to come up with clusters such as "poor, uneducated, mostly white counties" or "affluent highly educated counties". Running K-means was a more rigorous way for us to do this than to categorize these counties by hand. 
+
+As discussed in class, K-means is an unsupervised learning method, which means that it does NOT take the outcome variable into account when running its algorithm. You only have to give two inputs to a K-means algorithm:
+
+The data you want to cluster
+The number of clusters you want 
+From there, the algorithm runs iteratively until convergence. That is, it runs the same process over and over again until the results stop changing. The steps are as follows (displayed in the plots for a dataset with K=2):
+
+Initialize your cluster markers (colored x's) in random locations. step_1.png
+Assign each datapoint to the cluster marker closest to it.          tep_2.png
+Move the cluster marker to the centroid (geometric middle) of the newly assigned datapoints. step_3.png
+Repeat steps 2-3 until an additional iteration does not change any cluster assignments.
+step_4.pngstep_5.png
+
+ 
+
+See the coding worksheet for an example of K-means in action on the salaries dataset. 
+
+ 
+
+## k-Nearest Neighbors (aka k-NN)
+
+k-NN and K-means are often confused because they're both machine learning methods with "k" in the name. Here's a handy guide to tell them apart:
+
+K-means	k-NN
+"k"	uppercase	lowercase
+meaning of k/K	number of clusters in entire dataset	
+number of "nearest neighbors" to
+
+look for when classifying each point
+
+method type	unsupervised	supervised
+ 
+
+But what is k-NN, you might ask? Great question. 
+
+Like K-means, k-NN is a classification algorithm-- it tries to assign datapoints to groups. Unlike K-means, k-NN is a *supervised* learning method, which means that (like linear regression), the algorithm "looks at" the outcome variable and explicitly tries to put the datapoint into the appropriate group. 
+
+ Let's think about linear regression for a minute. Prediction in linear regression has two steps:
+
+Estimate the relationship between your variables (i.e. your coefficients).
+Use those relationships to predict the outcome value for a new data point. 
+That relationship estimation, that calculation that you run on your dataset, is something that exists and can be evaluated separately from the prediction results. Even if you didn't predict the salary of a woman with 30 years of service to a university, you can still say what the relationship is between salary, years of service, and sex if that's what you put in your regression. 
+
+With k-NN, that is NOT true. k-NN only has one step, really:
+
+Predict the class of a new datapoint based on the value of the points around it in parameter space.
+Algorithmically, k-NN works like this:
+
+Get a set of data split into classes, like the columns "salary", "years since Ph.D", and "rank" from the Salaries dataset (here "rank" is the outcome variable, and the other two are predictors).known_data.png
+Get a datapoint for a professor whose rank you'd like to predict, knowing their salary and years since Ph.D. to_predict.png
+On the plot of "salary" vs "years since Ph.D", find the k closest pre-assigned datapoints to your value of interest, and note their rank. Here we take k=4. Three of the closest points are green, and one is blue. closest_points.png
+Assign your new datapoint to whichever class was most dominant among those k "nearest neighbors". final_assign.png
+ 
+
+ Things to note about k-NN:
+
+Like K-means, your results are highly sensitive to the value you choose for k, especially in boundary regions. If I'd picked, say, k=7 in the example above, the classification would have switched to "Prof". In both cases, cross-validation can help you determine which k is most appropriate.
+When you run k-NN, you need to include both a set of reference datapoints and a set of points for which you want to predict (referred to as the train and test sets, even if you aren't running cross-validation). Unlike linear regression, there's nothing to do if you're not predicting points!
+ 
+
+Please work through and make sure you can answer questions on coding worksheet number 5View in a new window for examples of both K-means and k-NN in R.
