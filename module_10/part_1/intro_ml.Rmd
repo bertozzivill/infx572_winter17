@@ -5,25 +5,69 @@ output: html_document
 
 
 ## Introduction
-Read Adam Geitgey's excellent blog post introducing you to some basic machine learning concepts.
+Read Adam Geitgey's (excellent blog post) [https://medium.com/@ageitgey/machine-learning-is-fun-80ea3ec3c471#.1w12s9mdy] introducing you to some basic machine learning concepts. Take some time in particular to look through the code examples-- they're written in Python, not R, but given your knowledge about if statements and functions you should be able to interpret them pretty easily. 
 
-Did you catch the name of the method he describes to estimate a price for a house? It's our old friend multivariate linear regression!  I can hear you saying "Hold up Amelia, linear regression is the backbone of classical statistics! What business does it have in a machine learning article?" 
+I like this article because it walks through a lot of concepts we've already seen-- linear regression, prediction, and minimizing the sum of squares-- in a new and different way. 
 
-Well, despite people trying to make a clear-cut distinction between machine learning and the rest of statistics, the truth is that the two have a lot of overlap. While there are some methods that are used almost exclusively in either field, things like regression fall somewhere in the middle. So I would argue that this article is machine-learny not because of the method used specifically, but rather because it takes a classical statistical method like regression and approached it in a machine-learny way.  Specifically, it:
+You might be confused at what linear regression, the main tool of *classical* statistics, is doing in an article about machine learning, which we usually think of as "*not*-statistics". 
 
-Focuses on finding a generic algorithm to answer your question of interest, rather than a custom, highly-specified model;
-Focuses entirely on prediction: the goal is not to understand what components make a house valuable just to accurately predict the price of a new house that you plug into the dataset. 
+Well, despite people trying to make a clear-cut distinction between machine learning and the rest of statistics, the truth is that the two have a lot of overlap. While there are some methods that are used almost exclusively in either field, things like regression (especially logistice regression, which we'll talk about next week) fall somewhere in the middle. I would argue that this article is **machine-learny** not because of the method used specifically, but rather because it takes a classical statistical method like regression and approaches it in a machine-learny way.  In particular:
 
-## Machine Learning: Brief History, and Definitions
+1. It focuses on finding a generic algorithm to answer your question of interest, rather than a custom, highly-specified model. The actual algorithm for linear regression that a machine learner would use would *not* require you to input a specific regression equation like we did with the `lm()` function-- you would give it a dataset and and outcome variable and it would make its own regression equations out of all the other columns in the dataset.
+2. It focuses entirely on prediction: the goal is not to understand what components make a house valuable, but to accurately predict the price of a new house that you plug into the dataset. 
+
+## Machine Learning: Brief History
+
+Machine learning grew out of artificial intelligence research, which has existed just about as long as computer science has existed. Alan Turing, WWII codebreaker and "father of computer science", was fascinated by the question of whether or not a computer could be made to think. He developed a criterion called the Turing Test-- if a computer could trick a human into believing that the computer itself was a human, then that computer should be considered to be "intelligent". Artificial intelligence research expanded enormously in the following few decades, and still continues today, but people quickly realized that brains are hard, and intelligence is complicated, and that building a conscious machine would take more time than they thought. 
+
+However, many of the tools that had been developed to try and make a "thinking" machine, tools that in some way tried to mimic the adaptability and ability to learn from new examples that real brains exhibit, could still be extremely useful. They only worked when you stuck them on highly specific problems, like determining whether or not an email is spam or deciphering handwriting, but they were versatile and robust. This is how machine learning was born. 
+
+For decades, machine learning stayed solidly in the wheelhouse of computer science, with statisticians and theoretical mathematicians pursuing independent goals. It's only in the last 10-15 years that these fields have begun to communicate more, to realize that they've independently discovered many of the same algorithms, and to collaborate in a large-scale way. 
+
+There is no single, undisputed definition for "machine learning", but here's my favorite hand-wavey one: Machine learning is when you take a task that a human would be able to do easily, and program a computer to do it really really quickly instead. 
 
 
 ## Where Machine Learning Shines: Classification
 
+As it turns out, most of the tasks that fall into the definition above are tasks of *classification*: Is this email spam or not? What letter or number is that handwritten symbol? Is this a picture of a cat? Compared to machine learning, classical statistics has relatively few tools for classification. The main classification tool in traditional stats is logistic regression (which is also considered a machine learning method). Machine learning, on the other hand, has clustering algorithms like k-NN and K-means, perceptrons, support vector machines, decision trees, neural networks... the list goes on and on. Machine learning can be, and often is, used for non-classification tasks as well, but if you're trying to *do* classification, you should go to machine learning first.
+
+
 ## Classes of Machine Learning: Supervised and Unsupervised Learning
 
-## Validation
+Geitgey covered supervised and unsupervised learning in his blog post, but it's an important concept so I want to review it again. 
 
-One other important aspect of the machine-learny mindset, that is not discussed in the article but that I want to describe here, is a focus on out-of-sample validation to determine the quality of a model.
+The key difference between supervised and unsupervised learning is the status of your *outcome variable*-- supervised learning needs an outcome variable, unsupervised learning doesn't. 
+
+### Supervised Learning 
+Supervised learning is a paradigm you're already comfortable with-- if you thought about regression as a machine learning tool, it would be a supervised one. Supervised learning algorithms take in an *outcome variable* and a string of *predictor variables*, and try to build a model describing the relationship between the predictors and the outcome. Then, if you have a new datapoint whose predictor variables you know, but whose outcome variables you don't know, you can use the model you've build to *predict* an outcome value for that datapoint. 
+
+Let's say we're interested in predicting what rank a professor is, based on his/her salary and years since Ph.D. I could use a supervised learning algorithm called "k nearest neighbors" (k-NN). k-NN is super simple-- all you have to give the algorithm is a dataset, an outcome variable, and an integer value "k". Then, to predict a rank for a new datapoint, the algorithm does this:
+
+1. Find the *k* datapoints closest to the new datapoint;
+2. Look up what rank those datapoints are; 
+3. Assign the new datapoint to whichever rank is most common among those *k* datapoints. 
+
+We'll go into more detail about k-NN next lecture, but the key takeaway here is step 2-- it *uses information about the ranks of other professors* to predict a rank for a new professor. That's a *supervised* process. 
+
+### Unsupervised Learning
+Unsupervised learning works a little differently. Instead of being explicitly about *trying to predict a particular thing as effectively as possible*, it's just about trying to find relevant patterns in a dataset-- no outcome variable required. This goal is much looser and less well-defined than supervised learning. I would liken unsupervised learning to the "exploratory data analysis" phase of research. When you get a new dataset, you usually don't immediately dive into regressions or other models. Instead, you take some time to just look at the data-- plot a bunch of things against each other, maybe do some mapping, see what patterns jump out at you that might be worth exploring more in the future. That's what unsupervised learning is about-- finding new relationships.
+
+You *can* also use unsupervised learning methods to see if you can replicate some known variable in your dataset. For example, let's say we want to ask the question "do professors of different ranks cluster tightly in paramter space"? There's an unsupervised algorithm called K-means that clusters data into groups. All you give it is a dataset and an integer value "K", which is the number of groups you want to wind up with. K-means hunts through the data until it's found *K* groups of datapoints that are all as close to each other as possible. As an example, let's give K-means a *K* of 3, and a dataset consisting of the salary and years since Ph.D for our professors. K-means would split them into groups like so:
+
+[insert K-means plot]
+
+We could compare these groupings to the *actual* "rank" values in the dataset, and see how they line up:
+
+[insert rank color plot]
+
+The key point, however, is that we can never talk about K-means "accurately predicting" rank. K-means used absolutely no information about the rank of a professor to make its classification choices. It just put things into groups-- *you* were the one who hypothesized that maybe those groups corresponded to ranks. A priori, the two have no connection. Unsupervised learning **has no outcome variable**.
+
+
+## Validation: Out of Sample, In-Sample, and Why it Matters.
+
+One of the most important aspects of the **machine-learny mindset** was alluded to but not truly discussed in the Geitgey article: **out of sample validation**. We'll go into it in some detail here. 
+
+## What is validation?
 
  
 
