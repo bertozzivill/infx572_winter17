@@ -1,0 +1,21 @@
+---
+title: "Do You Have the Right to Your Own Data?"
+output: html_document
+---
+
+Make whole thing into a video:
+
+--23 and me: what it is, why they were shut down
+--real argument: can people understand/interpret their own medical data?
+
+--another example: overdiagnosing cancer
+
+-two different questions:
+1. Can people accurately *interpret* their own medical data
+2. Does it *matter*, given that we're risk averse?
+
+--My stance: it depends
+  --give people options whenever possible, but opt systems should be context-specific
+  --e.g: HIV tests should be opt-out, but herpes tests should be opt-in. 
+  
+--Question extends beyond medical data--people have all this data on us, but we often can't access it. Is that ok?
