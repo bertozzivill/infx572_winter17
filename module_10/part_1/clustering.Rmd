@@ -1,48 +1,119 @@
 ---
-title: "Clustering"
+title: "The Two K's"
 output: html_document
 ---
 
-## What is Clustering?
+## The Two "K's"
+
+This page, we're going to go over two simple machine learning algorithms, one supervised and one unsupervised. K-means is an *unsupervised* method for finding clusters in your dataset, while k-NN is a *supervised* method of classifying datapoints based on other features of your dataset. By "features", we just mean "predictor variables", but "feature" is the machine learning term for it. 
 
 
 ## K-means
 
-K-means is a clustering algorithm, which means that it classifies datapoints based on how close to each other they are in some parameter space. You would use K-means if you wanted to split your data into a predefined number of groups, based on similarities across your variables.
+K-means is a clustering algorithm, which means that it groups datapoints based on how close to each other they are in some parameter space. You would use K-means if you wanted to split your data into a predefined number of groups, based on similarities across your variables.
 
-For example: when I was running analyses on US counties, we wanted to compare the life expectancies of twenty different "groups" of counties that were similar based on socioeconomic/demographic variables. So, we ran K-means with a K of twenty and input variables of race, income, poverty, education, etc. to come up with clusters such as "poor, uneducated, mostly white counties" or "affluent highly educated counties". Running K-means was a more rigorous way for us to do this than to categorize these counties by hand. 
+For example: when I was on a team running analyses on US counties (some of which you read about last week), we wanted to compare the life expectancies of twenty different "groups" of counties that were similar based on socioeconomic/demographic variables. So, we ran K-means with a K of 20 and input variables of race, income, poverty, education, etc. to come up with clusters such as "poor, uneducated, mostly white counties" or "affluent highly educated counties". Running K-means was a more rigorous way for us to do this than to categorize these counties by hand. 
 
-As discussed in class, K-means is an unsupervised learning method, which means that it does NOT take the outcome variable into account when running its algorithm. You only have to give two inputs to a K-means algorithm:
+As mentioned last page, K-means is an unsupervised learning method, which means that it does NOT take the outcome variable into account when running its algorithm. You only have to give two inputs to a K-means algorithm:
 
-The data you want to cluster
-The number of clusters you want 
+1. The data you want to cluster
+2. The number of clusters you want (K)
+
 From there, the algorithm runs iteratively until convergence. That is, it runs the same process over and over again until the results stop changing. The steps are as follows (displayed in the plots for a dataset with K=2):
 
-Initialize your cluster markers (colored x's) in random locations. step_1.png
-Assign each datapoint to the cluster marker closest to it.          tep_2.png
-Move the cluster marker to the centroid (geometric middle) of the newly assigned datapoints. step_3.png
-Repeat steps 2-3 until an additional iteration does not change any cluster assignments.
-step_4.pngstep_5.png
+1. Initialize your cluster markers (colored x's) in random locations. 
+2. Assign each datapoint to the cluster marker closest to it.         
+3. Move the cluster marker to the centroid (geometric middle) of the newly assigned datapoints.
+4. Repeat steps 2-3 until an additional iteration does not change any cluster assignments.
 
+Let's look at an example of K-means in action. I'm sure you're all bored to tears of the `Salaries` dataset by now, so let's switch it up and use a classic machine learning dataset: `iris`. Each row of the dataset is an iris of one of three species: *setosa*, *versicolor*, or *virginica*. The dataset contains information on the length and width of both the petal and the sepal (the green leaflike things at the base of the flower) for every specimen, as well as what species it belongs to.
  
+Let's make some preliminary plots of this data: 
 
-See the coding worksheet for an example of K-means in action on the salaries dataset. 
+```{r}
+# load libraries
+library(data.table)
+library(datasets) # library for the iris data
+library(ggplot2)
 
+# load data
+data(iris)
+iris <- data.table(iris)
+iris[, Species:= factor(Species, levels=c("versicolor", "virginica", "setosa"))]
+
+# view data
+head(iris)
+
+##  Preliminary Plots
+ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
+  geom_point(aes(color=Species))
+
+```
+<br> 
+
+```{r}
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(color=Species))
+```
+<br>
+
+
+```{r}
+ggplot(iris, aes(x=Petal.Length, y=Sepal.Length)) +
+  geom_point(aes(color=Species))
+```
+<br>
+
+The question is this: Can K-means, which *does not* use any information about the species of a plant, recreate these groupings? Let's find out: 
+
+```{r}
+
+# load k-means library
+library(stats)
+
+# run k-means on data (note that we *exlude* the Species column)
+for_kmeans <- copy(iris)
+for_kmeans$Species <- NULL 
+kmeans_output <- kmeans(for_kmeans, centers=3) # the 'centers' argument is where we input our K value
+```
+<br>
+
+"kmeans_output" is an object of class "kmeans". One of the attributes of this object, "cluster", is a vector of all the different cluster assignments for the dataset. Let's add these predictions to our original "iris" dataset.
+
+```{r}
+iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
+
+#plot the result
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(color=kmeans_cluster))
+```
+<br>
+
+Hey, that looks pretty good! Let's compare it to our original plot of Petal Length vs Petal Width: 
  
+[insert plot]
+ 
+These results show that these data are *highly clustered by species*. But note, that you *can* run K-means with different K values, and it will still pick clusters-- they just won't be as well-defined:
+
+```{r}
+## K-means with K=5
+
+kmeans_output <- kmeans(for_kmeans, centers=5)
+iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
+
+#plot the result
+ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(color=kmeans_cluster))
+```
+ <br>
+
+Doesn't make as much sense anymore, does it? 
 
 ## k-Nearest Neighbors (aka k-NN)
 
 k-NN and K-means are often confused because they're both machine learning methods with "k" in the name. Here's a handy guide to tell them apart:
 
-K-means	k-NN
-"k"	uppercase	lowercase
-meaning of k/K	number of clusters in entire dataset	
-number of "nearest neighbors" to
-
-look for when classifying each point
-
-method type	unsupervised	supervised
- 
+[insert table]
 
 But what is k-NN, you might ask? Great question. 
 
@@ -50,25 +121,27 @@ Like K-means, k-NN is a classification algorithm-- it tries to assign datapoints
 
  Let's think about linear regression for a minute. Prediction in linear regression has two steps:
 
-Estimate the relationship between your variables (i.e. your coefficients).
-Use those relationships to predict the outcome value for a new data point. 
-That relationship estimation, that calculation that you run on your dataset, is something that exists and can be evaluated separately from the prediction results. Even if you didn't predict the salary of a woman with 30 years of service to a university, you can still say what the relationship is between salary, years of service, and sex if that's what you put in your regression. 
+1. Estimate the relationship between your variables (i.e. your coefficients).
+2. Use those relationships to predict the outcome value for a new data point. 
+
+Step 1, that calculation that you run on your dataset, is something that exists and can be evaluated separately from the prediction results. Even if you didn't predict the salary of a woman with 30 years of service to a university, you can still say what the relationship is between salary, years of service, and sex if that's what you put in your regression. 
 
 With k-NN, that is NOT true. k-NN only has one step, really:
 
-Predict the class of a new datapoint based on the value of the points around it in parameter space.
+1. Predict the class of a new datapoint based on the value of the points around it in parameter space.
+
 Algorithmically, k-NN works like this:
 
-Get a set of data split into classes, like the columns "salary", "years since Ph.D", and "rank" from the Salaries dataset (here "rank" is the outcome variable, and the other two are predictors).known_data.png
-Get a datapoint for a professor whose rank you'd like to predict, knowing their salary and years since Ph.D. to_predict.png
-On the plot of "salary" vs "years since Ph.D", find the k closest pre-assigned datapoints to your value of interest, and note their rank. Here we take k=4. Three of the closest points are green, and one is blue. closest_points.png
-Assign your new datapoint to whichever class was most dominant among those k "nearest neighbors". final_assign.png
+1. Get a set of data split into classes, like the columns "salary", "years since Ph.D", and "rank" from the Salaries dataset (here "rank" is the outcome variable, and the other two are predictors). 
+2. Get a datapoint for a professor whose rank you'd like to predict, knowing their salary and years since Ph.D.
+3. On the plot of "salary" vs "years since Ph.D", find the k closest pre-assigned datapoints to your value of interest, and note their rank. Here we take k=4. Three of the closest points are green, and one is blue. 
+4. Assign your new datapoint to whichever class was most dominant among those k "nearest neighbors".
  
 
  Things to note about k-NN:
 
-Like K-means, your results are highly sensitive to the value you choose for k, especially in boundary regions. If I'd picked, say, k=7 in the example above, the classification would have switched to "Prof". In both cases, cross-validation can help you determine which k is most appropriate.
-When you run k-NN, you need to include both a set of reference datapoints and a set of points for which you want to predict (referred to as the train and test sets, even if you aren't running cross-validation). Unlike linear regression, there's nothing to do if you're not predicting points!
+* Like K-means, your results are highly sensitive to the value you choose for k, especially in boundary regions. If I'd picked, say, k=7 in the example above, the classification would have switched to "Prof". In both cases, cross-validation can help you determine which k is most appropriate.
+* When you run k-NN, you need to include both a set of reference datapoints and a set of points for which you want to predict (referred to as the train and test sets). Unlike linear regression, there's nothing to do if you're not predicting points!
  
+Let's work through a k-NN example with the `iris` dataset: 
 
-Please work through and make sure you can answer questions on coding worksheet number 5View in a new window for examples of both K-means and k-NN in R.
