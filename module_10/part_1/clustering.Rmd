@@ -3,6 +3,10 @@ title: "The Two K's"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = F)
+```
+
 ## The Two "K's"
 
 This page, we're going to go over two simple machine learning algorithms, one supervised and one unsupervised. K-means is an *unsupervised* method for finding clusters in your dataset, while k-NN is a *supervised* method of classifying datapoints based on other features of your dataset. By "features", we just mean "predictor variables", but "feature" is the machine learning term for it. 
@@ -36,21 +40,14 @@ library(data.table)
 library(datasets) # library for the iris data
 library(ggplot2)
 
-main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_10/part_1/"
-
 # load data
 data(iris)
 iris <- data.table(iris)
 iris[, Species:= factor(Species, levels=c("versicolor", "virginica", "setosa"))]
 
-# view data
-head(iris)
-
 ##  Preliminary Plots
-png(paste0(main_dir, "sepal_length_width.png"))
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(aes(color=Species))
-graphics.off()
 ```
 <br> 
 
@@ -115,10 +112,12 @@ png(paste0(main_dir, "five_cluster_output_kmeans.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=kmeans_cluster))
 graphics.off()
+
+iris[, kmeans_cluster:=NULL]
 ```
  <br>
 
-Doesn't make as much sense anymore, does it? 
+Doesn't make as much sense anymore, does it? The results of a K-means analysis are highly sensitive to the "K" you pick.
 
 ## k-Nearest Neighbors (aka k-NN)
 
@@ -143,16 +142,79 @@ With k-NN, that is NOT true. k-NN only has one step, really:
 
 Algorithmically, k-NN works like this:
 
-1. Get a set of data split into classes, like the columns "salary", "years since Ph.D", and "rank" from the Salaries dataset (here "rank" is the outcome variable, and the other two are predictors). 
+1. Get a set of data with a categorical outcome variable, like 'rank' in the `Salaries` dataset. Let's say we're using 'salary' and 'yrs.since.phd' as preditor variables.
 2. Get a datapoint for a professor whose rank you'd like to predict, knowing their salary and years since Ph.D.
 3. On the plot of "salary" vs "years since Ph.D", find the k closest pre-assigned datapoints to your value of interest, and note their rank. Here we take k=4. Three of the closest points are green, and one is blue. 
 4. Assign your new datapoint to whichever class was most dominant among those k "nearest neighbors".
  
-
  Things to note about k-NN:
 
 * Like K-means, your results are highly sensitive to the value you choose for k, especially in boundary regions. If I'd picked, say, k=7 in the example above, the classification would have switched to "Prof". In both cases, cross-validation can help you determine which k is most appropriate.
 * When you run k-NN, you need to include both a set of reference datapoints and a set of points for which you want to predict (referred to as the train and test sets). Unlike linear regression, there's nothing to do if you're not predicting points!
  
-Let's work through a k-NN example with the `iris` dataset: 
+Let's work through a k-NN example with the `iris` dataset. Here, we're using all 4 quantitative variables to classify our points, so k-NN is finding nearest neighbors in a 4D space. 
+
+```{r}
+# load library for k-NN
+library(kknn) 
+
+main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_10/part_1/"
+
+# split the data into a testing set and a training set (we'll give the testing set 20% of the data)
+new_order <- sample(nrow(iris))
+iris <- iris[new_order] # randomly shuffle data
+testing_set <- iris[1:30]
+training_set <- iris[31:nrow(iris)]
+
+# run k-NN, with a k of 10. Notice that we use a formula as the first argument here, much as we would in a regression
+knn_output <- kknn(Species~., training_set, testing_set, k=10)
+
+## knn_output is an object of class "kknn", which has an attribute called "fitted.values" giving the algorithms prediction
+## for each element of our training set. Notice that, because k-NN is a supervised learning method, these predictions are 
+## of the same format (factor variable with values "versicolor", "virginica", and "setosa") as our original "Species" variable, whereas
+## K-means just gives you a cluster number because it doesn't know anything about the "Species" variable.
+testing_set[, predicted_species:=knn_output$fitted.values]
+
+## Let's take a look at the results: plot the *predicted* outputs as dark circles, with a transparent circle around each one
+## showing the true value for that point. The triangles show the *training* data
+## used to make the predictions:
+png(paste0(main_dir, "knn_predict_10.png"))
+ggplot(testing_set, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(color=Species), size=5, alpha=0.3) +
+  geom_point(aes(color=predicted_species)) +
+  geom_point(data=training_set, aes(color=Species), alpha=0.4, shape=2) +
+  labs(title="Predicted (dark) vs Real (opaque) Species, k=10")
+graphics.off()
+
+```
+<br>
+
+Very nice work! With k=10, it looks like we made all our predictions correctly. What if we expanded our value of k, so we looked at *more* neighbors?
+
+```{r}
+# run k-NN, with a k of 75 this time
+knn_output <- kknn(Species~., training_set, testing_set, k=75)
+
+# predict output
+testing_set[, predicted_species:=knn_output$fitted.values]
+
+#plot results
+png(paste0(main_dir, "knn_predict_75.png"))
+ggplot(testing_set, aes(x=Petal.Length, y=Petal.Width)) +
+  geom_point(aes(color=Species), size=5, alpha=0.3) +
+  geom_point(aes(color=predicted_species)) +
+  geom_point(data=training_set, aes(color=Species), alpha=0.4, shape=2) +
+  labs(title="Predicted (dark) vs Real (opaque) Species, k=75")
+graphics.off()
+```
+<br>
+
+When we really increase the number of neighbors we look at, we start to see less accurate predictions near the boundary between versicolor and virginica. Your *k* value matters!
+
+Stay tuned next week for more supervised machine learning tools!
+
+
+
+
+
 
