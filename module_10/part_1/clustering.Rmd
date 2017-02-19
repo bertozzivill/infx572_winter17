@@ -36,6 +36,8 @@ library(data.table)
 library(datasets) # library for the iris data
 library(ggplot2)
 
+main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_10/part_1/"
+
 # load data
 data(iris)
 iris <- data.table(iris)
@@ -45,22 +47,27 @@ iris[, Species:= factor(Species, levels=c("versicolor", "virginica", "setosa"))]
 head(iris)
 
 ##  Preliminary Plots
+png(paste0(main_dir, "sepal_length_width.png"))
 ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
   geom_point(aes(color=Species))
-
+graphics.off()
 ```
 <br> 
 
 ```{r}
+png(paste0(main_dir, "petal_length_width.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=Species))
+graphics.off()
 ```
 <br>
 
 
 ```{r}
+png(paste0(main_dir, "petal_length_sepal_width.png"))
 ggplot(iris, aes(x=Petal.Length, y=Sepal.Length)) +
   geom_point(aes(color=Species))
+graphics.off()
 ```
 <br>
 
@@ -84,8 +91,10 @@ kmeans_output <- kmeans(for_kmeans, centers=3) # the 'centers' argument is where
 iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
 
 #plot the result
+png(paste0(main_dir, "three_cluster_output_kmeans.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=kmeans_cluster))
+graphics.off()
 ```
 <br>
 
@@ -102,8 +111,10 @@ kmeans_output <- kmeans(for_kmeans, centers=5)
 iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
 
 #plot the result
+png(paste0(main_dir, "five_cluster_output_kmeans.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=kmeans_cluster))
+graphics.off()
 ```
  <br>
 
