@@ -1,0 +1,141 @@
+---
+title: "Intro Machine Learning"
+output: html_document
+---
+
+
+## Introduction
+Read Adam Geitgey's (excellent blog post) [https://medium.com/@ageitgey/machine-learning-is-fun-80ea3ec3c471#.1w12s9mdy] introducing you to some basic machine learning concepts. Take some time in particular to look through the code examples-- they're written in Python, not R, but given your knowledge about if statements and functions you should be able to interpret them pretty easily. 
+
+I like this article because it walks through a lot of concepts we've already seen-- linear regression, prediction, and minimizing the sum of squares-- in a new and different way. 
+
+You might be confused at what linear regression, the main tool of *classical* statistics, is doing in an article about machine learning, which we usually think of as "*not*-statistics". 
+
+Well, despite people trying to make a clear-cut distinction between machine learning and the rest of statistics, the truth is that the two have a lot of overlap. While there are some methods that are used almost exclusively in either field, things like regression (especially logistice regression, which we'll talk about next week) fall somewhere in the middle. I would argue that this article is **machine-learny** not because of the method used specifically, but rather because it takes a classical statistical method like regression and approaches it in a machine-learny way.  In particular:
+
+1. It focuses on finding a generic algorithm to answer your question of interest, rather than a custom, highly-specified model. The actual algorithm for linear regression that a machine learner would use would *not* require you to input a specific regression equation like we did with the `lm()` function-- you would give it a dataset and and outcome variable and it would make its own regression equations out of all the other columns in the dataset.
+2. It focuses entirely on prediction: the goal is not to understand what components make a house valuable, but to accurately predict the price of a new house that you plug into the dataset. 
+
+## Machine Learning: Brief History
+
+Machine learning grew out of artificial intelligence research, which has existed just about as long as computer science has existed. Alan Turing, WWII codebreaker and "father of computer science", was fascinated by the question of whether or not a computer could be made to think. He developed a criterion called the Turing Test-- if a computer could trick a human into believing that the computer itself was a human, then that computer should be considered to be "intelligent". Artificial intelligence research expanded enormously in the following few decades, and still continues today, but people quickly realized that brains are hard, and intelligence is complicated, and that building a conscious machine would take more time than they thought. 
+
+However, many of the tools that had been developed to try and make a "thinking" machine, tools that in some way tried to mimic the adaptability and ability to learn from new examples that real brains exhibit, could still be extremely useful. They only worked when you stuck them on highly specific problems, like determining whether or not an email is spam or deciphering handwriting, but they were versatile and robust. This is how machine learning was born. 
+
+For decades, machine learning stayed solidly in the wheelhouse of computer science, with statisticians and theoretical mathematicians pursuing independent goals. It's only in the last 10-15 years that these fields have begun to communicate more, to realize that they've independently discovered many of the same algorithms, and to collaborate in a large-scale way. 
+
+There is no single, undisputed definition for "machine learning", but here's my favorite hand-wavey one: Machine learning is when you take a task that a human would be able to do easily, and program a computer to do it really really quickly instead. 
+
+
+## Where Machine Learning Shines: Classification
+
+As it turns out, most of the tasks that fall into the definition above are tasks of *classification*: Is this email spam or not? What letter or number is that handwritten symbol? Is this a picture of a cat? Compared to machine learning, classical statistics has relatively few tools for classification. The main classification tool in traditional stats is logistic regression (which is also considered a machine learning method). Machine learning, on the other hand, has clustering algorithms like k-NN and K-means, perceptrons, support vector machines, decision trees, neural networks... the list goes on and on. Machine learning can be, and often is, used for non-classification tasks as well, but if you're trying to *do* classification, you should go to machine learning first.
+
+
+## Classes of Machine Learning: Supervised and Unsupervised Learning
+
+Geitgey covered supervised and unsupervised learning in his blog post, but it's an important concept so I want to review it again. 
+
+The key difference between supervised and unsupervised learning is the status of your *outcome variable*-- supervised learning needs an outcome variable, unsupervised learning doesn't. 
+
+### Supervised Learning 
+Supervised learning is a paradigm you're already comfortable with-- if you thought about regression as a machine learning tool, it would be a supervised one. Supervised learning algorithms take in an *outcome variable* and a string of *predictor variables*, and try to build a model describing the relationship between the predictors and the outcome. Then, if you have a new datapoint whose predictor variables you know, but whose outcome variables you don't know, you can use the model you've build to *predict* an outcome value for that datapoint. 
+
+Let's say we're interested in predicting what rank a professor is, based on his/her salary and years since Ph.D. I could use a supervised learning algorithm called "k nearest neighbors" (k-NN). k-NN is super simple-- all you have to give the algorithm is a dataset, an outcome variable, and an integer value "k". Then, to predict a rank for a new datapoint, the algorithm does this:
+
+1. Find the *k* datapoints closest to the new datapoint;
+2. Look up what rank those datapoints are; 
+3. Assign the new datapoint to whichever rank is most common among those *k* datapoints. 
+
+We'll go into more detail about k-NN next lecture, but the key takeaway here is step 2-- it *uses information about the ranks of other professors* to predict a rank for a new professor. That's a *supervised* process. 
+
+### Unsupervised Learning
+Unsupervised learning works a little differently. Instead of being explicitly about *trying to predict a particular thing as effectively as possible*, it's just about trying to find relevant patterns in a dataset-- no outcome variable required. This goal is much looser and less well-defined than supervised learning. I would liken unsupervised learning to the "exploratory data analysis" phase of research. When you get a new dataset, you usually don't immediately dive into regressions or other models. Instead, you take some time to just look at the data-- plot a bunch of things against each other, maybe do some mapping, see what patterns jump out at you that might be worth exploring more in the future. That's what unsupervised learning is about-- finding new relationships.
+
+You *can* also use unsupervised learning methods to see if you can replicate some known variable in your dataset. For example, let's say we want to ask the question "do professors of different ranks cluster tightly in paramter space"? There's an unsupervised algorithm called K-means that clusters data into groups. All you give it is a dataset and an integer value "K", which is the number of groups you want to wind up with. K-means hunts through the data until it's found *K* groups of datapoints that are all as close to each other as possible. As an example, let's give K-means a *K* of 3, and a dataset consisting of the salary and years since Ph.D for our professors. K-means would split them into groups like so:
+
+[insert K-means plot]
+
+We could compare these groupings to the *actual* "rank" values in the dataset, and see how they line up:
+
+[insert rank color plot]
+
+The key point, however, is that we can never talk about K-means "accurately predicting" rank. K-means used absolutely no information about the rank of a professor to make its classification choices. It just put things into groups-- *you* were the one who hypothesized that maybe those groups corresponded to ranks. A priori, the two have no connection. Unsupervised learning **has no outcome variable**.
+
+
+## Validation: Out of Sample, In-Sample, and Why it Matters.
+
+```{r, include=F}
+library(data.table)
+library(car)
+
+data(Salaries)
+Salaries <- data.table(Salaries)
+
+original_reg <- lm(salary~yrs.since.phd, data=Salaries)
+full_reg <- lm(salary ~ yrs.since.phd + yrs.service + sex + discipline, data=Salaries)
+
+```
+
+One of the most important aspects of the **machine-learny mindset** was alluded to but not truly discussed in the Geitgey article: **out of sample validation**. We'll go into it in some detail here. 
+
+## What is validation?
+How do you know if your model is any good? How do you know if a different model could do better? For example, how can we compare the quality of our original `Salaries` regression `salary ~ yrs.since.phd` to our full regression `salary ~ yrs.since.phd + yrs.service + sex + discipline`? 
+
+You have to come up with some metric to test model performance. A common method to test model quality in the statistic literature is to compare R-squared values (which, remember, defines how much *variation in the outcome* is explained by *variation in the predictor variables*). R-squared tests **goodness-of-fit**-- the closer the model gets to the actual data, the better.
+
+Let's look at the outputs for each of our regressions:
+
+```{r}
+summary(original_reg)
+
+summary(full_reg)
+```
+
+Look at the second to last row of the output, which shows us R-sauared values. Our full regression has an R-squared of 0.226, whereas the original regression. Based on the R-squared metric, our full regression performs best. 
+
+
+### The Problem with Goodness-of-fit: Overfitting
+
+R-squared and other goodness-of-fit tests seem like a good method for determining which model works best, but they have a serious weakness: Overfitting. If your goal is to get as close to *the data you observe* as possible, you may wind up capturing random noise that you would be better off ignoring. 
+
+For example, look at this plot: 
+
+[insert linear/overfit plot]
+
+The data seems to have a pretty linear relationship--the linear regression line (black) fits pretty well. But that line isn't going to have anywhere near the R-squared value of the curvy spline function that was also fit to the data (blue). The blue curve will have an R-squared of 1, because it perfectly touches every data point. Does that mean its' a better model?
+
+No! The model is *overfit*-- if we were to try and predict a new y-value for an x-value between -5 and -4, for example, the blue curve would probably give a wildly inaccurate prediction. 
+
+Overfitting is a common problem with R-squared values, or an other **in-sample** validation methods. An in-sample method is any validation structure that uses data the model has already seen to judge model performance. Think about it. Our process of running linear regression is this:
+
+1. Provide some data, and tell a computer our model specification;
+2. Tell the model to find coefficients that get as close to that data as possible;
+3. Use the fact that our model is close to *the data we gave it* as a way of proving that the model does well.
+
+This is kind of like me handing you a book without a cover page, telling you it's by Edgar Allen Poe, and then asking you who wrote it. You'll (hopefully) answer my question correctly, but that doesn't mean that you'll do a good job of naming the author when I give you a different random book *without* telling you who wrote it. 
+
+
+### Out-of-sample validation
+The solution to overfitting, hopefully, is obvious: rather than judging the model based on numbers it used to generate its prediction line, judge the model based on how well it predicts data it's never seen before. In our `Salaries` example, that means that we would come up with those two different regression estimates, find some *new* data on professors' years since phd and salary (and sex, and discipline), and see how well predicted salary matches real salary for those new datapoints. 
+
+We usually can't just "find" new data that's structured the way we want it, so instead we *hold out* some data from our original dataset. That is, we randomly take some observations *out* of our dataset and put them to the side. We call this our **testing set** The rest of the data is called the **training set**-- this is the thing we'll actually use to get our regression coefficients. So we run our regressions on the training set, get some model coefficients, use each model to *predict* for values in the testing set, and see how those predicted values match up to what we actually observe. Whichever model does a better job of predicting data it's never seen before is viewed as superior. 
+
+This type of validation method, in contrast to in-sample, is known as **out of sample validation**.
+
+Out of sample validation is a fundamental aspect of machine learning-- no one will take you seriously if you don't use it. Fortunately, it's so fundamental that methods for out-of-sample validation are included in most of the machine learning packages and tools available for R. However, it's also fairly straightforward to build an out of sample validation method on your own-- we review that in the video below: 
+
+
+
+
+Here's a common way of doing that, step-by-step:
+
+Randomly shuffle the rows of your dataset, then split it into two datasets: one that has 90% of the rows of data, and one that has 10%. The bigger dataset is called the training set, and the smaller one is the testing set.
+Run your regression on the training set. You run exactly the same commands as you would before, just on a smaller dataset.
+Predict outcome values for the TESTING set. This is the key moment-- when we ask the computer to calculate a value based on a datapoint it's never seen before. 
+Calculate how close your predictions were to the actual values held in your testing set. If your model did a good job at guessing values for data points it hadn't seen before, it's probably not overfit and can safely be used for additional prediction. 
+Note on step 4: the metric you usually use to determine whether a model is good or bad at prediction is called Root Mean Squared Error-- see the coding example for a more thorough description. 
+
+ 
+
+ 

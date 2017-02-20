@@ -157,7 +157,6 @@ $(document).ready(function () {
 ## F-statistic: 45.71 on 2 and 394 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br> If you’re comfortable interpreting bivariate regressions, this should look pretty familiar. You still have your intercept, and your slope on <code>yrs.since.phd</code>, and now you just have an extra value for <code>yrs.service</code>. The <code>Estimate</code> column for this value is the coefficient on <code>yrs.service</code>, exactly the same way that it is for <code>yrs.since.phd</code>.</p>
 <p>If we wanted to interpret these regression results in a sentence, we would say “A professor with zero years since his/her Ph.D and zero years of service is expected to have a salary of $89,912.20. Every additional year since Ph.D <em>increases</em> expected salary by $1,562.90, and every additional year of service <em>decreases</em> expected salary by $629.10.”</p>
-<p>[insert: explanation of weird <code>yrs.service</code> value.]</p>
 </div>
 <div id="categorical-variables" class="section level3">
 <h3>Categorical Variables</h3>
@@ -186,6 +185,53 @@ $(document).ready(function () {
 ## F-statistic: 43.74 on 2 and 394 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><br> Ok, this looks a little bit different than what we had before. We still have an intercept estimate and a <code>yrs.since.phd</code> coefficient, but our third row is now <code>sexMale</code>, when you might have expected it to just be <code>sex</code>. Remember that for categorical variables, one value is <em>incorporated into the intercept</em>, and every other value gets its own coefficient that gets <em>added</em> to that intercept. So here, The <code>(Intercept)</code> value refers to the regression intercept for <em>females</em>, and the <code>(Intercept)</code> value <strong>plus</strong> the <code>sexMale</code> value gives the regression intercept for <em>males</em>.</p>
 <p>You would interpret this regression like so: “A <em>female</em> professor with zero years since her Ph.D has an expected salary of $85,181.80, while a <em>male</em> professor with zero years since his Ph.D has an expected salary of ($85,181.80 + $7,923.60) = $93,105.40. Every additional year since Ph.D increases a professor’s expected salary by $958.10.”</p>
+<p>You plot categorical regression outputs the same way that you’d plot bivariate outputs, you just need to be sure to stratify by rank somehow (it can be through color, faceting, shape– whatever you prefer).</p>
+<pre class="r"><code>## Generate predicted values from categorical regression
+Salaries[, predicted_salary_sex:= predict(multivariate_categorical, data=Salaries)]</code></pre>
+<pre><code>##          rank discipline yrs.since.phd yrs.service  sex salary
+##   1:     Prof          B            19          18 Male 139750
+##   2:     Prof          B            20          16 Male 173200
+##   3: AsstProf          B             4           3 Male  79750
+##   4:     Prof          B            45          39 Male 115000
+##   5:     Prof          B            40          41 Male 141500
+##  ---                                                          
+## 393:     Prof          A            33          30 Male 103106
+## 394:     Prof          A            31          19 Male 150564
+## 395:     Prof          A            42          25 Male 101738
+## 396:     Prof          A            25          15 Male  95329
+## 397: AsstProf          A             8           4 Male  81035
+##      predicted_salary_sex
+##   1:            111308.95
+##   2:            112267.03
+##   3:             96937.76
+##   4:            136219.01
+##   5:            131428.62
+##  ---                     
+## 393:            124722.06
+## 394:            122805.90
+## 395:            133344.77
+## 396:            117057.43
+## 397:            100770.08</code></pre>
+<pre class="r"><code>png(paste0(main_dir, &quot;sex_by_color.png&quot;))
+## Plot #1: Group sex by color
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary, color=sex), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_sex, color=sex), size=1) +
+  labs(title=&quot;Multivariate Regression with Categorical Variables: Sex&quot;,
+       x=&quot;Years Since Ph.D&quot;,
+       y=&quot;Salary&quot;)
+graphics.off()
+
+png(paste0(main_dir, &quot;sex_by_facet.png&quot;))
+## Plot #2: Facet on Sex
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_sex), size=1) +
+  facet_grid(.~sex, scales=&quot;free&quot;) + 
+  labs(title=&quot;Multivariate Regression with Categorical Variables: Sex&quot;,
+       x=&quot;Years Since Ph.D&quot;,
+       y=&quot;Salary&quot;)
+graphics.off()</code></pre>
 </div>
 <div id="rank" class="section level4">
 <h4>Rank</h4>
@@ -215,7 +261,46 @@ summary(rank_regression)</code></pre>
 <p><br> Hopefully this output should look familiar, from our video about interpreting regressions with <code>rank</code>. We have four rows of output, even though we only included two variables in the regression. That’s because “rank” takes <em>three</em> values, and <em>one</em> of them gets incorporated into the intercept, so we need <em>two</em> rows to fully describe the “rank” component of the regression. If we run <code>unique(Salaries$rank)</code> to get all possible values of the <code>rank</code> variable, we see that our options are <code>AsstProf</code>, <code>AssocProf</code>, and <code>Prof</code>. We only see regression values for <code>AssocProf</code> and <code>Prof</code>, which means that the <code>(Intercept)</code> value must refer to <code>AsstProf</code>.</p>
 <p>Can you write up an interpretation for this regression on your own? Try it out.</p>
 <p>Once you’ve tried it, here’s the solution: “At zero years since his/her Ph.D, an <strong>assitant professor</strong> has an expected salary of <strong>$81,186.23</strong>, <br> an <strong>associate professor</strong> an expected salary of ($81,186.23 + $13,932.18) = <strong>$95,118.41</strong>, <br> and a <strong>[full] professor</strong> an expected salary of ($81,186.23 + $47,860.42) = <strong>$129,046.60</strong>. <br> Every additional year since Ph.D <strong>decreases</strong> a professor’s expected salary by <strong>$80.37</strong>.”</p>
-<p>Notice that, upon including the <code>rank</code> variable, our <code>yrs.since.phd</code> variable switched signs and became non-significant. This is a strong indication that <code>rank</code> is a mediator– more multicollinearity issues.</p>
+<p>Notice that, upon including the <code>rank</code> variable, our <code>yrs.since.phd</code> variable <em>switched signs</em>– it’s negative now! It’s also not significant anymore. This is a strong indication that <code>rank</code> is a mediator. Because the mechanism by which “years since Ph.D” impacts salary is <em>through</em> rank, including rank in the regression should almost completely negate any impact that “years since Ph.D” has on salary. This is almost precisely what we see.</p>
+<p>Even though the coefficient on <code>yrs.since.phd</code> is no longer significant, it does suggest something pretty interesting (and probably true): <em>within</em> any one rank, additional “years since Ph.D” is actually a detriment to your salary. That is, if you spend a long time at one rank level, never being promoted, that bodes poorly for your carreer prospects broadly, and your salary specifically.</p>
+<p>Here’s the visualization for the regression with rank as a categorical variable:</p>
+<pre class="r"><code>## Predict salary for the rank regression
+Salaries[, predicted_salary_rank:= predict(rank_regression, data=Salaries)]</code></pre>
+<pre><code>##          rank discipline yrs.since.phd yrs.service  sex salary
+##   1:     Prof          B            19          18 Male 139750
+##   2:     Prof          B            20          16 Male 173200
+##   3: AsstProf          B             4           3 Male  79750
+##   4:     Prof          B            45          39 Male 115000
+##   5:     Prof          B            40          41 Male 141500
+##  ---                                                          
+## 393:     Prof          A            33          30 Male 103106
+## 394:     Prof          A            31          19 Male 150564
+## 395:     Prof          A            42          25 Male 101738
+## 396:     Prof          A            25          15 Male  95329
+## 397: AsstProf          A             8           4 Male  81035
+##      predicted_salary_sex predicted_salary_rank
+##   1:            111308.95             127519.61
+##   2:            112267.03             127439.24
+##   3:             96937.76              80864.75
+##   4:            136219.01             125429.98
+##   5:            131428.62             125831.84
+##  ---                                           
+## 393:            124722.06             126394.43
+## 394:            122805.90             126555.17
+## 395:            133344.77             125671.10
+## 396:            117057.43             127037.39
+## 397:            100770.08              80543.27</code></pre>
+<pre class="r"><code>png(paste0(main_dir, &quot;rank_predictions.png&quot;))
+## Plot predicted values
+ggplot(Salaries, aes(x=yrs.since.phd)) +
+  geom_point(aes(y=salary, color=rank), alpha=0.7) +
+  geom_line(aes(y=predicted_salary_rank, color=rank), size=1) +
+  labs(title=&quot;Multivariate Regression with Categorical Variables: Rank&quot;,
+       x=&quot;Years Since Ph.D&quot;,
+       y=&quot;Salary&quot;)
+graphics.off()</code></pre>
+<p><br></p>
+<p>The downward trend in these lines is very slight (again, it’s nonsignificant), but compared to the coefficient values we were getting for <code>yrs.since.phd</code> previously, the difference is dramatic.</p>
 </div>
 </div>
 </div>
@@ -251,6 +336,7 @@ summary(combined_regression)</code></pre>
 <li>A <strong>male</strong> professor with zero years since his Ph.D and zero years of service has an expected salary of ($82,875.90 + $8,457.10) = <strong>$91,333</strong>.</li>
 <li>An extra year since Ph.D <strong>increases</strong> a professor’s expected salary by $1,552.80, and an extra year of service <strong>decreases</strong> it by <strong>$649.80</strong>.</li>
 </ul>
+<p>Visualized, this regression would look a lot like the “Sepal.Length + Sepal.Width + Species” plot in the <a href="http://shiny.stat.calpoly.edu/3d_regression/">multivariate regression visualization</a>: instead of creating just <em>one</em> plane through 3D space, now we make three, one for each level of <code>rank</code>.</p>
 </div>
 
 

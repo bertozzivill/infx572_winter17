@@ -1,0 +1,60 @@
+---
+title: "How Do Businesses Collect Your Data?"
+output: html_document
+---
+
+As information school students, and citizens of the 21st century, you're probably aware: your data is being collected, all the time, mostly by businesses. But how do businesses collect your data, and why? 
+
+Broadly speaking, the goal of every business is the same: to make a profit. Data collection and data science play a wide range of roles in pursuit of this overarching goal, a sampling of which we'll go over here. Also, don't think of it as a bad thing that businesses are profit-driven-- they also deliver high-valued services to consumers in exchange for our data and/or our dollars. 
+
+## Online, Businesses Collect **Everything**
+
+When you're on the website of a for-profit company, you should expect them to be tracking *everything* you do. Number of visits to the page, number of clicks, *what* you click on, mouse movements, scrolling behavior, interactions with others, your location, the images you upload, the messages you write... the list goes on and on. There's a chapter in Christian Rudder's *Dataclysm* where he analyzes the length of messages that people wind up sending each other on OkCupid, compared to the total number of characters entered into the text box while the message was being drafted. 
+
+Yes, *OkCupid knows how many times you wrote and deleted that one-sentence joke you wound up not sending*. 
+
+This type of large-scale data collection generates truly enormous amounts of data, and while there are uses for it (described in the next section), there are also much more specific data-collection strategies that can help businesses answer specific questions. We review those below. 
+
+
+## A/B Testing
+One of the most common types of data collection for web-based businesses is **A/B testing**, or **split testing**. It's designed to answer the question, "What would happen to [some outcome variable, usually sales or page views] if I changed [some aspect of my site or app design]?" You could, of course, answer this question by simply making your design change across the whole site, and seeing how your outcome variable changes. For example, if Amazon want to know what happens to sales if they change the font size on their site, they could just change the font size and look at sales. 
+
+This approach has two problems:
+
+1. It's risky. If your design change actually *reduces* sales, you could potentially lose a lot of money, and lose users, by making a poor design choice.
+2. You could never know for sure if the design change was the thing that led to the change in your outcome. Let's say you're Amazon, and on November 8th, 2016 you change the font size throughout the site. On November 9th, sales of George Orwell's *1984* skyrocket. Amazing, changing the font size on the site had a *HUGE* impact on dystopian novel sales, right? 
+
+Wrong. The change in book sales was most likely caused not by your design change, but by external political factors that made people want to brush up on their dystopian fiction. But without a **control group** to see what happens when you *don't* make your proposed change, you'll never be able to make that distinction. 
+
+A/B testing is a great way to solve both of those problems. It's the business equivalent of a randomized control trial or a lab experiment. You simply pick a subset of site visitors at random, show them a version of the site with your new changes implemented, and see whether they purchase more or less *relative to the people who are viewing the unchanged version of the site*. In our Amazon example, you would pick a random subset of viewers, increase the font size, and see if they purchased more or fewer items than everyone else. This approach is less risky than changing the site for everyone, because you're only exposing a subset of people to a potentially detrimental chagne. It also allows you to gauge the true effect of your design change-- in our November 8th scenario, you might see that *both* the smaller and larger font-groups increased their purchasing of *1984*, so the font size doesn't really matter that much after all. 
+
+
+
+## Surveys
+
+The most direct way to get information from your consumers is to ask them questions about their experience. This has the benefit of giving you explicit feedback about what people want from your business, but has the weakness of small sample size: You can track everything every person does on your site, but only a tiny subset of users will agree to answer survey questions. Therefore you will always be working with only a *sample* of your population, and it may well be a biased sample. This limits the utility of the data. 
+
+Many organizations increase response rates by *incentivizing* survey-taking-- offering discounts or other rewards in exchange for answering questions. This increases sample size, but may lead to people who answer dishonestly because they just want to finish the survey and get the reward. 
+
+Almost every feedback survey you fill out will include this question, towards the end: "On a scale of 1 to 10, how likely would you be to recommend [product] to a friend?" This question is key because businesses rely on word of mouth to thrive-- extremely positive feedback can propel you to success, but even lukewarm feedback can destroy you. This pattern is reflected in a popular metric called the Net Promotor Score, or NPS. The NPS is defined as:
+
+$$ NPS =  \frac{(\# \ people \ rating \ 9 \ or \ 10 - \# \ people \ rating \ 6 \ or \ below)}{\# \ people \ who \ took \ survey}$$
+
+The NPS can range anywhere from -100 (if everyone rated you a 6 or below) to 100 (if everyone rated you 9 or 10). 
+
+
+## Ratings
+"Ratings" here refers to two very separate types of activity: there's the rating you give to a business' product (such as a site or an app), and there's the rating you give to the products that business gives you access to. The score you give to the Netflix app on your iPad is an example of the first class of rating; the score you give to a movie you watched on Netflix is an example of the second. All businesses collect data on the first type of rating; only businesses that act as marketplaces or libraries collect data on the second. 
+
+Businesses use the first type of rating (in conjunction with things like A/B testing) to assess and improve their own design and user interface, and use the second type of rating for recommender systems (see next Page). 
+
+
+## Offline Data Collection
+
+Even businesses that we usually think of as "offline"-- places like grocery stores, coffee shops, and restaurants-- collect data on you. The most common type of data collected in this way is purchasing history. Items bought together, number of repeat visits within a given time period, and other metrics are often also collected. 
+
+A huge amount of the data collected on you, both online and off, is never used. Most small businesses don't run data analytics on their sales to try to engineer better store layouts, most surveillance footage is erased. But a significant portion of that data makes its way into datasets that are used to train algorithms to perform a wide range of tasks-- a sampling of which we'll review on the next page. 
+
+
+
+
