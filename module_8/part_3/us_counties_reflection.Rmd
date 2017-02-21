@@ -23,5 +23,33 @@ A few things to note about this:
 1. Instead of betas 9-11, we actually use something called a *random effect* on time, sex, and age;
 2. The "spatial smoothing" part means that we "look next door" and incorporate some information from neighboring counties and neighboring years into the estimate for any given county-year. This allows us to get better estimates for place with small sample sized and few deaths.
 
+### Raking
+There was some confusion expressed about the raking step. Raking was undertaken to deal with two separate but related problems:
+
+1. We ran separate, county-level models for all-cause mortality, cause-specific mortality for the the 3 Level 1 causes (Communicable, Maternal and Neonatal Diseases; Noncommunicable Diseases; and Injuries), and cause-specific mortality for the 21 Level 2 causes. Because all of these models were run separately, when you added deaths for the 3 Level 1 causes together, they didn't precisely add up to all-cause mortality (though they were close). Similarly, if you added up deaths for all children of a Level 1 cause, they wouldn't quite add up to the deaths modeled by that cause. We wanted these death counts to add exactly. 
+2. At the same time that we were making these county level estimates, a different group at the same organization was making them on the state level. Because they could incorporate data that wasn't available on the county level, we wanted our death counts on the county level to sum exactly to their counts on the state level. 
+
+Raking, also called "Iterative Proportional Fitting", is how you achieve both of those goals. Basically, you jiggle your results slightly until all the death counts add up the way you want them to. You've changed your numbers a little, but you retain the *relative* values of county level deaths. There's much more information about raking in section 1.4 of the (supplemental materials)[http://jamanetwork.com/journals/jama/fullarticle/2592499?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jama.2016.13645].
+
+### Data, County of Residence, and Underlying Cause of Death
+We got our mortality rate information from the US's vital registration system-- every time someone dies, information from their death certificate gets put into this database. So, the dataset we were initially working with had a row for every person who died in the US from 1980 to 2014-- over 80 million rows. Each row tells you the sex, race, age, and county of residence of the decedent. It then goes on to list the *underlying* cause of death, and up to 20 *additional* causes of death. 
+
+Let's pause here for some definitions. The medical field fully acknowledges that people often have multiple illnesses when they die, and that each of those illnesses may have contributed to their death. However, it is required that everyone who dies in the US be assigned a single **underlying** cause of death-- that is, the condition that tipped the first domino that led to an individuals' demise. For example, if you die due to an infection, but you only acquired that infection because your AIDS suppressed your immune system, your *underlying* cause of death should be HIV/AIDS, and whatever infection killed you should be listed as one of the other causes on the "multiple cause" list. For the purpose of the US counties analysis, we considered only the underlying cause, though there is work underway to incorporate information from other causes on the multiple cause list. 
+
+As several of you noted, the determination of "underlying cause" is often not straightforward. If an individual struggled with both mental disorders and substance abuse for years before his/her death, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
