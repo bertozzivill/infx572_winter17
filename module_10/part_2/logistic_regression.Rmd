@@ -5,7 +5,114 @@ date: "February 22, 2017"
 output: html_document
 ---
 
+Logistic regression straddles the boundary between machine learning and statistics-- it's a classification algorithm, but it uses (statistical) regression techniques. Logistic regressions are easy to interpret if you're comfortable with natural logarithms, exponentiation, and odds-- let's review these topic before we get into the details of how logistic regression works. 
+
 ## Script for e/log definitions
+
+Definitions: e, exponents, logs
+
+
+### e
+Let's start by defining the number e.
+
+$$ e $$
+
+In mathematics, "e" doesn't represent a letter, it represents a number. Like pi, e is an irrational number-- that is, its decimal representation goes on forever with no repetitions or other patterns-- and also like pi, e is extremely important both in pure and applied mathematics. The first few digits of e are 2.71828. 
+
+
+### Exponents
+Most of you are probably familiar with the idea of exponentiation, or taking a number "to the power" of another number.
+
+$$ b^n $$
+
+Exponentiation requires two values: the "base" value b, and the "exponent" n. This operation means "multiply b by itself n times". 
+
+So, if our base is 10 and our exponent is 2, we multiply 10 by itself twice:
+
+$$ 10^2 = 10*10 = 100 $$ 
+
+Notice that you can have negative exponents, which is the same as dividing by a positive exponent:
+
+$$ 10^{-2}=\frac{1}{10^2} = \frac{1}{100} = 0.01 $$
+
+And, importantly, that you can have non-integer exponents, which it's easiest to calculate using a computer:
+
+$$ 10^{1.5} = 31.62278 $$ 
+
+The base value, b, can also be whatever you want it to. it's very common to have b take the value of e: 
+
+$$ e^x $$
+
+For any exponentiated value b, b^1 is always b and b^0 is always 1:
+
+$$ b^1=b \\b^0 = 1 $$
+
+
+Exponentiated values have the nice property that addition in the exponents can also be expressed as multiplication in the bases:
+
+$$ e^{a + b} = e^a * e^b $$
+
+Here's a concrete example of this:
+
+$$ 10^{2+3} = 10^5 =  100,000 \\ 10^{2+3} = 10^2 * 10^3 = 100 * 1000 = 100,000 $$ 
+
+### Logarithms
+
+#### Inverse function
+An *inverse function* is something that does the opposite of some other function. Let's say we have a funtion f(x) that takes a value x and multiplies it by 2:
+
+$$ f(x) = 2x $$
+
+The *inverse function* of f(x) would be a function that *divides* a value by 2: 
+
+$$ g(x) = x/2 $$
+
+You know that two functions are the inverse of each other when performing them in sequence recovers the original x value. For example, let's say our x value is 4. Let's run f(x) on this value, *then* run g(x) on the output of that function:
+
+$$ f(4) = 2*4 = 8 \\ g(8) = 8/2 = 4$$
+
+you can also see this by nesting the two functions inside each other:
+
+$$ g(f(x)) = \frac{f(x)}{2} = \frac{2x}{2} = x $$
+
+#### Logarithms 
+In the same way that x/2 is the inverse function of 2x, a *logarithm* is the inverse function to exponentiation. Like exponentiation, logarithms have a *base*, and only exponential functions and logarithmic functions with the *same base* are inverses of each other. So:
+
+$$ log_{10}(x) $$ 
+
+and 
+
+$$ 10^x $$ 
+
+Are inverse functions to each other, but
+
+$$ log_{10}(x) $$ 
+
+and 
+
+$$ e^x $$ 
+are *not* inverse functions to each other. 
+
+When you run a logarithmic function with a certain base b on a number x, it returns *the number you would need to exponentiate b by in order to get x*. For example, log base 10 of 100 is 2:
+
+$$ log_{10}(100) = 2$$ 
+
+What this means is: "You have to raise 10 to the power of 2 in order to get 100"
+
+You can see from this example how the two functions are inverse to each other:
+
+$$ log_{10}(10^2) = log_{10}(100) = 2 $$ 
+
+The function e^x is so common that its inverse function log base e is called the "natural logarithm"-- it's often written shorthand as simply ln(x). 
+
+$$ e^x $$
+
+$$log_e(x) \\ ln(x)$$
+
+Remember: 
+
+$$ ln(e^x) = x $$ 
+
 
 ## Script for odds definitions
 
