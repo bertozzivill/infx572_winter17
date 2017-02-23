@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = F)
+knitr::opts_chunk$set(eval = T)
 ```
 
 ## The Two "K's"
@@ -52,19 +52,15 @@ ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) +
 <br> 
 
 ```{r}
-png(paste0(main_dir, "petal_length_width.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=Species))
-graphics.off()
 ```
 <br>
 
 
 ```{r}
-png(paste0(main_dir, "petal_length_sepal_width.png"))
 ggplot(iris, aes(x=Petal.Length, y=Sepal.Length)) +
   geom_point(aes(color=Species))
-graphics.off()
 ```
 <br>
 
@@ -88,10 +84,8 @@ kmeans_output <- kmeans(for_kmeans, centers=3) # the 'centers' argument is where
 iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
 
 #plot the result
-png(paste0(main_dir, "three_cluster_output_kmeans.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=kmeans_cluster))
-graphics.off()
 ```
 <br>
 
@@ -108,10 +102,8 @@ kmeans_output <- kmeans(for_kmeans, centers=5)
 iris[, kmeans_cluster:= factor(kmeans_output$cluster)]
 
 #plot the result
-png(paste0(main_dir, "five_cluster_output_kmeans.png"))
 ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=kmeans_cluster))
-graphics.off()
 
 iris[, kmeans_cluster:=NULL]
 ```
@@ -154,11 +146,9 @@ Algorithmically, k-NN works like this:
  
 Let's work through a k-NN example with the `iris` dataset. Here, we're using all 4 quantitative variables to classify our points, so k-NN is finding nearest neighbors in a 4D space. 
 
-```{r}
+```{r, tidy=T}
 # load library for k-NN
 library(kknn) 
-
-main_dir <- "/Users/bertozzivill/repos/infx572_winter17/module_10/part_1/"
 
 # split the data into a testing set and a training set (we'll give the testing set 20% of the data)
 new_order <- sample(nrow(iris))
@@ -178,13 +168,11 @@ testing_set[, predicted_species:=knn_output$fitted.values]
 ## Let's take a look at the results: plot the *predicted* outputs as dark circles, with a transparent circle around each one
 ## showing the true value for that point. The triangles show the *training* data
 ## used to make the predictions:
-png(paste0(main_dir, "knn_predict_10.png"))
 ggplot(testing_set, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=Species), size=5, alpha=0.3) +
   geom_point(aes(color=predicted_species)) +
   geom_point(data=training_set, aes(color=Species), alpha=0.4, shape=2) +
   labs(title="Predicted (dark) vs Real (opaque) Species, k=10")
-graphics.off()
 
 ```
 <br>
@@ -199,13 +187,11 @@ knn_output <- kknn(Species~., training_set, testing_set, k=75)
 testing_set[, predicted_species:=knn_output$fitted.values]
 
 #plot results
-png(paste0(main_dir, "knn_predict_75.png"))
 ggplot(testing_set, aes(x=Petal.Length, y=Petal.Width)) +
   geom_point(aes(color=Species), size=5, alpha=0.3) +
   geom_point(aes(color=predicted_species)) +
   geom_point(data=training_set, aes(color=Species), alpha=0.4, shape=2) +
   labs(title="Predicted (dark) vs Real (opaque) Species, k=75")
-graphics.off()
 ```
 <br>
 

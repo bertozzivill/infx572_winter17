@@ -17,5 +17,4 @@ Make whole thing into a video:
 --My stance: it depends
   --give people options whenever possible, but opt systems should be context-specific
   --e.g: HIV tests should be opt-out, but herpes tests should be opt-in. 
-  
 --Question extends beyond medical data--people have all this data on us, but we often can't access it. Is that ok?
