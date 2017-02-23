@@ -161,6 +161,74 @@ This will become relevant later.
 
 ## Script for Logistic regression intro/motivation
 
+Why have I spent all this time bringing back awful memories from your high school precalc class? We'll pull it all together here. 
+
+Let's say you want to run a regression, but your outcome variable isn't continuous like "salary" or "tip". Instead, it's *binary*-- a yes/no or 0/1 variable, like "did this person survive?" or "did this person get accepted to medical school?" The problem here is that you have to take the continuous variable of your predictor, and *map it* to a space between 0 and 1. Traditional linear regression doesn't let you do this-- it takes all possible values of your predictor variable and maps them to a space from negative infinity to infinity. 
+
+Luckily, there's a super convenient function we can use to map our continuous predictor variable onto an output variable that has to be between zero and one: the *logistic function*: 
+
+$$  \frac{1}{1+e^-t}$$
+Which looks like this: 
+
+[insert logistic plot]
+
+We can make this into a regression by replacing that t value with a regression equation: 
+
+$$ F(x) = \frac{1}{1+ e^{-(\beta_0 + \beta_1x)}}  $$
+
+Now, the variables we input into our regression will be mapped to a value between 0 and 1. This value can be interpreted as the probability of the event in question occurring (survival, admittance to med school, etc). You can convert these to binary values with a cutoff: usually, we say that if the probability is less that 0.5, we predict 0, and if it's greater than 0.5, we predict 1. So if we run logistic regression on whether or not a student gets admitted to med school based on their undergrad GPA, and then we predict a probability of getting into med school for a new student, we would predict that the student *does* get into med school if her regression prediction was above 0.5, and predict that she doesn't get into med school if her regression prediction was below 0.5. 
+
+That's all well and good for prediction, but what on earth does this equation actually *mean*? What do the beta values mean? 
+
+We can answer that question by rearranging the logistic regression equation to isolate just the part with the betas:
+
+$$ F(x) = \frac{1}{1+ e^{-(\beta_0 + \beta_1x)}}  $$
+$$ F(x) (1+ e^{-(\beta_0 + \beta_1x)}) = 1  $$
+
+$$ 1+ e^{-(\beta_0 + \beta_1x)} = \frac{1}{F(x)}  $$
+$$ e^{-(\beta_0 + \beta_1x)} = \frac{1}{F(x)} -1 = \frac{1-F(x)}{F(x)}  $$
+But remember that e^-x is just 1/e^x, so:
+
+$$ \frac{1}{e^{(\beta_0 + \beta_1x)}} = \frac{1-F(x)}{F(x)}   $$
+And doing some more switching:
+$$ e^{(\beta_0 + \beta_1x)} = \frac{F(x)}{1-F(x)}   $$
+Let's stop right here, because this should look familiar. Remember that F(x) represents a *probability*. So the right hand side of this equation, F(x) divided by 1-F(x), represents an *odds*. So when we finally solve for our beta equation:
+
+
+$$ \beta_0 + \beta_1x = ln\left(\frac{F(x)}{1-F(x)} \right)  $$
+
+Thats a *log odds*. Our regression equation is describing the *log odds* of an event occurring. Our beta nought will itself be a log odds, while all the other betas will be log odds *ratios*. 
+
+The right hand side of this equation is called the logit function, by the way. It's the inverse of the logistic function. 
+
+
+Let's use our example from before: We're trying to predict whether or not a student will get into medical school, and we have two explanatory variables: the gender of the student, and their GPA. 
+
+Let's look at gender first. If "female" is the baseline category, as before, our beta-1 variable will represent *males*. Let's say we run this regression, and get an intercept of -1.609 and a beta 1 of  0.4054. Beta-0 is the *log odds* of a female student getting into med school. We can convert it back into an odds by taking the exponent: e^-1.609 = 0.2. 
+
+$$  e^{-1.609} = 0.2 $$
+
+Beta-1 is the *log odds RATIO* of a male student getting into med school. If we exponentiate this value, we get :
+
+$$  e^{0.4054} = 1.5 $$
+So, this regression is saying that males have 1.5 times the odds of getting into med school as females do. (note: this is not true, I just made these numbers up as an example).
+
+---
+Now, let's imagine that we're using GPA as a predictor variable instead. Let's say we get a beta-0 of -9.21, and a beta-1 of 1.163. 
+As with our linear regression, the intercept value corresponds to what we get when our predictor variable equals zero. Here, our intercept value beta-0 is the *log odds* of getting into med school when your GPA is 0. We should expect this to be *extremely* unlikely:
+
+$$ \beta_0 \ odds = e^{-9.21} = 0.0001 $$ 
+And indeed, our odds are extremely low! 
+
+Our exponentiated beta-1 value tells us *the odds ratio of a one-point bump in GPA*. A whole point increase is huge in GPA terms-- that's the difference between a 2.0 and a 3.0. So, we should expect this value to be pretty big.
+
+$$ \beta_1 \ OR = e^{1.163} = 3.2 $$
+This says that a 1-unit increase in GPA multiplys our odds of getting into medical school *3.2 times* ! That's an increase in probability of 220%! 
+
+Practically speaking (as with linear regression), we rarely think much about the intercept value. Most of the focus is on betas greater than zero)
+
+I know there was a lot of math in this video, but if you remember nothing else, remember this: **exponentiate your beta values to get odds ratios. Except beta-0, exponentiate that to get an odds. Interpretations of categorical/continuous variabls are analogous to linear regression. **  
+
 ## Script for example in R
 
 
