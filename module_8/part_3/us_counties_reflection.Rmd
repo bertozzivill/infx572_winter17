@@ -5,38 +5,92 @@ date: "February 20, 2017"
 output: html_document
 ---
 
-For obvious reasons, this paper is quite near and dear to my heart, and I know quite a bit about how this analysis was performed. I'm going to go into some detail on the methods to clear up some confusion, then address a few other common theme from the discussion thread. 
+For obvious reasons, this paper is quite near and dear to my heart, and I know quite a bit about how this analysis was performed. I'm going to go into some detail on the methods to clear up some confusion, then address a few other common themes from the discussion thread. 
 
 ## Methods
 
 ### Regression Specification
 Everyone who responded to the question about predictor and outcome variables for the regression analysis accurately stated that the outcome variable of this analysis was cause-specific mortality rate. But most of you stated that the predictor variable was "county", which is not quite correct. Saying that the predictor variable is "county" is kind of like saying that the predictor variable in our "Salaries" regression is "professor"-- the county isn't a predictor variable, it's our **unit of analysis**. 
 
-In the dataset that we use to run the regression, every row represents a particular county-year-sex-age group. There's a column for county identifier, year, sex, and age that collectively uniquely identify that row as a unit of analysis. There's a column for the mortality rate within that county-year-sex-age group. Then there are columns for all of our *covariates*: the proportion of the adult population who has graduated high school; the proportion of the population that is Hispanic; the proportion of the population that is Black; the proportion of the population that is a race other than Black or white; the proportion of a county that is contained within a state or federal Native American reservation; the median household income; and the population density. **These** are our predictor variables, not county. The results that you see in the maps are what happens when you use this model to predict mortality rates for a new place. 
+In the dataset that we use to run the regression, every row represents a particular county-year-sex-age group. There are columns for county identifier, year, sex, and age that collectively uniquely identify that row as a unit of analysis. There's a column for the mortality rate within that county-year-sex-age group. Then there are columns for all of our county-level *covariates*: the proportion of the adult population who has graduated high school; the proportion of the population that is Hispanic; the proportion of the population that is Black; the proportion of the population that is a race other than Black or white; the proportion of a county that is contained within a state or federal Native American reservation; the median household income; and the population density. **These** are our predictor variables, not county. The results that you see in the maps are what happens when you use this model to predict mortality rates for a new place. 
 
 If we had to write a regression equation for our model, it would look like this:
 
-$$ mortality\_rate = \beta_0 + \beta_1education + \beta_2percent\_Hispanic + \\ \beta_3percent\_Black + \beta_4percent\_white + \beta_5percent\_other +\\ \beta_6percent\_reservation + \beta_7income + \beta_8population\_density + \\ \beta_9year + \beta_10sex + \beta_{11}age + [spatiotemporal\ smoothing] + \varepsilon  $$
+$$ mortality\_rate = \beta_0 + \beta_1education + \beta_2percent\_Hispanic + \\ \beta_3percent\_Black + \beta_4percent\_white + \beta_5percent\_other +\\ \beta_6percent\_reservation + \beta_7income + \beta_8population\_density + \\ \beta_9year + \beta_{10}sex + \beta_{11}age + [spatiotemporal\ smoothing] + \varepsilon  $$
 <br>
 A few things to note about this: 
 
 1. Instead of betas 9-11, we actually use something called a *random effect* on time, sex, and age;
-2. The "spatial smoothing" part means that we "look next door" and incorporate some information from neighboring counties and neighboring years into the estimate for any given county-year. This allows us to get better estimates for place with small sample sized and few deaths.
+2. The "spatial smoothing" part means that we "look next door" and incorporate some information from neighboring counties and neighboring years into the estimate for any given county-year. This allows us to get better estimates for place with small sample sizes and few deaths.
 
 ### Raking
 There was some confusion expressed about the raking step. Raking was undertaken to deal with two separate but related problems:
 
-1. We ran separate, county-level models for all-cause mortality, cause-specific mortality for the the 3 Level 1 causes (Communicable, Maternal and Neonatal Diseases; Noncommunicable Diseases; and Injuries), and cause-specific mortality for the 21 Level 2 causes. Because all of these models were run separately, when you added deaths for the 3 Level 1 causes together, they didn't precisely add up to all-cause mortality (though they were close). Similarly, if you added up deaths for all children of a Level 1 cause, they wouldn't quite add up to the deaths modeled by that cause. We wanted these death counts to add exactly. 
+1. We ran separate, county-level models for all-cause mortality, cause-specific mortality for the the three Level 1 causes (Communicable, Maternal and Neonatal Diseases; Noncommunicable Diseases; and Injuries), and cause-specific mortality for the 21 Level 2 causes. Because all of these models were run separately, when you added deaths for the three Level 1 causes together, they didn't precisely add up to all-cause mortality (though they were close). Similarly, if you added up deaths for all children of a Level 1 cause, they wouldn't quite add up to the deaths modeled by that cause. We wanted these death counts to add exactly. 
 2. At the same time that we were making these county level estimates, a different group at the same organization was making them on the state level. Because they could incorporate data that wasn't available on the county level, we wanted our death counts on the county level to sum exactly to their counts on the state level. 
 
-Raking, also called "Iterative Proportional Fitting", is how you achieve both of those goals. Basically, you jiggle your results slightly until all the death counts add up the way you want them to. You've changed your numbers a little, but you retain the *relative* values of county level deaths. There's much more information about raking in section 1.4 of the (supplemental materials)[http://jamanetwork.com/journals/jama/fullarticle/2592499?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jama.2016.13645].
+Raking, also called "Iterative Proportional Fitting", is how you achieve both of those goals. Basically, you jiggle your results slightly until all the death counts add up the way you want them to. You've changed your numbers a little, but you retain the *relative* values of county level deaths. There's much more information about raking in section 1.4 of the [supplemental materials](http://jamanetwork.com/journals/jama/fullarticle/2592499?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jama.2016.13645).
 
-### Data, County of Residence, and Underlying Cause of Death
+### Data, Underlying Cause of Death, and County of Residence
 We got our mortality rate information from the US's vital registration system-- every time someone dies, information from their death certificate gets put into this database. So, the dataset we were initially working with had a row for every person who died in the US from 1980 to 2014-- over 80 million rows. Each row tells you the sex, race, age, and county of residence of the decedent. It then goes on to list the *underlying* cause of death, and up to 20 *additional* causes of death. 
 
+#### Underlying Cause of Death
 Let's pause here for some definitions. The medical field fully acknowledges that people often have multiple illnesses when they die, and that each of those illnesses may have contributed to their death. However, it is required that everyone who dies in the US be assigned a single **underlying** cause of death-- that is, the condition that tipped the first domino that led to an individuals' demise. For example, if you die due to an infection, but you only acquired that infection because your AIDS suppressed your immune system, your *underlying* cause of death should be HIV/AIDS, and whatever infection killed you should be listed as one of the other causes on the "multiple cause" list. For the purpose of the US counties analysis, we considered only the underlying cause, though there is work underway to incorporate information from other causes on the multiple cause list. 
 
-As several of you noted, the determination of "underlying cause" is often not straightforward. If an individual struggled with both mental disorders and substance abuse for years before his/her death, 
+As several of you noted, the determination of "underlying cause" is often not straightforward. If an individual struggled with both mental disorders and substance abuse for years before his/her death, which should be the underlying cause? Ultimately, that decision is left to whomever writes the death certificate. One of the weaknesses of the study is that it was out of the scope of the work to delve too much more deeply into quality of cause of death records that had valid (i.e. non-garbage) codes. 
+
+#### County of Residence
+Several of you expressed concern about using county as a unit of measurement, given human mobility. This is a fascinating question that I wish we had more data on. A few explanations/rebuttals to specific comments:
+
+* One student was concerned that "snowbirds", retirees who live in one place but go somewhere warmer and more southerly in the winter, might bias results. However, since deaths are coded to the county in which an individual *resides*, not the one in which they die, this should be accounted for in the data. 
+* Another student instead had doubts about retirees who move, permanently, later in life. These individuals would bring illnesses from sources that were acquired elsewhere, and might therefore bias results in the county in which they die. This is a valid concern if you're trying to find an *environmental cause* for people's death, but this study does not attempt such a thing-- it's reflecting variation geographically, but not attributing causality. And since the data of those retirees will be reflected in the covariates we use to predict (education, income, race, etc), those individuals aren't biasing our mortality estimates. They're dying in the right place. 
+
+### Garbage Code Redistribution 
+Most people were convinced that keeping and adjusting for garbage codes was a better strategy than throwing that data away, but there were some questions about why redistribution was necessary-- why not just keep the codes as they were, knowing their weaknesses?
+
+Well, one of the issues is that not every place codes death the same way-- in fact, the geographic distribution of garbage coding is quite uneven: 
+
+[insert garbage code map]
+
+Furthermore, garbage codes aren't equally likely to be any disease-- the majority of "garbage" gets redistributed onto stroke and ischemic heart disease:
+
+[insert sankey diagram]
+
+So, we can think about garbage codes as a big chunk of "unknowns"-- but they're unknowns that we know affect some places and some causes more than others. If left unaccounted for, this will cause bias in those places. Hence, redistribution-- a deeply imperfect system, but better than the alternative. 
+
+(The plots above are from the [supplemental materials](http://jamanetwork.com/journals/jama/fullarticle/2592499?utm_campaign=articlePDF&utm_medium=articlePDFlink&utm_source=articlePDF&utm_content=jama.2016.13645), by the way-- there are also maps for the other 11 causes of death, if you're interested.)
+
+### Geographic Trends
+You all did a great job of picking out the big geographic outliers, and coming up with appropriate explanations for them-- the Dakotas and much of the Four Corners region have poorer health outcomes because much of that region is reservation land, and Native populations (for a range of historical and structural reasons) have notoriously poor health outcomes. Alaska also has a large native population, and its small populations and remote locations make it difficult to "borrow strength" from neighboring regions, which lead to more extreme (and more uncertain) estimates there than elsewhere. 
+
+Several of you made comments about using maps like these as a guide for where to move (or not move). That's a perfectly natural inclination, and it has some truth to it (so far as inherent environmental factors affect health), but I'd also like you to consider a different question: How would you moving to a place affect the pattern of mortality in that place? 
+
+I don't want to make too many assumptions about you as a group, but given that you're all Masters students at an excellent school I can at least assume with a high degree of confidence that you're well-educated. That already puts you at a huge advantage in terms of your expected mortality outcomes (based on a large number of other studies, not this one). So if you were to move to a place, it might not be so much that your expected mortality would change as a function of where you live, as it is that the mortality pattern of the place you live would change as a result of you moving there.
+
+Again, there's certainly causality in both directions-- just something for you to consider. 
+
+### Policy Neutrality 
+As with geographic trends, you all repeatedly touched on the reasons why we as a group stayed away from policy recommendations in this paper. First of all, there's just too much information here for us to come up with anything coherent. And that, to some extent, is the entire point-- we wanted to come up with an extremely rich datasource that people could use to investigate further and draw policy conclusions *at the local level*. Condensing all of these results into one or two sweeping policy conclusions would have defeated the purpose. 
+
+Secondly-- the goal of this research was to provide mortality estimates that were comparable across space and time, **not** to determine *why* those mortality rates were the way they were. Our goal was purely predictive, which is why we didn't report any regression coefficients anywhere. You can't say too much about what should be done to improve mortality if you don't know what's causing the mortality in the first place. Reporting mortality on the cause-specific level of course helps narrow down the options somewhat, but we still leave it to local policymakers to conduct their own causality analyses.
+
+### A Note on the Language 
+Scientists generally, and my co-authors and I in particular, aren't trying to block people out with our language. On the contrary, many of us are proponents of making our science accessible to the general public, and we try to write in a way that reflects that. On the whole, I hope that this paper was relatively straightforward to follow, at least so far as the broad strokes are concerned. But of course, the system is imperfect, and at various points we all end up with dense, difficult-to-interpret paragraphs like the one about raking that was brought up in discussion. There are several reasons why language like this shows up in many scientific papers:
+
+1. **It's efficient.** Journals are extremely strict about word counts in papers, and when you have limited space to explain a complex topic, you have to resort to jargon and terse definitions or you'll never get anything published.
+2. **You have to write to your expected audience.** Thrilled as I would be to have the general public pick up this paper like a *Newsweek* and take a peek, the fact of the matter is that just about everyone who reads an article like this will be a physician or health statistician. And technical terms for diseases ("neoplasm" instead of "cancer"), etc. is just the expectation for many of these publications. You sacrifice accessibility for specificity within your field of interest. 
+3. **You want to get to the point.** While raking is an extremely important part of the workflow for this project (and something I personally devoted about 18 months of my life to), it's not the main takeaway of this paper. We want to use those precious words to tell people something interesting and exciting about how people die, so we try to keep the methods shorter unless the methods themselves are the focus of the paper. 
+
+The bright side to all this is that there *isn't* a word limit on supplemental materials, so those will usually have a much more thorough (and legible) explanation of what's going on. 
+
+### Conclusions
+I can't speak much to the quality or impact of this paper because I am of course extremely biased, but I do feel that work like this provides an important basis for other, more policy-relevant projects such as the Black Lives matter or infant mortality papers. The goal of the group I worked with was to provide high-quality, high-definition estimates of mortality to aid in further analyses, and I think we've done an acceptable job of that. Thank you all very much for your comments and critiques. 
+
+I have a few additional responses to specific questions back in the original discussion section-- I encourage you to take a look back there if you have a question that went unanswered. 
+
+Best,
+Amelia
+
 
 
 
