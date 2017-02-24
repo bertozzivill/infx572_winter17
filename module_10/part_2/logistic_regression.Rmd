@@ -15,7 +15,7 @@ Definitions: e, exponents, logs
 ### e
 Let's start by defining the number e.
 
-$$ e $$
+$$ e = 2.7182818284590452353602874713527... $$
 
 In mathematics, "e" doesn't represent a letter, it represents a number. Like pi, e is an irrational number-- that is, its decimal representation goes on forever with no repetitions or other patterns-- and also like pi, e is extremely important both in pure and applied mathematics. The first few digits of e are 2.71828. 
 
