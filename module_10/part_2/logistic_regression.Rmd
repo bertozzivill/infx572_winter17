@@ -37,7 +37,8 @@ $$ 10^{-2}=\frac{1}{10^2} = \frac{1}{100} = 0.01 $$
 
 And, importantly, that you can have non-integer exponents, which it's easiest to calculate using a computer:
 
-$$ 10^{1.5} = 31.62278 $$ 
+$$ 10^{1.5} = 31.62278$$ 
+
 
 The base value, b, can also be whatever you want it to. it's very common to have b take the value of e: 
 
@@ -167,7 +168,7 @@ Let's say you want to run a regression, but your outcome variable isn't continuo
 
 Luckily, there's a super convenient function we can use to map our continuous predictor variable onto an output variable that has to be between zero and one: the *logistic function*: 
 
-$$  \frac{1}{1+e^-t}$$
+$$  \frac{1}{1+e^{-t}}$$
 Which looks like this: 
 
 [insert logistic plot]
