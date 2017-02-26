@@ -3,7 +3,7 @@ title: "Other ML"
 output: html_document
 ---
 
-## A Quick Review of Other Machine Learning Methodss
+## A Quick Review of Other Machine Learning Methods
 
 ## Decision Trees & Random Forests
 
@@ -23,15 +23,15 @@ print(data)
 
 Can you find a way to characterize book color, based on book height and book weight?
 
-You should be able to work out this example manually-- all the books with a height greater than 7 are red, and if a book has a height less than (or equal to) 7 but a wieght greater than 2, it's also red. If you wanted to predict the color (blue or red) of a new book with height a and weight b, you would start by looking at the height-- if it's over 7, you'd predict "red". If it's under 7, you'd look at the weight, and predict "red" if the weight is above 2 and "blue" otherwise. 
+You should be able to work out this example manually-- all the books with a height greater than 7 are red, and if a book has a height less than (or equal to) 7 but a weight greater than 2, it's also red. If you wanted to predict the color (blue or red) of a new book with height a and weight b, you would start by looking at the height-- if it's over 7, you'd predict "red". If it's under 7, you'd look at the weight, and predict "red" if the weight is above 2 and "blue" otherwise. 
 
-This is precisely what a decision tree algorith does-- it *splits* the data based on the most informative cutoff point first, and then keeps going until it's correctly classified as much data as it can. 
+This is precisely what a decision tree algorithm does-- it *splits* the data based on the most informative cutoff point first, and then keeps going until it's correctly classified as much data as it can. 
 
 A single decision tree is not the best predictive method, but using a data randomization method you can produce lots of related decision trees, called a **random forest**, that can perform predictive tasks quite well.
 
 Here's an example output of the same decision tree, in two common visualizations. The one on the right you probably recognize-- it's just a flowchart. The one on the left shows the same information by dividing up the parameter space that your data live in. In this case, you're making a decision tree using two predictor variables, X1 and X2. The results of your decision tree tell you that the first "split" should happen at an X1 value of t1 (the big vertical line in the figure). If X1 *is* greater than t1, you should classify your data as value A. That is, everything in the plot to the right of t1 gets classification A. If X1 is less than t1, go on to the next split: whether X2 has a value greater than or less than t2. If the value is *less* than t2, make classification B. Otherwise, go on to the final split: Whether X1 is greater than or less than value t3, which splits the group into classifications C and D. 
 
-Note that different sections of this tree could correspond to the same values: for example, groups A and C could both correspond to a book color of "red", while B and D correspond to "blue". 
+Note that different sections of this tree could correspond to the same values: in our books example, two of the three endings of the decision tree wound up with the classification "red".
 
 
 ## Support Vector Machines
