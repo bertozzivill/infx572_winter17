@@ -1,0 +1,56 @@
+---
+title: "Other ML"
+output: html_document
+---
+
+## A Quick Review of Other Machine Learning Methodss
+
+## Decision Trees & Random Forests
+
+A decision tree is sort of like a flowchart-- it describes how to get from a starting point to one of any number of ending points based on a sequential set of decisions. If you've ever read a choose-your-own-adventure story, you've experienced a decision tree in action. 
+
+It turns out that you can use algorithms to *generate* a decision tree that can predictive values or classes for new datapoint in a dataset. As a motivating example, imagine that you have a dataset of books with covers of different colors: 
+
+```{r, echo=F}
+library(data.table)
+data <- data.table(book.id=1:6,
+                   book.height=c(12, 10, 13, 6, 6, 7),
+                   book.weight=c(1.5, 4, 2, 3.5, 2, 1),
+                   book.color=c("red", "red", "red", "red", "blue", "blue"))
+
+print(data)
+```
+
+Can you find a way to characterize book color, based on book height and book weight?
+
+You should be able to work out this example manually-- all the books with a height greater than 7 are red, and if a book has a height less than (or equal to) 7 but a wieght greater than 2, it's also red. If you wanted to predict the color (blue or red) of a new book with height a and weight b, you would start by looking at the height-- if it's over 7, you'd predict "red". If it's under 7, you'd look at the weight, and predict "red" if the weight is above 2 and "blue" otherwise. 
+
+This is precisely what a decision tree algorith does-- it *splits* the data based on the most informative cutoff point first, and then keeps going until it's correctly classified as much data as it can. 
+
+A single decision tree is not the best predictive method, but using a data randomization method you can produce lots of related decision trees, called a **random forest**, that can perform predictive tasks quite well.
+
+Here's an example output of the same decision tree, in two common visualizations. The one on the right you probably recognize-- it's just a flowchart. The one on the left shows the same information by dividing up the parameter space that your data live in. In this case, you're making a decision tree using two predictor variables, X1 and X2. The results of your decision tree tell you that the first "split" should happen at an X1 value of t1 (the big vertical line in the figure). If X1 *is* greater than t1, you should classify your data as value A. That is, everything in the plot to the right of t1 gets classification A. If X1 is less than t1, go on to the next split: whether X2 has a value greater than or less than t2. If the value is *less* than t2, make classification B. Otherwise, go on to the final split: Whether X1 is greater than or less than value t3, which splits the group into classifications C and D. 
+
+Note that different sections of this tree could correspond to the same values: for example, groups A and C could both correspond to a book color of "red", while B and D correspond to "blue". 
+
+
+## Support Vector Machines
+
+**Support Vector Machines**, or SVMs, are classification algorithms that try to split your data into groups by drawing dividing lines between data of different classes. In particular, SVMs find the dividing line that gives *the widest possible margin* between the two (or more) groups. Look at the picture below for an example: 
+
+
+Here, we have data in two classes-- the black dots and the white dots--and three possible lines we could use to divide that data. The first line, H1, is obviously useless- it doesn't split the data into two separate classes. The second line, H2, *does* split the data into the proper classes, but it does so with a very narrow margin of error. Line H3, by contrast, separates the two groups with *the maximum possible margin* between the white dot "zone" and the black dot "zone" (NOTE: Segregation is not a good idea in real life). The one black dot and two white dots closest to line H3 are calle the *support vectors*-- they're the key datapoints that drive the creation of the dividing line. 
+
+Often, data aren't completely separable in real life-- say there's a white dot mixed in with the black ones. There are two options here: 
+
+1. Leave it be-- if we don't allow some error, our SVM will be overfit;
+2. For cases where separability really matters, you can use a thing called a **kernel trick** to translate your data to higher-dimensional space, find an SVM in *that* space, and then translate it back down to your normal parameter space. If you do that, your SVM in your original parameter space will look like a curve, not a line.  
+
+
+## Neural Networks
+
+**Neural networks** are a broad class of algorithms that spring directly from some of the original AI research. The goal with a neural net is to abstractly mimic the behavior of neurons in the brain-- that is, to create a *layered* set of nodes that are connected to each other in relationships that can be excitatory or inhibitory. Over the course of learning, the *strengths* of these relationships are modified until the network can reliably predict the relationship of interest. These algorithms cover an enormous variety of quantitative methods, and have come back into fashion in the last decade or so. 
+
+## And so on, and so on...
+Ridge regression, LASSO, principle component analysis, graphical models.. the field of machine learning is vast, and it's far beyond the scope of this class to cover all of them. But if anything in these lectures has piqued your interest, I strongly encourage you to delve deeper into this world-- the job security is excellent. 
+
