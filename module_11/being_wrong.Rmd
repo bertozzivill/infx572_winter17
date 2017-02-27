@@ -1,0 +1,81 @@
+---
+title: "Being Wrong"
+output: html_document
+---
+
+Please read this week's discussion paper before reading this page. 
+
+Ionnidis gives us a nuanced and sobering introduction to the wide world of being wrong in statistics. Here, I want to jump off from his descriptions to go into more detail about *why* research is so often wrong-- what incentives lead us down roads of bias and competition that attenuate the value of our findings. I want to focus on three sources specifically: scientific publications, funding sources & universities, and scientific journalism. 
+
+## Scientific Publications
+In theory the system of peer-reviewed scientific publishing is a fantastic idea. Papers don't get published until they go through a rigorous approval process by experts in the field! Journals and papers are assigned status based on how many other researchers cite them--a true meritocracy! Publishing results makes them available to a much broader audience than single authors simply sharing their results!
+
+Unfortunately, in practice, the process is dramatically messier. First off, almost all journals are for-profit organizations, so they're heavily incentivized to publish results that sell-- shiny, new, statistically significant results. Since authorship plays such an important role in hiring and retention at universities, researchers are incentivized to generate results that will make it to the high-impact journals. And citation-based metrics of excellence are gamed by extensive self-citation. 
+
+Competition for publication in top journals discourages cooperation and data-sharing between groups, and emphasis on producing novel results discourages important replication studies. Furthermore, many academic field are split into two or more competing philosophies, so which camp winds up reviewing your paper could have a large impact on whether or not it gets published. 
+
+In fact, the peer-review system broadly is a mess-- reviewers give their time for free to look over papers that they may or may not be qualified to review, authors are blinded to reviewers but reviewers **are not** blinded to authors, and a single unfavorable review can block a paper from publication. And peer review and paper publication takes a **long time**-- months at least, and sometimes over a year. This can delay the dissemination of highly time-sensitive publications (on epidemics, for example). 
+
+Finally, because journals are usually for-profit, they can charge whatever they want for others to gain access to their papers-- and many charge thousands of dollars a year for a subscription. This restricts access to these publications only to those affiliated with an organization wealthy enough to foot such a bill. This in turn can limit accountability for those who write bad papers-- the fewer people who see your work, the less likely any one person is to scrutinize it enough to find its weakenesses.
+
+With an incentive system such as this, it's hardly shocking that "true" research findings are hard to come by!
+
+
+## Funding Sources and Universities
+As previously alluded to, academic culture and economics further incentivize carelessness in statistics. The vast majority of STEM researchers depend on grants from large funding sources (NIH, CDC, RWJF, and Gates to name just a few) for their money. It's common for initial grants to be relatively short-term, with grant extensions dependent on positive results from the first grant period. In parallel, universities make hiring and tenure decisions based in large part on how often and how prestigiously faculty publish. 
+
+These twin structures-- of funding and job security-- work together to create an academic culture of "publish or perish": generate results quickly, and publish often (but remember, in order to publish you need to have statistically significant results!)  This system encourages rushed analysis, shoddy statistics, and p-value hacking; and discourages carefully-designed or long-term experiments[^1].
+
+[^1]: This is not to say that carefully-designed or long-term experiments are nonexistent in academia-- on the contrary, they're common! However, it takes an understanding funding source and considerable external resources to do such science. 
+
+And while tenure is the holy grail of job security in academia, it also has a dark side: the oldies **never retire**. This is a nontrivial problem-- it keeps researchers whose philosophy and methods might be quite outdated in positions of highest power within departments, and dramatically reduces the number of available faculty positions for new Ph.D's with the most up-to-date training. 
+
+
+## Scientific Journalism 
+Ok, if academia and peer-reviewed journalism is no good, what about scientific journalism? Will the New York Times and FiveThirtyEight save us?
+
+Unfortunately not. Scientific journalism is immune to several of the weaknesses of academic journals--turnaround times are fast, nobody gets bogged down by peer review, and results are widely disseminated-- but these strengths are also its weaknesses. Peer review, flawed as it is, plays an important role in weeding out poor results, and scientific journalism doesn't have that rigor. The need to be applicable to a broad audience often (though not necessarily) corresponds to a glossing-over of the finer points of an analysis-- or, worse, to flat-out misinterpretation. 
+
+And scientific journalism is no less prone to sensationalism than academic journalism-- on the contrary, it is more biased toward extraordinary results. The two systems of journalism are in a constant positive feedback loop with each other, amplifying the "hotness" of the latest field of research (which, as Ionnidis mentions, leads directly to more false findings). Pop culture journalism also tends to give all research findings equal weight ("a study shows that..."), even when a statistician could clearly see that one analysis is stronger than another (news articles, for example, very rarely pay attention to the sample size of the research they cover). 
+
+Finally, as we've seen with the latest political climate, once a false result makes waves in popular culture, it's incredibly hard to quash. Academic journals can retract a paper, but it's impossible to retract an idea from someone's mind. 
+
+
+## The Silver Lining
+
+What is my intention with telling you all of this? Am I trying to make you lose hope not just in data science, but in science itself? Pardon my French, but the description I've just given makes all of science sound like a hopeless, chaotic shitshow. Should you just give up and go work at the Dairy Queen?
+
+No, not at all! On the contrary, science needs your help! Standards for research and publication are slowly changing, and the more people on the front lines to make research more self-accountable, the better. 
+
+### Shift Scientific Culture
+I'm not the first person to point out these flaws in the scientic process as it stands. On the contrary, hundreds of researchers have been making this point, for years now, and things are slowly starting to change. You could join them!
+
+Excessive dependence on p-values is the source of so many problems in scientific publishing, but more and more institutions are doing away with the need to report p-values, in favor of broader and less coercive metrics of model performance like confidence intervals and out-of-sample validation results. Open access journals, which make papers freely available to the public, are more popular and higher-impact than ever before. To facilitate timely dissemination of results there's an online repository called ArXiv (pronounced "archive") where researchers can (openly) post their results as they await peer review. Peer review itself has yet to be reformed, but there is more and more pressure from academics and researchers to do so. 
+
+Large funding organizations have started heavily incentivizing collaboration, data sharing, and replication of results as a condition of receiving grants. At the forefront of these efforts is the Gates Foundation, whose newly drafted GATHER guidelines mandate (among other things) that any research funded by the foundation must be published in an open access journal. 
+
+Journalism will always be journalism, but the science (especially data science) teams at large news organizations have gotten dramatically more rigorous over the past few years--analyses by the NYTimes' the Upshot, FiveThirtyEight, and the Guardian do solid statistical work. 
+
+### Change Starts With You 
+
+More important than any of these large-scale trends, however, is you. Your skepticism is the most valuable weapon in the world against fake results. 
+
+As a consumer of science, **be critical at all times**. As a colleague of mine put it when speaking to my students last quarter, "I always assume everything is lies until I'm proven otherwise". Approach breakthroughs with tentative optimism. Try to understand the weaknesses of every methodology. Ask to see confidence intervals. If you train yourself to think in this way, it will encourage those around you to do the same. 
+
+A larger challenge: **acknowledge your own fallibility**. We all *hate* being wrong. It feels awful. It makes us feel dumb. But the truth is that being wrong is nothing to be scared or ashamed of, so long as you *acknowledge* you were wrong and lay your mistaken beliefs to rest. I promise you, the more you acknowledge that you were wrong without beating yourself up about it, the more free you'll feel. Try it!
+
+## Parting Thoughts
+
+It's been a long 11 weeks. Thank you for your thoughtful insights, hard work, and patience at the multiple typos in my problem sets. I hope that you've gained a lot of practical quantitative knowledge in this class, but more than anything, I hope you've learned this:
+
+* Be your own harshest critic. 
+* Be skeptical of every paper, map, and plot: they are all lying to you in some way, and you should understand how. 
+* Don't get jaded-- in the words of George Box, "All models are wrong, but some are useful". Think critically about the data around you, and try to find the useful amid the wrong. 
+
+Data has the power to inspire us, to teach us, and to lead us astray--and now, hopefully, you know a little bit about how to control it. 
+
+--Amelia
+
+
+
+

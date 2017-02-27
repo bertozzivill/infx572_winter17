@@ -18,7 +18,7 @@
 ## Load the "tips" dataset and convert it to a data.table.
 
 ## Let's say that we're interested in the relationship between total bill (predictor variable) and tip (outcome variable).
-## For each of the other four variables in the dataset, indicate what class that variable falls into (confounder, effect modifier,
+## For each of the other five variables in the dataset, indicate what class that variable falls into (confounder, effect modifier,
 ## mediator, or none of the above). Explain why you think that. Is this variable categorical or continuous?
 ## Should this variable be included in the regression?
 
@@ -26,7 +26,7 @@
 ## Section 3: Designing a regression ---------------------------------------------------------
 
 ## Write out what your regression equation should be, including all the variables you deemed necessary in Section 2.
-## You can use "b" instead of "beta", for example: "total_bill = b0 + b1*tip + b2*sex". 
+## You can use "b" instead of "beta", for example: "tip = b0 + b1*total_bill + b2*sex". 
 ## You should have at least three predictor variables. 
 
 
