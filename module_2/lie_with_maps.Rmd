@@ -1,0 +1,132 @@
+---
+title: "How to Lie With Maps"
+output: html_document
+---
+
+## What is a Map?
+The word "map" has a wide range of definitions, some of which are very general: one of the definitions of "to map" is simply to "be associated with or linked to". However, for our purposes when I talk about "mapping" I'm describing a diagrammatic representation of an area of land or sea. In this class, when we talk about maps we're explicitly talking about making plots that represent physical space. 
+
+However, even this somewhat restrictive definition still gives us an incredible body of work to consider: there are thousands of different type of map, and we'll only have space to explore a few examples here.
+
+Every map is a type of data visualization: one in which the "x-axis" encodes longitude, the "y-axis" encodes latitude, and (usually) color encodes the data we're interested in representing. However, the purpose of maps can differ widely, and some even intentionally distort the latitude/longitude relationship. Due to the impossibility of accurately representing a curved surface (like the Earth's) on a 2D plane (like a page or screen), every map will be "wrong" in one way or another. This flexibility of representation makes maps an extremely powerful tool for storytelling and data visualization, but also for propaganda and misleading messages.
+
+The four sections below explore a few of the most common stylistic choices that can either clarify or distort the stories maps tell. 
+
+ 
+
+## Projection
+Map projection is the practice of translating the components of the globe's spherical surface into components on a flat surface. For example, consider a common type of projection called a cylindrical projection. You get a cylindrical projection by wrapping a huge imaginary piece of paper around the globe (so it touches only at the equator), using some mathematical transformation to trace the outlines of landmasses onto that paper, then unfurling the paper:
+
+ cylindrical_projection.gif
+
+Cylindrical projections will always be most accurate around the equator, and get progressively distorted toward the poles.
+
+There are dozens of different type of projection, each with its own pros and cons. Probably the most famous (or infamous) map projection is the Mercator Projection:
+
+ Mercator_projection.jpg
+
+The distortion at the poles is especially clear in this projection, which makes Greenland look as large as Africa even though the Arctic island in reality is only a fraction as large as the continent. This projection became extremely popular throughout the nineteenth and twentieth centuries: the British liked how large it made various elements of the British Empire look, and (a little later), Reagan liked that it made the USSR look huge and threatening compared to the US. 
+
+However, in more recent decades the Mercator Projection has been heavily criticized for the way it diminishes the perceived size of many developing nations, especially those in Africa and Southeast Asia. As a result, in recent years many groups have switched to using the more politically representative Robinson projection. 
+
+Randall Munroe has a brief and amusing rundown of different map projections here.
+
+ 
+
+ 
+
+## Color
+One of the most common ways maps are used to visualize data is to split a geography into small units of analysis, like US counties:
+
+ county_shapefile_us.png
+
+And then color those units in a way that represents your data.  
+
+There are two main types of maps like this: categorical, and choropleth. 
+
+Categorical maps are used to represent categorical data-- that is, data about what group (from a set number of options) any given unit of analysis falls into. For example, what religion someone is would be a categorical variable. What the most popular religion is in each county is also a categorical variable, and its shown in this categorical map:
+
+religion_categorical_usa.jpg
+
+Note that the colors in this map are chosen simply to be distinct from each other-- "red" and "blue" don't indicate good or bad, they just indicate different groups.
+
+ 
+
+Choropleth maps, conversely, are for conveying continuous or numerical data-- things like population, infant mortality rate, per-capita income-- anything where what you're measuring is a number on a sliding scale. You represent this in maps by picking a continuous color scale that uses either different shades of the same color or a smoothly transitioning set of colors to show the change in the data. Here's an example of a choropleth map with a single hue scale:
+
+choropleth_pop_usa_single_hue.jpg 
+
+ 
+
+And of one with a multi-hue scale (here blue and green indicate low population densities, pink and orange are high population density, and yellow is in the middle):
+
+choropleth_pop_usa.jpg
+
+ 
+
+Each of these types of map can be misleading, depending on the color choices you make. For example, if the color progression on either of the choropleth maps were flipped, you would be mistakenly lead to believe (because of the way we process color) that the middle of the country has the highest population density. 
+
+How you choose your color bins also matters: notice that in the top choropleth map, most counties from Nevada to the Dakotas are the same color (indicating a population density under 10 per square mile), whereas in the lower map there are two hues to represent this range: a blue-green for extremely low densities of <1 person per square mile, and a grassier green for densities between 1 and 10 people per square mile. Distinctions such as these can dramatically alter some map results. 
+
+ 
+
+And then sometimes mapmakers just misuse color. Here's one of the most egregious examples, where the plot on the left shows change in population over time, and the one on the right shows population in the thousands:
+
+bad_pop_map.gif
+
+ Both of these maps use a categorical color scale, even though the values they're representing are continuous. The result is unintelligible: bright red counties are the ones that had the biggest decrease in population? Pale green states have a higher population than bright red ones? What does it mean?
+
+(As a side note, the right-hand map is also incorrect: New Jersey and Rhode Island most certainly do not have higher populations than California or New York). 
+
+ 
+
+ 
+
+## Geographic Simplification
+I've described maps as explicitly projecting latitude and longitude onto their x and y axes, but what about this map?
+
+ light_rail_simple.jpg
+
+Hopefully you all recognize this as a map of the light rail stations in King County, but this is also a map of light rail stations in King County:
+
+light_rail_complex.png
+
+ 
+
+Which one of these is more "correct"? The second one certainly is more geographically accurate, but one could make a strong argument that it includes unnecessary information for someone simply trying to figure out where to get off the train. The first map generates a simplified geography of the region it's displaying in order to more effectively convey important information: the relative location of light rail stations. 
+
+The use of simplified geographies is particularly popular for visualizations of public transit systems. One of the earliest and most famous example of this was Harry Beck's 1931 map of the London Underground:
+
+london_underground_old.jpg
+
+ 
+
+This undeniably gorgeous map has since served as inspiration for transit map designers from New York City to Tokyo. However, the more complex a system becomes, the more difficult it is to preserve this type of elegance. As of the summer of 2016, this was the London Tube map:
+
+london_underground_new.jpg
+
+The same in spirit, but much more difficult to comprehend in practice!
+
+ 
+
+ 
+
+## Iconography
+Let's look back at that first light rail map:
+
+light_rail_simple.jpg
+
+In addition to a simplified geography, this minimalist map is also chock full of icons  and symbology. Each station has an icon (a simple, representative image) associated with it, to clarify an important cultural or practical aspect of the area around the station. There are also icons for parking garages, the airport, and various other transit methods you can transfer to from the light rail. The availability of a transfer is indicated both by the presence of an icon and by a different symbol for the stop itself: instead of a lone circle on the red line, it's a circle connected to a separate circle, outside the line. Without these intuitive and representative uses of iconography, this map would convey dramatically less information and be dramatically less useful. 
+
+Iconography can also be used to generate maps for propaganda, as this 1877 map of Europe clearly shows:
+
+war_map.jpg
+
+ You don't need to know much at all about European history to understand that the maker of this map is not too fond of Russia, and that he's specifically concerned with conflicts ongoing in Persia (now Iran), Turkey, and Austro-Hungary, as well as the threat of confrontation in Germany. 
+
+ 
+
+ 
+
+## Conclusion
+There is no way to make a completely "honest" map. But much of the information data scientists work with is spatial, and must be understood and interpreted with that spatial context in mind. Maps are an invaluable tool to help us understand and convey spatial trends in our data, but maps are also extremely sensitive to misuse. Exercise caution! 
