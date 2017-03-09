@@ -1,0 +1,43 @@
+---
+title: "final"
+output: html_document
+---
+
+## Objectives
+
+The goal of the final project is to synthesize everything you have learned in this course. You should demonstrate proficiency in R programming and regression/machine learning methods, design appropriate and attractive data visualizations, and discuss the ethical and societal ramifications of your work.
+
+## Steps:
+
+Pick a dataset. There are recommended ones at the bottom of this page, or you can choose your own from the R datasets page (Links to an external site.). If you pick your own dataset, I need to approve it first-- just send me a short email telling me what analysis you want to run, and why. 
+Construct a research question you want to ask of that dataset. This should be a clearly-defined question about how two or more variables in your dataset interact. "What effect do sex, rank, and discipline have on salary?" is a well-defined research question. "What factors determine salary?" is not. 
+Pick an analytical method for answering that research question. This could be linear regression or any of the machine learning techniques.
+Visualize the data being addressed in the research question above, and make sure that it's appropriate for your analysis. For example, if it's nonlinear data and you want to run a regression analysis, transform it so that it's linear.
+Analyze the data with the method you chose. NOTE: If you picked linear regression, you MUST run a multivariate, not a bivariate, regression.
+Interpret and visualize the results of your analysis. (See below for more details).
+Consider what weaknesses your analytical methods displayed, as well as the moral and societal implications of the analysis you just ran. 
+ 
+
+You should then write a 5-7 page paper (double spaced) describing your analytical process. It should include answers to the following questions for each step:
+
+What dataset did you pick? Why did you pick that one? What does one line in the dataset represent? What are the columns of the dataset, and what do they mean?
+What is your research question? Why does that relationship interest you? Why did you choose to exclude some variables from that question? If you're running a regression, say whether each column is a mediator, confounder, effect modifier, or none of the above with respect to the relationship your'e analyzing. 
+What method did you pick to answer your question, and why? What strength does that method have over other ones?
+Include your preliminary plot(s) in your paper. All plots must be fully labeled and make appropriate use of color and faceting.
+If you're running a regression, write out the specific regression equation. If you're using a machine learning method, describe how you will implement that method, including equations if/when appropriate.
+For linear regression, include a description of all coefficients and their uncertainty and p-values, as well as a plot showing the regression line through your data. For machine learning methods, this should include a plot of predicted values and a description of root mean squared error rates for your model. In both cases, the step must include a sentence about specifically how to interpret the results, such as "a unit increase in variable x is associated with a 20-point increase in variable y", or "this method classifies variable x into categories y with 85% accuracy". 
+Describe the weaknesses of your method analytically, and what it's implications are from a scientific, moral, and societal perspective. 
+
+You should submit the code you used to generate your results along with your paper.
+
+ 
+
+## Possible Datasets
+
+Library	Datasets
+Stat2Data	TipJoke, ReligionGDP, Grocery
+mosaicData	CPS85
+Zelig	swiss, free1, approval
+pscl	presidentialElections
+plm	RiceFarms, Males
+MASS	birthwt

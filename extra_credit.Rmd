@@ -1,0 +1,50 @@
+---
+title: "extra_credit"
+output: html_document
+---
+
+## Data Viz
+
+The purpose of this assignment is to have you choose, interpret, and visualize a dataset in some depth. You can earn up to 5 points of extra credit by completing this project. 
+
+Pick a dataset, either from the R built in datasets list (Links to an external site.) or elsewhere. You MAY NOT use a dataset we've already worked with in class, or any of the recommended datasets on the final project page. Pick your own! Your chosen dataset must have at least 60 rows and 6 columns.
+
+Start off by writing a couple paragraphs about the dataset and what it represents-- what is a row? What does each column mean? Where does this data come from? Why is it interesting?
+
+Then, make at least 5 plots with this dataset. The following criteria must be met: 
+
+Each plot must include color and complete, attractive labeling (title, axes, and legend);
+You must use at least 3 different plot geoms overall, including at least one geom not discussed in class;
+At least 3 of the plots should be faceted;
+Each plot should be accompanied by a one-paragraph description of the plot, what it represents, and what story it tells.
+Points will be deducted for:
+
+Picking inappropriate plot types for the data;
+Labels that are simply the column names, especially if those column names are difficult to understand;
+Insufficient explanations of the dataset itself and where it comes from, or of the story told by each plot. 
+
+## Essay
+
+The purpose of this assignment is to have you critically assess the role of data science in current events. You can earn up to 5 points of extra credit by completing this project.
+
+ 
+
+Pick a topic/debate in current events or popular culture in which data science plays an important role. Write a 3-4 page essay, double spaced, that answers the following questions:
+
+What is the nature and history of this debate?
+How is data science used to inform the positions of one or both sides?
+Is data science used appropriately by both sides of the argument?
+How has data science affected this debate? Has it changed anyone's mind or behavior? 
+Why do one or both sides criticize data science in the context of this debate? Even if the science is sound, you have to go deeper than just saying "people are irrational"--people have explicit reasons for their beliefs, and you should explore them.
+Can you think of ways in which data science could be more effectively harnessed to resolve this debate?
+You should cite your sources (I'm not picky about the citation style). Citations ARE NOT included in page count.
+
+Possible topics include, but are not limited to: 
+
+Vaccines
+Climate change
+Gun law
+Election Prediction
+Nutrition (especially salt, fat, or sugar)
+Safe consumption spaces (and/or the opioid epidemic broadly)
+Charter schools

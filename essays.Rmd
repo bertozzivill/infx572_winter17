@@ -1,0 +1,54 @@
+---
+title: "essays"
+output: html_document
+---
+
+## Essay 1: Asking Questions of Data
+Imagine you were given a dataset showing the salaries of some professors at your university. Each row in the dataset represents a professor, and the columns are as follows: Rank, Department, Years since Ph.D, Years of Service, Sex, and Salary.
+
+Is this dataset longitudinal or cross-sectional? How do you think it was collected?
+
+Why do you think researchers chose those data points to collect? Are you satisfied with them? What other elements would you want the dataset to include?
+
+What questions would you want to ask of this dataset? What relationships interest you? Describe or sketch three plots you would want to make while exploring this data. Be sure to include in your plots:
+
+what kind of plot it would be (bar chart, scatter plot, etc.)
+what the x and y axes would represent
+how you would use shape and color to convey meaning
+(If you're not already familiar with visualization techniques, it might be better to read through Module 2 before completing the plotting section of the assignment).
+
+This essay should be 1-2 pages, double spaced, and should be grammatical but does not have to be formally/academically written. Write it "business casual". 
+
+If you do sketch plots on paper, you can take photos and submit them.
+
+
+## Essay 2: Interpreting Visualization
+
+My hope for this class is that it makes you notice (and mentally critique) data visualization everywhere you go. To that effect, at some point over the course of the quarter, I'd like you to give a short write-up of a visualization you come across. It cannot be a viz that's discussed or posted in class (though if your viz gets posted after you submit your assignment, that is of course acceptable). 
+
+The visualization can be static or interactive, online or in-person, intentional or accidental. Include:
+
+A picture, screenshot, or link to the visualization;
+An explanation of why it appeals to you;
+A description of what data it visualizes and how it encodes each element of that data;
+A critique of the methods it uses and suggestions for what it could have done better.
+This essay should be 1-2 pages, double spaced, and should be grammatical but does not have to be formally/academically written. Write it "business casual". 
+
+
+## Essay 3: How Your Data is Collected
+
+For a day, record all the occasions you notice when a non-internet organization collects data from you, and up to five occasions when a unique internet organization collects data from you. Also note what data they collected. Please submit your list of occasions, as well as a reflection on the following questions:
+
+In general, who collected your data?
+In general, what data did they collect?
+How often do these organizations collect data from you?
+Why do you think they collected that data? Did they gather some information unintentionally?
+How will they use this data?
+How do you feel about the fact or manner of this data collection?
+ 
+
+This essay should be 1-2 pages long, excluding your list. 
+
+
+
+
