@@ -1,0 +1,55 @@
+---
+title: 'Reflection: Lean Startup & OKC/FB'
+output: html_document
+---
+
+Hi all,
+
+I won't have as long of a response to the two readings for last week, since they were less methods-intensive than other readings so there's less methodology for me to clarify. That said, there are a few points I want to bring up. 
+
+## Lean Startup
+
+I asked you to read the Lean Startup because, though it is buzzwordy and jargon-filled (I too suppress a shudder every time I read the words "Innovation Accounting"), it illuminates the crucial point that it doesn't just matter *whether* you use metrics to evaluate yourself-- it matters *how* you use metrics. If you (as a business, or a nonprofit, or just a human) look hard enough at the numbers that describe you, you *will* find something that paints you in a positive light. However, that should not imply that you're necessarily doing well. You need to make sure that the metrics you pick are reflective of the question you're trying to answer, and that will change in a predictable way as your own behavior changes. 
+
+You would be astonished at how little attention some organizations pay to performance evaluation (on an organizational scale). Businesses aren't the only ones who use vanity metrics-- up until ten years ago or so, it was not common practice for global health and philanthropy organizations to evaluate the effect of their own interventions in any sort of rigorous way. They would distribute, say, nutritional supplements to children in a developing country, but then not stick around to determine whether those supplements actually had a positive effect on childhood nutrition. This is changing in the world of health, as in the world of business, but it's hard to make vanity metrics go away.
+
+As much as I support the use of actionable metrics, I want to add a word of caution: There is no metric that cannot be gamed. As soon as a metric becomes popular, people find a way to work around it. Think about "number of clicks" on a website. Once, this was a pretty good metric to track how actively people were engaging with your site-- but heavy utilization of this metric commodified clicks, so now "number of clicks" may in fact simply be reflecting how infuriatingly you have designed your website. 
+
+For another example of a metric that has lost virtually all of its original meaning, think of p-values. There is *nothing wrong* with using a p-value as a metric for which variables in your regression matter more than others, but as soon as people started using statistically significant p-values to make broader publishing or hiring judgements, people found ways to manipulate p-values that makes the metric effectively meaningless (and that reduces the quality of scientific literature as a whole-- see next week's reading). 
+
+Finally, think about a metric that you may be familiar with from your own life: number of steps. The science is quite solid that walking  (or just generally moving) is more beneficial to health than staying sedentary. As a result, we as a society have crowned 10,000 steps a day as the golden value of healthiness. This may have several consequences for the fitness-tracker-wearers among us: Stopping our movement when we get to the magical 10,000 even if we could very well go further, not bothering to move much at all in a day if we know we won't be able to make the glorious step count, and perhaps even vigorously waving our arm around while watching Netflix to *simulate* step-taking. 
+
+Be aware of metric-gaming, both in your personal and professional life.
+
+## Facebook and OkCupid
+
+My goal with these readings was to show you how *your* data is used (and, if you go work for any tech company, how you might encounter other people's data being used). 
+
+Setting aside ethical questions for a moment, I was glad that so many of you recognized the weakness of Facebook's sentiment analysis for the emotional contagion paper. Use of a single negative or positive word to dictate sentiment leaves me with more questions than answers. What if a post contains both positive and negative words? What if it contains an equal number? What if some words are more strongly negative than others ("It makes me kind of sad that summer is over, but I'm SO EXCITED  to see all my friends again after the break")? I wonder how many of their so-called "negative" posts are simply the phrase "Haters gonna hate". 
+
+Now let's come back around to ethical questions. I agree that the Facebook study was unethical, and the OkCupid experiments less so. But why? I want to focus specifically on the most Facebook-esque of the OkCupid posts, in which they artificially inflated or reduced some people's match percentages to see what impact that would have on messaging. Both the Facebook and OkCupid study:
+
+* Altered website content without users' knowledge or intent;
+* Did so in a way that could considerably alter their emotional state (either directly or via attraction to someone else);
+* Did so specifically for the purpose of hypothesis testing;
+* Published results from these experiments.
+
+Why do (most) of us feel much more upset about Facebook's use of testing? Here are my thoughts.
+
+First of all, there's the question of why people are using your service. OkCupid is a matchmaking site-- you go there explicitly so that an algorithm will tell you who you might be compatible with. The algorithm is not separate from the service provided. Facebook's utility, on the other hand, is as a social network-- it's a place people go to talk to each other, plan events, and share news. The only thing mandating that Facebook *have* an algorithm determining what content to show you is because of the immense volume of material constantly being uploaded. Not having an algorithm would almost certainly make your Facebook experience worse, but it wouldn't entirely remove the utility of the service provided. 
+
+Therefore, Facebook doing experiments on their algorithm can be interpreted as less inherently relevant than OkCupid's experiments. If OkCupid's algorithm doesn't really capture whether or not two people are compatible, that would seriously impact the utility of the service. But if Facebook's algorithm is a little off, you see more posts than you'd like to from your racist uncle. the two aren't quite on the same e level. 
+
+Second is the question of impact. If OkCupid tells you that you're a 90% match with someone when in "reality" you're a 30% match, probably the worst thing that will happen is that you'll exchange some awkward messages, *maybe* go on an awkward date. But unless the date in question is a sexual predator (which OkCupid has an entirley different system for trying to determine and weed out), the negative consequences seem slim. 
+
+With Facebook, on the other hand, it's clear to see how trying to make people sad for an extended period of time might have very real psychological impact, especially (as many of you mentioned) on teens, those suffering with depression, or otherwise vulnerable people. That the experiment only lasted 10 days probably mitigates some of those concerns, but it's difficult to say for certain. 
+
+Finally, there's simply the question of intent. OkCupid wrote a blog post in friendly language, published it on a website with a nice pink border, and said "Hey, we want to get you dates! Here's why we think this algorithm does pretty well." Facebook, on the other hand, published a densely-worded academic paper about the disturbingly-worded "emotional contagion", without making it at all clear how this would improve anyone's Facebook experience. This strongly impacts how the two pieces of research were received--it's up to you to decide whether or not that's a valid reason to be more suspicious of one than the other. 
+
+All media is trying to change our emotions, all the time. Ads, headlines, books-- you name it. Ethical or not, this happens, and if I can get you to remember one thing from these readings, its' this: never, ever think that it's not happening to you. 
+
+
+
+
+
+

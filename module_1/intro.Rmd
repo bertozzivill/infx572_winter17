@@ -1,0 +1,107 @@
+---
+title: "Intro"
+output: html_document
+---
+
+## Hello!
+Hi there!
+
+headshot.jpg
+
+My name is Amelia Bertozzi-Villa. Please call me "Amelia", but if you do have to say my last name out loud for some reason, it's pronounced "ber-TOHT-zee VIH-lah". 
+
+I'm guest faculty here at the iSchool, and while it's my second time teaching this class (it debuted last quarter), this is the first time it's been taught online. Welcome! 
+
+As you might have guessed from the term "guest faculty", lecturing is not my full-time job. Professionally, I work in global health--I work on the malaria team at the Institute for Disease Modeling, making maps that look like this:
+
+karen.jpg
+
+Prior to this job, I spent three years at the Institute for Health Metrics and Evaluation, where I primarily studied county-level patterns of mortality in the US: 
+
+ us_map
+
+I also did work on projects for maternal mortality, neonatal morbidity, and scattered other projects. If you have any global health questions, I'm happy to answer them! My personal website is here if you'd like to look through more of my work.
+
+ 
+
+ ## Getting my attention
+ I work on this class whenever I can, but have both a full-time job and outside priorities as well. I'll check my UW email in the morning, afternoon, and evening, but can't promise super-fast response times. I'll be more present when big deadlines are approaching. 
+
+ 
+
+## Meet your grader, Shrawan!
+shrawan
+
+I am Shrawan Sher, a Masters student in Information Management at the University of Washington iSchool specializing in Data Science. Prior to this I was a developer for Oracle, building recommender systems that leverage data mining models and predictive analysis. My work at Oracle inspired me to further my knowledge in the Data Science domain which brought me to Seattle.
+
+I hold a Bachelor’s degree in Electrical & Electronics Engineering from BITS-Pilani in India.
+
+My area of interest lies in the field of data visualization, social networks and analytics. I am passionate about machine learning and utilizing data to build impactful intelligent systems which provide value to people in their day-to-day lives.
+
+ 
+
+## What's in this class, anyway?
+ This course assumes that you have no background in either statistics or programming (but it will come in handy if you do). It's designed to give you an introduction to programming with the R language, to teach you the basic principles behind statistics and machine learning, and to get you comfortable working with, analyzing, and visualizing data yourself. Along the way, there will be continual applications to real-world uses of data science in global health, business, biology, and other fields. 
+
+ 
+
+## Course Layout
+Please carefully read the course syllabus for a full rundown of the class. (Don't forget to scroll down to the section on hate speech, that one's important.)
+
+The course is split into modules like this one, each of which has several pages you should read through, and occasionally associated readings, discussions, and assignments. Almost every module will also have a quiz at the end. This module, for example, has two pages, one assignment (the essay), one reading (the syllabus),  and one quiz. 
+
+All input from you is due on Sundays-- quizzes and discussion responses must be in by midnight on the Sunday after the module (or section of module) is opened, assignments are due one week later (with the exception of Essay #2 and the final project).
+
+Note that not all modules are the same length-- this week, for example, there are two modules, whereas module 8 is split into three one-week chunks. Modules are organized by content, not time.   
+
+In addition to the discussion boards associated with readings, there are also a few special discussion boards for asking questions or posting interesting data-science related finds.
+
+ 
+
+## Discussions
+Most of you are already quite familiar with discussion participation in online classes, but here's the rundown:
+
+--Please do the reading before posting to the board.
+
+--If you have something interesting to say, don't be limited by the prompts given.
+
+--Post at least twice over the course of the week to receive full credit; and by "post", I mean "add meaningfully to the conversation". Lone smiley face emojis are not valid "posts".
+
+--This may be new to some of you: Posts are "threaded", so you can reply to people's responses and start cohesive conversations, and I've enabled "liking" on posts-- that means that if a bunch of people "like" a specific post or thread, it will show up at the top of the page for easy access (this is the same system that Reddit uses, if you're familiar). Please "like" the posts/threads that are particularly useful to you! The system doesn't work if you don't use it.
+
+--Shrawan and I will actively browse in (and, when appropriate, contribute to) discussion boards.
+
+ 
+
+## Special Discussions
+There are a few discussion sections that aren't like the others. These are specifically designed for people to share data-science related items, or to ask for help. See specific descriptions below.
+
+General Course Questions/Comments: Just what it sounds like. If you have any questions or concerns about the course as a whole that you don't mind sharing publicly and anonymously, please post them here. If you'd like to raise a question/concern with me privately, email me. If you'd like to be private and anonymous, post it to the course feedback google form. 
+
+Data Science in the World: See a cool use of data science in your news feed? Post it here! People are doing incredible things with data science all the time, and I can't keep track of it all. I'll be posting a lot of data visualizations here, hopefully at least one or two a week. 
+
+Coding Questions: Are you banging your head against a wall because your code won't work? Ask your question here! Your peers, Shrawan, and I should be able to help you. However, this thread should not be the first place you go if you're stuck. Your process should look like this:
+
+Google/check StackOverflow for an answer to your question (this will be covered further in Module 4)
+Post to the discussion board
+Email me/Shrawan
+Post your own StackOverflow question
+Please be sure to adhere to the posting guidelines outlined in the discussion body to make sure your question is as clear as possible. 
+
+Statistics Questions: Same idea as the coding questions thread, but for stats questions. Same guidelines apply. 
+
+NOTE: Students who are already familiar with programming/statistics are strongly encouraged to help their peers solve problems on this thread. Help each other! 
+
+ 
+
+## Additional Readings
+ There will be a handful of readings that don't have a discussion associated with them, but which will be extremely valuable to your understanding of the course. If a reading has a "*" next to it, that means I ask questions about it in a quiz or problem set. If it doesn't have a star, you should read it anyway, but there's no grading penalty if you don't. 
+
+ 
+
+## Cheating
+The UW has a formal academic policy on cheating. It's linked to in the syllabus. You can go read it. All I have to say about cheating is this: 
+
+WHY WOULD YOU BOTHER?!
+You're paying to be here. You're giving this institution a not-inconsiderable amount of money for me to put information in your head, and cheating is just pouring that money (and my time, and yours) down the drain. Employers will not care what your grade was in this class, but they will care whether or not you know how to do the thing you're applying for. Don't waste any of our time. Don't cheat.
+

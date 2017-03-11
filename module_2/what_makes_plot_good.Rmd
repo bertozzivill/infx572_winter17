@@ -1,0 +1,148 @@
+---
+title: "What Makes a Plot “Good”?"
+output: html_document
+---
+
+## What is a Data Visualization?
+Data visualization is a way of taking those datasets we spent so much time talking about in Module 1:
+
+infx_dataset 
+
+And making visual representations of them:
+
+program_stats.png
+
+Data visualization is more than just a tool in the data scientist's back pocket: it's an essential component of understanding your data. We as humans cannot easily find patterns or trends by looking at rows and rows of numbers, but we are incredibly good at finding patterns in plots. Our brains are also easily fooled, however. This makes visualization an incredibly powerful tool that you should use with care and caution. 
+
+ 
+
+Data visualization works by encoding the values in your dataset, which are just numbers and words, into spaces, colors, and shapes. For example, let's think about the plot above, and the dataset it comes from. The "stats_background" column is encoded in the x-axis, with the position of the bars. To add extra emphasis, that same column is also encoded in the color of the bars. The y-axis is encoding a count variable: how many rows there are in the dataset for each value of "stats_background". This is computed automatically by the computer, so there's no column for it. We can tell how many people there are of each statistical background because that "count" variable is encoded in the height of the bars. The "programmer" column is encoded by subplots, also knowns as faceting. In other words, our plot is actually two plots: one for people with a programming background, and one without. The "program" column is not used in this plot.
+
+Let's go over the encodings in this plot again: 
+
+This plot element	   encodes for   	This dataset attribute
+x-axis / position of the bars		"stats_background" column
+color of the bars		"stats_background" column
+y-axis/height of the bars		count variable (computed automatically)
+subplots/faceting		"programmer" variable
+You don't even need to have the dataset around to understand visualization encoding, you should be able to do it with just the plot. Let's try this example (make your own guesses about what the encodings are before looking at the table):
+
+salaries.png 
+
+Similarly to looking at a dataset itself, start by thinking about what each point represents. Here, it's a professor at a university.
+
+Here are the encodings for this plot:
+
+This plot element	   encodes for   	This data attribute
+Position on the x axis		# of years since Ph.D
+Position on the y axis		Salary
+Color of point		Rank
+Shape of point		Sex
+This plot clearly shows that there seems to be an association between years since Ph.D and salary. It would have been much harder to see that simply by looking at the dataset!
+
+Also notice the importance of labeling in understanding this plot. Between the title, the axis labels, and the legend labels, we can figure out everything about how this plot is encoded. Good labeling is key to making understandable figures.
+
+Maps are a special type of visualization in which the x and y axes encode latitude and longitude. More about maps next module. 
+
+ 
+
+## How Do Our Brains Perceive Plots?
+Not all visualizations are made equal-- our brains are much better at accurately reading some forms of encoding than others. William S. Cleveland was one of the first people to thoroughly study how graphical perception affects our interpretation of plots; his paper on the topic is a classic in the field (see "Readings" tab).
+
+Here's the main takeaway of Cleveland's work: 
+
+ cleveland_plot.png
+
+This figure shows, in increasing order from left to right and top to bottom, the ease with which our brains understand how data is encoded. We are better at accurately gauging the difference in position between two points than we are in gauging the difference in the size of two circles, or between two different shades of a color. This plot gives us some good guidelines for how to encode data in our own visualizations: try to encode important or subtle values in position and length, and put less valuable or super-obvious trends into hard-to-interpret encodings like shade or color. If at all possible, the general wisdom is to stay away from 3D representations entirely; our brain is really bad at understanding how volume is encoded, and it's usually not worth the effort. 
+
+ You should also be careful how you use color in your plots: many color schemes are not friendly to red-green colorblind individuals, and our brains can distinguish more finely between shades of some colors (like green) than others (like blue or yellow).
+
+## What Makes a Good Visualization?
+Edward Tufte, another famed data visualizer, has the following requirements for a good data visualization. He says a good graphic should:
+
+show the data;
+induce the viewer to think about the substance rather than about methodology, graphic design, the technology of graphic production or something else;
+avoid distorting what the data has to say;
+present many numbers in a small space;
+make large data sets coherent;
+encourage the eye to compare different pieces of data;
+reveal the data at several levels of detail, from a broad overview to the fine
+structure;
+serve a reasonably clear purpose: description, exploration, tabulation or decoration;
+be closely integrated with the statistical and verbal descriptions of a data set.
+ 
+
+Easy, right?
+
+ 
+
+Obviously, most visualizations pick and choose from this list of requirements; no plot is perfect. Let's take a look at some particularly nice ones, though.
+
+ 
+
+ minard_plot.png
+
+Tufte thinks this is the best data visualization ever made. Designed by Charles Minard in 1869, it describes Napoleon's march on Russia. This is a mix between a map and a classical plot; the physical spaces are connected by a band that shows the direction of Napoleon's army. The width of the band indicates the size of the army, and color encodes direction-- the brown bands are when he's marching toward Russia, the black bands are when he's marching back. Additionally, the chart at the bottom indicates temperature (many of Napoleon's men died of exposure). 
+
+While this plot has many excellent qualities, it also has issues: A large block of text draws the eye unnecessarily from the rest of the page; it takes time and a long explanation to understand what the plot is showing; the changes in direction of the bands make it difficult to compare different widths. 
+
+ 
+
+ 
+
+gbd_compare
+
+Here's a visualization from my former workplace, the Institute for Health Metrics and Evaluation. It's showing the "burden" of each disease on the health of the world at large-- the larger the area of the box, the more that cause contributes to both death and illness around the globe. The three colors indicate the three primary types of ill health: blue is noncommunicable diseases, red is communicable, maternal, and neonatal disorders, and green is injuries. Shade indicates change over time: causes that are darker have gotten worse since 1980, while lighter ones have gotten better.
+
+This plot, too, has some faults: it's difficult to tell what color corresponds to a "no change" value, some causes are so small you can't read them, it's difficult to compare two faraway boxes. 
+
+ 
+
+ 
+
+windmap_may21.png
+
+This map is one of my favorite visualizations, though it's much more engaging in the live visualization. It uses data from weather stations around the US to show the strength (line thickness) and direction (line movement, though you can't see that in the static version) of the wind at any given moment. 
+
+Faults? It's poorly labeled, and it would be extremely hard to extract concrete values from it. 
+
+ 
+
+I would argue that all three of these are "good" visualizations, when you have in mind the purpose they serve. Each visualization should have a concrete story to tell. For Minard's map, that story is "Invading Russia when winter is coming is a bad idea". For the IHME plot, it's that noncommunicable diseases take up the vast majority of the world's burden of disease, but there are some communicable diseases and injuries we should be paying more attention to. For the wind map, it's that the wind is beautiful and ever variable and we don't think about it enough. Each of these visualizations achieves its goal. 
+
+
+ 
+
+## What Makes a Bad Visualization?
+Bad visualizations happen, basically, when you ignore the rules for how to make a good visualization. Relying heavily on perceptually difficult encodings like angle or volume, including useless images in your plot, misrepresenting your data-- all of these can make visually unappealing or misleading visualizations. Let's look at a few of my favorites. 
+
+misleading_axis 
+
+A favorite tool of media outlets (both liberal and conservative, for the record) is the truncated axis trick: one of these bars looks much taller than the other, but the y-axis starts at ~100 million, not at zero! If the axis started at zero, there would be only a fractional difference between the bars. (As a side note, this data is also misrepresented: having a full time job doesn't preclude you from being on welfare, and vice versa). 
+
+ 
+
+ 
+
+ethnicity_plot.png
+
+This visualization took a type of plot called a stacked area chart, which is a perfectly reasonable way of comparing different proportions to each other, and cut the shape of the US out of it. This is problematic, since a stacked area chart encodes data in the relative height of each segment. You get rid of some of the plot on the top or bottom, and everything becomes meaningless. 
+
+ 
+
+ 
+
+banana_export.png
+
+This is, I believe, the worst visualization I have ever seen. I'll grant you, the labeling is decent and the color scheme of the bars are acceptable, but the banana background makes everything illegible, the 3D elements (both in the bars themselves and in the plot as a whole) makes it impossible to gauge trends, and it's ugly as all get-out.
+
+ 
+
+## Conclusion
+Making good data visualizations is hard! Here are my guidelines for making good visualizations:
+
+Have a story, or a question in mind that you want to answer, before you even start planning the visualization.
+Pick a plot format that aligns well with answering that question.
+Include in your visualization all the information needed to answer that question, encoded in a clear and well-labeled manner.
+Include no more information that what is needed to answer your question.
+Follow Tufte's guidelines for more specifics.

@@ -1,0 +1,219 @@
+---
+title: "Discussions"
+output: html_document
+---
+
+## Feltron Annual Report/Dear Data
+
+Reading
+
+Look over the 2013 Feltron Annual Report (the images unfortunately cannot be zoomed, but try to get the broad trends) and read this short NYTimes piece on Nicholas Felton. Also, look through the available weeks of postcards from the Dear Data project.
+
+Prompts:
+
+--Which visualization is your favorite? Why? What does the visualization show? What are its strengths and weaknesses?
+
+--How difficult do you think it was for these people to collect data on themselves the way they did? Do you think it was time well spent?
+
+--Do you collect data on yourself in any systematic way (fitness tracker, to-do list, goodreads account, etc)? What benefit does that data collection give you? How do you visualize the data you collect?
+
+--Are these visualizations "data science", or are they art? What's the difference? 
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation. 
+
+
+## What is Code?
+
+Read the article "What is Code? (Links to an external site.)", by Paul Ford from Bloomberg Magazine. Yes, it's long. Yes, it's worth it. 
+
+Questions:
+
+What did you think code was before you started reading this piece? What do you think code is now?
+Is coding separable from the culture of coding? Is it possible to change the culture of coding?
+What interactions have you had with programmers that mirror (or counteract) the common "coder" behaviors Ford describes? 
+What terms do you still not understand after reading this piece? What terms make much more sense to you now?
+Thinking like a data visualizer: do you think the visual layout and interactivity of the piece added to or detracted from its effectiveness?
+If you are not already a programmer, did this piece make you want to become one?
+If you do consider yourself a programmer, do you think this article represents you?
+
+## Black Lives Matter
+
+Reading
+
+Read this articlePreview the documentView in a new window on excess mortality among Blacks, and how it might impact election outcomes. Also, read through the New York Times' Missing Black Men (Links to an external site.) piece. 
+
+Prompts:
+
+--What sources of data did this paper utilize? How was each data source collected, and what population did it represent? How did each of those data sources contribute to the analysis?
+
+--What questions were the authors trying to answer? Did they use appropriate data to answer this question?
+
+--What were the authors' goals in writing this paper? What message were they trying to get across? Do you think they succeeded?
+
+--Walk me through the analysis. How did the authors get from raw data to final results? Go step by step. 
+
+--What questions do you have about the methods employed in this paper?
+
+--What major assumptions does the BLM paper make about excess mortality and voting patterns among Blacks? Do you agree with those assumptions?
+
+--What relationship, if any, do you see between excess mortality and mass incarceration of Blacks, especially Black men?
+
+--What did you think of the visualizations in the Upshot piece? Were they clear and well put together? Did they violate any guidelines of visualization? What about the visualizations in the paper?
+
+--Side note: Do you think the word "black" should be capitalized when referring to race? Why or why not?
+
+--How did these articles change your thinking about race in America? 
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+ ## Presidential Parties and Infant Mortality
+ 
+ Read this infant mortalityPreview the documentView in a new window paper.
+
+Questions:
+
+What was the hypothesis the authors were testing? What result did they find?
+In what way(s) was the data transformed to perform this analysis?
+How did the authors "de-trend" the data?
+What is a spline and how does (or doesn't) it relate to linear regression?
+What variables did the authors include in their regression? Do you think these were appropriate variables to include? Do you think there is anything missing?
+Do you find the results of this paper convincing? Why or why not?
+What sources of bias do the authors mention? Did they leave anything out?
+Both this paper and the Black Lives Matter paper were about the interaction between politics and mortality. How else are they similar? How are they different? Which do you prefer, and why?
+How do you think the relationship explored in this paper might change under the current administration? Keep your answers CORDIAL. 
+
+## Cause-Specific Mortality in US counties
+Reading
+Here we are, in the final installation of our "papers about mortality in the US" series. Read this paperPreview the documentView in a new window on cause-specific mortality on the county level in the US. Also, play around with this visualization (Links to an external site.) of the results.
+
+ 
+
+Prompts
+--What was the outcome variable of the regression the authors ran? What were the predictor variables?
+
+--What other variables do you think should have been included? Should any variables have been left out?
+
+--What is a garbage code, and why does it matter? How did the authors deal with garbage code issues?
+
+--What questions do you have about the methods employed in this paper?
+
+--What are the main weaknesses of this analysis? What parts of this paper don't you like?
+
+--Data visualization question: Each cause comes with two associated maps. What do those two maps show, and why is it important to include both of them?
+
+--How does the interactive visualization add or detract to your understanding of the results?
+
+--Which cause of death had results that most surprised you? Which causes were about as you expected?
+
+--What benefit does it add that these results are at the county level? Why not just do the analysis by state, or nationally?
+
+--What do these results suggest about health inequalities in the US? Does that surprise you?
+
+--Unlike our previous two papers, this article is very careful not to draw strong policy conclusions about its results. Do you think that's a good or a bad thing? Why?
+
+--Do you think that these results inform/illuminate the results of our previous two mortality papers (or vice versa)? Why or why not?
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+## The Lean Startup
+
+Find the reading here.Preview the documentView in a new window ONLY READ CHAPTER 7!
+
+ 
+Prompt:
+
+--What common business metrics does the author claim are actually meaningless? What questions does he prefer?
+
+--What criteria does he say a good metric should have? What method does he recommend for collecting these metrics?
+
+--Do you agree or disagree with these claims? If you've worked in businesses in any capacity, how do your experiences compare to what the author describes here? 
+
+--What connection, if any, do you see between this author's recommendations and the data collection methods used by Facebook, OkCupid, etc?
+
+ 
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+## Facebook/OkCupid
+
+Facebook
+
+Read this paperPreview the documentView in a new window about emotional contagion.
+
+Prompts: 
+
+--What were the quantitative methods employed in this paper? What was the take-home message? Do you find this result convincing (irrespective of your opinion about the ethics of the study)?
+
+--Had you heard about this study when it was released? What concerns were raised about it? Why?
+
+--How do you feel about the fact that businesses use your data and test your behavior in the way described in the post? Do you find it invasive, or is it simply a fact of life in this day and age?
+
+--Do you do anything to try and prevent companies from collecting accurate information about you? What are they?
+
+ 
+
+OkCupid
+
+Read OkCupid's blog posts about the mathematics of beauty (Links to an external site.) and how OkCupid run tests on their users (Links to an external site.).
+
+Prompts:
+
+--Do you recognize the method being described in the "math of beauty" blog post? What was it? Did you find it easy to interpret?
+
+--What was the result of the "math of beauty" study? Do you find that result convincing? Why or why not?
+
+--What do you think the authors would have found if they had done the same study on men? Why?
+
+--How do you feel about OkCupid performing tests on their users compared to Facebook? What do you feel is different or the same about the two? 
+
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+## fMRI Noun Prediction
+
+Find the reading herePreview the documentView in a new window.
+
+  
+
+Prompts:
+
+ 
+
+What was the goal of this paper? What main question was answered by this paper?
+What were the key results of this analysis?
+What were the "two steps" of the two-step methodology? (Don't just copy and paste the authors' text-- tell me in your own words.) Do you recognize the second step?
+What are the two "key theoretical assumptions" that go along with the "two steps" of the paper? Now do you recognize the second step of the methods?
+What type of validation was performed? Is that an in-sample or out-of-sample method?
+Why was it important that the authors leave two out in their validation? (Hint: What error metric was used to validate the model?)
+What do you think about the nouns and verbs chosen for this study? Do you think the results would have changed if they'd chosen different words? Did they test for that?
+Do you think that the methods used in this study would work equally well on anybody? what types of people might it be hard to use this method on?
+What were the weaknesses of this paper? Were there any sources of error that went unaddressed?
+Do you have any moral or ethical concerns with how this research was conducted?
+What are the implications of this paper for neuroscience research, or the world at large?
+this is one of the more linguistically dense papers we've read in this course. Despite that, do you still feel that you understand the key points of the paper? How could it be rephrased to be more accessible?
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+## Why Most Published Research Findings Are False
+
+Find the reading here.Preview the documentView in a new window
+
+  
+
+Prompts:
+
+Why--in a sentence or two-- are most published research findings false?
+Define Type I error, Type II error, and Power.
+What is R in this paper? What are its units? (Hint: it's either an odds or a probability.)
+What is an example of a field with low R? With high R?
+Pick one of the six corollaries listed in the paper, and discuss a real world example (a study you read about, etc) that exhibits the issue described in the corollary. 
+We learned early in class that replicating study results is good-- it helps ensure that someone's methods were accurate. Given that, why does this paper say that the probability of finding a true result goes down as the number of studies in that field increases?
+What role do p-values play in the determination that most published research findings are false?
+How does (or doesn't) this paper relate to the recent snafu about "fake news" we've been experiencing?
+Do you believe this paper? If not, are you more or less optimistic than the author about the quality of scientific research?
+What can the scientific community do to repair the issue of falsity in research findings?
+How does this paper make you feel about published research findings you've encountered in your own life? How does it make you feel about the scientific community as a whole?
+ 
+
+REMEMBER: DO NOT ANSWER ALL OF THESE QUESTIONS ONE BY ONE. These are designed to be a starting-off point for conversation ONLY. If there's something you want to say that doesn't fit into any of these bins, say it! Start a new conversation.
+
+
