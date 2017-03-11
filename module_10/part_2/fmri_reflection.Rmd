@@ -1,0 +1,87 @@
+---
+title: "fMRI Response"
+author: "Amelia Bertozzi-Villa"
+date: "March 10, 2017"
+output: html_document
+---
+
+Hi all,
+
+As you may have noticed, this paper was quite technically challenging. I did that on purpose, for a few different reasons:
+
+1. To show you that, even with a complex paper, you can extract the key takeaways (which most of you did very well);
+2. To continue to get you used to reading scientific literature in general. As one or two of you mentioned in your posts, this type of reading gets much much easier the more you practice;
+3. Because this is a genuinely interesting paper with methods and results that are relevant to what we've learned in class.
+
+The methods were pretty dense in this paper, but if you break them down into their respective components they should actually be quite familiar to you. I'll start with a breakdown of those, then comment on some common themes in the discussion thread. 
+
+## Methods
+
+The methods can be split into two main sections: Regression and Validation
+
+### Regression
+
+They used a lot of fancy words to describe it, but effectively what the authors conducted was a big linear regression. The "two-step process" described in the methods refer to 1) generating the covariates for the model, and 2) actually running the regression(s).
+
+It looks a little different that what we've seen before, but the paper's equation 1 is just a regression equation, where $c_{vi}$ is a coefficient (we're used to seeing them as $\beta$), and $f_i(w)$ describes our explanatory variables (a.k.a. "semantic features"). The big "E"-looking thing, $\Sigma$, indicates *summation* of everything that comes after it: $\sum_{i=1}^{3} i$ means "sum the values from 1 to 3" (thus, $\sum_{i=1}^{3} i = 6$). They use this shorthand notation because the full regression equation is long-- they use 25 semantic features in the model. A more familiar way of writing this equation would be:
+
+$$ y_v = \beta_{v0} + \beta_{v1}f_1(w) + \beta_{v2}f_2(w) +  ... + \beta_{v25}f_{25}(w) + \varepsilon$$
+where the $v$ indicates that there's a different value for every voxel in the brain, and $w$ is a given stimulus noun. So, for any voxel, the dataset in question would have sixty rows, one for each stimulus noun. The first of those rows might look like this:
+
+```{r, echo=FALSE}
+library(data.table)
+
+fmri <- data.table(y=sample(1000, 60),
+                   f1=sample(2000,60))
+for (i in 2:25){
+  fmri[[paste0("f", i)]] = sample(1000, 60)
+}
+
+head(fmri)
+```
+
+Now that that structure is clear, let's go into what the input and output variables *are*. 
+
+#### Input Variables: "Semantic Features"
+"Semantic feature" is the term the authors use for "predictor variable" in this analysis. Machine learning folks usually refer to predictor variables as "features", and the authors use "semantic" just to stress that these features are coming from a language corpus. Here, each semantic feature corresponds to one of the verbs listed in the article.
+
+So, if each row is a noun and each column is a verb, what does the numeric value of any one dataset entry represent? What does the number `800` in row 1, column `f1`of the dataset denote? Well, it denoted the **co-occurrence** of that noun and that verb together in the text corpus. This is defined vaguely in the paper, but the supplementary materials tell us that co-occcurrence is defined as "the number of times those two words appear within 5 [words] of each other" in the text corpus. So, that `800` is telling us that Noun 1 and Verb 1 co-occurred 800 times in the text corpus (and so on for every other noun-verb pair). The "vector $f_i$" referred to at various points throughout the paper denotes one entire column of the dataset. 
+
+
+#### Output Variable: Voxel Activation
+
+Ok, now what about our outcome variable, column `y`? Remember, the dataset we created up above only refers to *one voxel* of the brain. Remember also that each row represents a "stimulus noun"-- that is, the word that study participants were shown whil in the MRI. Therefore, our `y` column denotes the level of *luminance* of that voxel when that stimulus noun was shown to the participant-- it indicates how much that voxel lit up for any given word. I'm not sure what the exact units were of this column, but it's not super relevant. 
+
+Therefore, the way to interpret (say) $\beta_{v4}$ from this regression would be: "Holding all else equal, if you increase by 1 the number of times a stimulus noun co-occurrs with Verb 4 in the text corpus, you'll get an illumination change in voxel $v$ of $\beta_{v4}$."
+
+Let's pause for a minute to do some math here. We're talking about running a regression for every voxel in the brain, for each of the 9 participants in the study. There are somewhat over a million voxels in the brain (at the current fMRI resolution of 1 cubic millimeter per voxel), so that would be over **9 million regressions**! 
+
+There are ways, using a statistical technique called "random effects", to combine similar datasets and run a single regression with a number of outputs (assuming that the outcome variables are related in some way). I suspect that in this way the authors actually ran 9 big regressions, not 9 million small ones. 
+
+This is worth considering in your conversations about sample size for this paper: the human sample size of the study was quite small (only 9 participants), but the sample size of any 1 regression was huge: if they ran 9 regresions, each dataset would have about 60 million rows. 
+
+###  Validation
+
+For simplicity when thinking about the validation step, let's think about a regresion for just one participant. Because the authors ran a **leave-two-out** validation method, each voxel's dataset would be 58 rows long, so they ran a regression on a 58-million row dataset and came up with coefficient values for each voxel-semantic feature pair.
+
+Next, for each of the two words they'd held out, they *predicted* the illumination of each voxel, based on the co-occurrence of those held-out words with the 25 verbs. This should be very familiar to all of you-- we've been predicting new results since we started learning regression. The next step, though, is a little different. 
+
+By the time they're done predicting, the authors have 4 pictures: The 2 **real** fMRI images of the held-out words, and the two **predicted** fMRI images of the held-out words. Figure 2B of the paper shows these 4 pictures for one particular slice of the brain:
+
+[insert brain pic]
+
+In the cross-validation methods we've learned about so far, the next step would be to *subtract* the true from the predicted illumination values to get the *residual* for each voxel, and to use that error to determine how well the model performs. **This is not what the authors did.** 
+
+Instead, they *compared* each predicted image to each observed image, and matched each predicted picture to the observed picture it was most similar to (according to a metric called "cosine similarity"). The error metric was whether or not the pictures were matched correctly. Look back at figure 2B, and imagine that you were told only that the two top images were predicted, and the two bottom images were observed. Could you (you are playing the role of the cosine similarity function here) correctly guess which of the two bottom images correspond to "airplane"? 
+
+For each round of hold-2-out cross-validation, instead of getting as outputs two huge datasets of residuals, we get a binary, yes-or-no outcome: did the model match the pictures correctly? You can then count the *proportion of times* that the model predicted correctly to come up with your accuracy metrics. If you just matched images randomly, you would expect to be right 50% of the time, which is why the authors are aiming for an accuracy score greater than 0.5.
+
+This is why it was important that the authors held out **two** samples from their validation, not one or three or seven. Their outcome variable was dependent on being able to match two variables to the appropriate pictures. If you had just held **one** out, you'd get a perfect match every time, and if you'd held out more than two, the math would be trickier. 
+ 
+
+## Comments and Reflection
+
+
+
+
+
