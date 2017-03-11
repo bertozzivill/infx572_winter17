@@ -17,13 +17,15 @@ The methods were pretty dense in this paper, but if you break them down into the
 
 ## Methods
 
-The methods can be split into two main sections: Regression and Validation
+The methods can be split into two main sections: Regression and Validation.
 
 ### Regression
 
-They used a lot of fancy words to describe it, but effectively what the authors conducted was a big linear regression. The "two-step process" described in the methods refer to 1) generating the covariates for the model, and 2) actually running the regression(s).
+They used a lot of fancy words to describe it, but effectively what the authors conducted was a big linear regression. The "two-step process" described in the methods refer to 1) generating the covariates for the model, and 2) actually running the regression(s). Let's look at the paper's Equation 1:
 
-It looks a little different that what we've seen before, but the paper's equation 1 is just a regression equation, where $c_{vi}$ is a coefficient (we're used to seeing them as $\beta$), and $f_i(w)$ describes our explanatory variables (a.k.a. "semantic features"). The big "E"-looking thing, $\Sigma$, indicates *summation* of everything that comes after it: $\sum_{i=1}^{3} i$ means "sum the values from 1 to 3" (thus, $\sum_{i=1}^{3} i = 6$). They use this shorthand notation because the full regression equation is long-- they use 25 semantic features in the model. A more familiar way of writing this equation would be:
+$$y_v = \sum_{i=1}^{n} c_{vi}f_i(w)$$
+
+It looks a little different that what we've seen before, but this is just a regression equation, where $c_{vi}$ is a coefficient (we're used to seeing them as $\beta$), and $f_i(w)$ describes our explanatory variables (a.k.a. "semantic features"). The big "E"-looking thing, $\Sigma$, indicates *summation* of everything that comes after it: $\sum_{i=1}^{3} i$ means "sum the values from 1 to 3" (thus, $\sum_{i=1}^{3} i = 6$). They use this shorthand notation because the full regression equation is long-- they use 25 semantic features in the model. A more familiar way of writing this equation would be:
 
 $$ y_v = \beta_{v0} + \beta_{v1}f_1(w) + \beta_{v2}f_2(w) +  ... + \beta_{v25}f_{25}(w) + \varepsilon$$
 where the $v$ indicates that there's a different value for every voxel in the brain, and $w$ is a given stimulus noun. So, for any voxel, the dataset in question would have sixty rows, one for each stimulus noun. The first of those rows might look like this:
@@ -45,7 +47,9 @@ Now that that structure is clear, let's go into what the input and output variab
 #### Input Variables: "Semantic Features"
 "Semantic feature" is the term the authors use for "predictor variable" in this analysis. Machine learning folks usually refer to predictor variables as "features", and the authors use "semantic" just to stress that these features are coming from a language corpus. Here, each semantic feature corresponds to one of the verbs listed in the article.
 
-So, if each row is a noun and each column is a verb, what does the numeric value of any one dataset entry represent? What does the number `800` in row 1, column `f1`of the dataset denote? Well, it denoted the **co-occurrence** of that noun and that verb together in the text corpus. This is defined vaguely in the paper, but the supplementary materials tell us that co-occcurrence is defined as "the number of times those two words appear within 5 [words] of each other" in the text corpus. So, that `800` is telling us that Noun 1 and Verb 1 co-occurred 800 times in the text corpus (and so on for every other noun-verb pair). The "vector $f_i$" referred to at various points throughout the paper denotes one entire column of the dataset. 
+So, if each row is a noun and each column is a verb, what does the numeric value of any one dataset entry represent? What does the number `800` in row 1, column `f1`of the dataset denote? Well, it denotes the **co-occurrence** of that noun and that verb together in the text corpus. This is defined vaguely in the paper, but the supplementary materials tell us that co-occcurrence is defined as "the number of times those two words appear within 5 [words] of each other" in the text corpus. So, that `800` is telling us that Noun 1 and Verb 1 co-occurred 800 times in the text corpus (and so on for every other noun-verb pair). The "vector $f_i$" referred to at various points throughout the paper denotes one entire column of the dataset. 
+
+Keep in mind that the participants were only shown *nouns*, not verbs. For each row (a.k.a. noun) in the dataset, the only piece of data that comes from the study participant is `y`, the voxel activation. All the covariates about verb co-occurrence come from the text corpus, not the study participants.
 
 
 #### Output Variable: Voxel Activation
@@ -62,7 +66,7 @@ This is worth considering in your conversations about sample size for this paper
 
 ###  Validation
 
-For simplicity when thinking about the validation step, let's think about a regresion for just one participant. Because the authors ran a **leave-two-out** validation method, each voxel's dataset would be 58 rows long, so they ran a regression on a 58-million row dataset and came up with coefficient values for each voxel-semantic feature pair.
+For simplicity when thinking about the validation step, let's think about a regresion for just one participant. Because the authors ran a **leave-two-out** validation method, each voxel's dataset would be 58 rows long, so they ran a regression on a 58-million row dataset and came up with coefficient values for each voxel-semantic feature pair (that's 1 million voxels * 25 semantic features, or about 25 million coefficients).
 
 Next, for each of the two words they'd held out, they *predicted* the illumination of each voxel, based on the co-occurrence of those held-out words with the 25 verbs. This should be very familiar to all of you-- we've been predicting new results since we started learning regression. The next step, though, is a little different. 
 
@@ -81,7 +85,18 @@ This is why it was important that the authors held out **two** samples from thei
 
 ## Comments and Reflection
 
+Many of you expressed concern about the lack of cultural/linguistic diversity in the participant sample, and what that might imply for the reliability of the study outcomes. I think that many of you made valid points, but want to take a moment to stress what the article was and wasn't claiming about noun prediction. The authors **do not** claim that this algorithm woul be capable of predicting the neurological activity of someone whose fMRI scans had not been used to train an algorithm of the type they develop. The study is conducted strictly within any one participant-- each of the 9 participants has separate regressions run for him/her, which produce a separate list of $c_{vi}$s that are then used to predict nouns. It's not just true that any one of the 9 models would perform poorly on someone from a different culture-- it would perform poorly on anyone except the participant for whom it was built! 
 
+There is, however, value to the idea that utilizing this methodology on people of different or more diverse backgrounds might not work as well as it did on these college students-- not because of the model outputs, but because of the text corpus. Remember the first "key theoretical assumption" of this modeling approach: that "the semantic features that distinguish the meanings of arbitrary concrete nouns *are reflected in the statistics of their use within a very large text corpus*" [emphasis mine]. That is, the authors assume that the cognitive associations between words that the human brain makes are similar to the associations seen in a collection of text scraped from several billion English-language websites (which is what the text corpus is). For native, monolingual English speakers, this is probably a fair assumption-- the language we write and publish is almost certainly similar to the language we think. But for a non-native or bilingual English speaker, word associations might stray quite far from the patterns found in the text corpus, and this could impact model performance dramatically. 
+
+There was another common sentiment expressed in the discussion responses: "What's the point?" The authors were notably terse about any social or human benefit this type of analysis could provide. Why did they bother? 
+
+As I mentioned above, this paper is a far cry from showing that technology can read minds. But what it does show, quite remarkably, is that a simple algorithm can be trained to identify which word a brain is thinking about, without "knowing" anything concrete about brain structure or language. This type of research could be used from a data mining perspective, to gain insight into what areas of the brain are more relevant for certain activities and emotion. And as many of you mention, there is a vast uncharted territory about understanding of abstract or emotionally charged nouns. 
+
+I personally would view this paper as a modest but encouraging step forward in the realm of computational neuroscience, and would encourage you not to worry too much about surveillance state dystopias (in the context of this paper, at least). But if you are worried about the government secretly scanning your brain to learn your deepest darkest secrets, just move your head a few millimeters every couple of seconds-- that'll throw 'em off. 
+
+
+--Amelia
 
 
 

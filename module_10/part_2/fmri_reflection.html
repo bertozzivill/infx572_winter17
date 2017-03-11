@@ -127,46 +127,70 @@ $(document).ready(function () {
 <p>Hi all,</p>
 <p>As you may have noticed, this paper was quite technically challenging. I did that on purpose, for a few different reasons:</p>
 <ol style="list-style-type: decimal">
-<li>To show you that, even with a dense and complex paper, you can extract the key takeaways (which most of you did very well);</li>
-<li>To continue to get you used to reading scientific literature in general. As one or two of you mentioned in your posts, this type of reading gets much much easier the more you practice.</li>
+<li>To show you that, even with a complex paper, you can extract the key takeaways (which most of you did very well);</li>
+<li>To continue to get you used to reading scientific literature in general. As one or two of you mentioned in your posts, this type of reading gets much much easier the more you practice;</li>
 <li>Because this is a genuinely interesting paper with methods and results that are relevant to what we’ve learned in class.</li>
 </ol>
 <p>The methods were pretty dense in this paper, but if you break them down into their respective components they should actually be quite familiar to you. I’ll start with a breakdown of those, then comment on some common themes in the discussion thread.</p>
 <div id="methods" class="section level2">
 <h2>Methods</h2>
-<p>The methods can be split into two main sections: Regression and Validation</p>
+<p>The methods can be split into two main sections: Regression and Validation.</p>
 <div id="regression" class="section level3">
 <h3>Regression</h3>
-<p>They used a lot of fancy words to describe it, but effectively what the authors conducted was a big linear regression. The “two-step process” described in the methods refer to 1) generating the covariates for the model, and 2) actually running the regression(s).</p>
-<p>It looks a little different that what we’ve seen before, but the paper’s equation 1 is just a regression equation, where <span class="math inline">\(c_{vi}\)</span> is a coefficient (we’re used to seeing them as <span class="math inline">\(\beta\)</span>), and <span class="math inline">\(f_i(w)\)</span> describes our explanatory variables (a.k.a. “semantic features”). The big “E”-looking thing, <span class="math inline">\(\Sigma\)</span>, indicates <em>summation</em> of everything that comes after it: <span class="math inline">\(\sum_{i=1}^{3} i\)</span> means “sum the values from 1 to 3” (thus, <span class="math inline">\(\sum_{i=1}^{3} i = 6\)</span>). They use this shorthand notation because the full regression equation is long– they use 25 semantic features in the model. A more familiar way of writing this equation would be:</p>
-<p><span class="math display">\[ y_v = \beta_{v0} + \beta_{v1}f_1(w) + \beta_{v2}f_2(w) +  ... + \beta_{v25}f_{25}(w) + \varepsilon\]</span> where the <span class="math inline">\(v\)</span> indicates that there’s a different value for every voxel in the brain, and <span class="math inline">\(w\)</span> is a given stimulus noun. So, for any voxel, the dataset in question would have sixty rows, the first of which might look like this:</p>
+<p>They used a lot of fancy words to describe it, but effectively what the authors conducted was a big linear regression. The “two-step process” described in the methods refer to 1) generating the covariates for the model, and 2) actually running the regression(s). Let’s look at the paper’s Equation 1:</p>
+<p><span class="math display">\[y_v = \sum_{i=1}^{n} c_{vi}f_i(w)\]</span></p>
+<p>It looks a little different that what we’ve seen before, but this is just a regression equation, where <span class="math inline">\(c_{vi}\)</span> is a coefficient (we’re used to seeing them as <span class="math inline">\(\beta\)</span>), and <span class="math inline">\(f_i(w)\)</span> describes our explanatory variables (a.k.a. “semantic features”). The big “E”-looking thing, <span class="math inline">\(\Sigma\)</span>, indicates <em>summation</em> of everything that comes after it: <span class="math inline">\(\sum_{i=1}^{3} i\)</span> means “sum the values from 1 to 3” (thus, <span class="math inline">\(\sum_{i=1}^{3} i = 6\)</span>). They use this shorthand notation because the full regression equation is long– they use 25 semantic features in the model. A more familiar way of writing this equation would be:</p>
+<p><span class="math display">\[ y_v = \beta_{v0} + \beta_{v1}f_1(w) + \beta_{v2}f_2(w) +  ... + \beta_{v25}f_{25}(w) + \varepsilon\]</span> where the <span class="math inline">\(v\)</span> indicates that there’s a different value for every voxel in the brain, and <span class="math inline">\(w\)</span> is a given stimulus noun. So, for any voxel, the dataset in question would have sixty rows, one for each stimulus noun. The first of those rows might look like this:</p>
 <pre><code>##      y   f1  f2  f3  f4  f5  f6  f7  f8  f9 f10 f11 f12 f13 f14 f15 f16
-## 1:  98  609 164 130 375 134 647 739  57  56 693 283  46  10 912 593 596
-## 2: 845 1930 839 623 497 459 839 160 510 961 755 415 124 802  89 100 452
-## 3: 914  479 630 311 440 435 668 651 689 643  76 810 256 475 290 575 925
-## 4: 320  544 863 643 900  25 799 629 925 897 661 804 660 275 251 521 664
-## 5: 748  701 652  80 238 860 618 516 349 726 680 471 709 673 490  75 877
-## 6: 191  699 966 198 723 937 892 870 616 152 534 407 923 595 762 659 103
+## 1: 358 1178 252  96 252 909 249 548 954 894 472 894 427 367 701 250  11
+## 2: 218  152 671 484 817 986 250 976 211 200 528 909 864 855 202 698 211
+## 3: 263 1832 764 932 210 943 240 534 769 661 634 867 891 293 162 768 973
+## 4: 877  604 649 255 790 533 837 409 380 349 715 354 881 485 478 293 803
+## 5: 308  443 900 354  82 615 694 783 216  20 778 549 990 953 476 315 712
+## 6: 460 1919 655 983 958 154 114 635 686 241 111 929 164 814 398 235 958
 ##    f17 f18 f19 f20 f21 f22 f23 f24 f25
-## 1: 241 112 294 511 274 289 434  92 832
-## 2:  92 145 551 256 859 825 762 673 953
-## 3: 575  84 876 650 155 493 422 873 589
-## 4: 905 878 615 571 878 598  27  25 850
-## 5: 240 297  54  21 267 246  80  35 671
-## 6: 629 233 904 745 438 472 875 520 221</code></pre>
+## 1: 165 875 536 623 860 859 117 406 231
+## 2: 786 324  49 527 644 181 275 374 993
+## 3:  56 956  91 382 710 210 204 139 216
+## 4: 949 724 568 259 721 883 424 486  75
+## 5: 399 680 343 293 631 239 412 352 518
+## 6: 846 548 960 594  16 892 299 778 127</code></pre>
+<p>Now that that structure is clear, let’s go into what the input and output variables <em>are</em>.</p>
 <div id="input-variables-semantic-features" class="section level4">
 <h4>Input Variables: “Semantic Features”</h4>
+<p>“Semantic feature” is the term the authors use for “predictor variable” in this analysis. Machine learning folks usually refer to predictor variables as “features”, and the authors use “semantic” just to stress that these features are coming from a language corpus. Here, each semantic feature corresponds to one of the verbs listed in the article.</p>
+<p>So, if each row is a noun and each column is a verb, what does the numeric value of any one dataset entry represent? What does the number <code>800</code> in row 1, column <code>f1</code>of the dataset denote? Well, it denotes the <strong>co-occurrence</strong> of that noun and that verb together in the text corpus. This is defined vaguely in the paper, but the supplementary materials tell us that co-occcurrence is defined as “the number of times those two words appear within 5 [words] of each other” in the text corpus. So, that <code>800</code> is telling us that Noun 1 and Verb 1 co-occurred 800 times in the text corpus (and so on for every other noun-verb pair). The “vector <span class="math inline">\(f_i\)</span>” referred to at various points throughout the paper denotes one entire column of the dataset.</p>
+<p>Keep in mind that the participants were only shown <em>nouns</em>, not verbs. For each row (a.k.a. noun) in the dataset, the only piece of data that comes from the study participant is <code>y</code>, the voxel activation. All the covariates about verb co-occurrence come from the text corpus, not the study participants.</p>
 </div>
 <div id="output-variable-voxel-activation" class="section level4">
 <h4>Output Variable: Voxel Activation</h4>
+<p>Ok, now what about our outcome variable, column <code>y</code>? Remember, the dataset we created up above only refers to <em>one voxel</em> of the brain. Remember also that each row represents a “stimulus noun”– that is, the word that study participants were shown whil in the MRI. Therefore, our <code>y</code> column denotes the level of <em>luminance</em> of that voxel when that stimulus noun was shown to the participant– it indicates how much that voxel lit up for any given word. I’m not sure what the exact units were of this column, but it’s not super relevant.</p>
+<p>Therefore, the way to interpret (say) <span class="math inline">\(\beta_{v4}\)</span> from this regression would be: “Holding all else equal, if you increase by 1 the number of times a stimulus noun co-occurrs with Verb 4 in the text corpus, you’ll get an illumination change in voxel <span class="math inline">\(v\)</span> of <span class="math inline">\(\beta_{v4}\)</span>.”</p>
+<p>Let’s pause for a minute to do some math here. We’re talking about running a regression for every voxel in the brain, for each of the 9 participants in the study. There are somewhat over a million voxels in the brain (at the current fMRI resolution of 1 cubic millimeter per voxel), so that would be over <strong>9 million regressions</strong>!</p>
+<p>There are ways, using a statistical technique called “random effects”, to combine similar datasets and run a single regression with a number of outputs (assuming that the outcome variables are related in some way). I suspect that in this way the authors actually ran 9 big regressions, not 9 million small ones.</p>
+<p>This is worth considering in your conversations about sample size for this paper: the human sample size of the study was quite small (only 9 participants), but the sample size of any 1 regression was huge: if they ran 9 regresions, each dataset would have about 60 million rows.</p>
 </div>
 </div>
 <div id="validation" class="section level3">
 <h3>Validation</h3>
+<p>For simplicity when thinking about the validation step, let’s think about a regresion for just one participant. Because the authors ran a <strong>leave-two-out</strong> validation method, each voxel’s dataset would be 58 rows long, so they ran a regression on a 58-million row dataset and came up with coefficient values for each voxel-semantic feature pair (that’s 1 million voxels * 25 semantic features, or about 25 million coefficients).</p>
+<p>Next, for each of the two words they’d held out, they <em>predicted</em> the illumination of each voxel, based on the co-occurrence of those held-out words with the 25 verbs. This should be very familiar to all of you– we’ve been predicting new results since we started learning regression. The next step, though, is a little different.</p>
+<p>By the time they’re done predicting, the authors have 4 pictures: The 2 <strong>real</strong> fMRI images of the held-out words, and the two <strong>predicted</strong> fMRI images of the held-out words. Figure 2B of the paper shows these 4 pictures for one particular slice of the brain:</p>
+<p>[insert brain pic]</p>
+<p>In the cross-validation methods we’ve learned about so far, the next step would be to <em>subtract</em> the true from the predicted illumination values to get the <em>residual</em> for each voxel, and to use that error to determine how well the model performs. <strong>This is not what the authors did.</strong></p>
+<p>Instead, they <em>compared</em> each predicted image to each observed image, and matched each predicted picture to the observed picture it was most similar to (according to a metric called “cosine similarity”). The error metric was whether or not the pictures were matched correctly. Look back at figure 2B, and imagine that you were told only that the two top images were predicted, and the two bottom images were observed. Could you (you are playing the role of the cosine similarity function here) correctly guess which of the two bottom images correspond to “airplane”?</p>
+<p>For each round of hold-2-out cross-validation, instead of getting as outputs two huge datasets of residuals, we get a binary, yes-or-no outcome: did the model match the pictures correctly? You can then count the <em>proportion of times</em> that the model predicted correctly to come up with your accuracy metrics. If you just matched images randomly, you would expect to be right 50% of the time, which is why the authors are aiming for an accuracy score greater than 0.5.</p>
+<p>This is why it was important that the authors held out <strong>two</strong> samples from their validation, not one or three or seven. Their outcome variable was dependent on being able to match two variables to the appropriate pictures. If you had just held <strong>one</strong> out, you’d get a perfect match every time, and if you’d held out more than two, the math would be trickier.</p>
 </div>
 </div>
 <div id="comments-and-reflection" class="section level2">
 <h2>Comments and Reflection</h2>
+<p>Many of you expressed concern about the lack of cultural/linguistic diversity in the participant sample, and what that might imply for the reliability of the study outcomes. I think that many of you made valid points, but want to take a moment to stress what the article was and wasn’t claiming about noun prediction. The authors <strong>do not</strong> claim that this algorithm woul be capable of predicting the neurological activity of someone whose fMRI scans had not been used to train an algorithm of the type they develop. The study is conducted strictly within any one participant– each of the 9 participants has separate regressions run for him/her, which produce a separate list of <span class="math inline">\(c_{vi}\)</span>s that are then used to predict nouns. It’s not just true that any one of the 9 models would perform poorly on someone from a different culture– it would perform poorly on anyone except the participant for whom it was built!</p>
+<p>There is, however, value to the idea that utilizing this methodology on people of different or more diverse backgrounds might not work as well as it did on these college students– not because of the model outputs, but because of the text corpus. Remember the first “key theoretical assumption” of this modeling approach: that “the semantic features that distinguish the meanings of arbitrary concrete nouns <em>are reflected in the statistics of their use within a very large text corpus</em>” [emphasis mine]. That is, the authors assume that the cognitive associations between words that the human brain makes are similar to the associations seen in a collection of text scraped from several billion English-language websites (which is what the text corpus is). For native, monolingual English speakers, this is probably a fair assumption– the language we write and publish is almost certainly similar to the language we think. But for a non-native or bilingual English speaker, word associations might stray quite far from the patterns found in the text corpus, and this could impact model performance dramatically.</p>
+<p>There was another common sentiment expressed in the discussion responses: “What’s the point?” The authors were notably terse about any social or human benefit this type of analysis could provide. Why did they bother?</p>
+<p>As I mentioned above, this paper is a far cry from showing that technology can read minds. But what it does show, quite remarkably, is that a simple algorithm can be trained to identify which word a brain is thinking about, without “knowing” anything concrete about brain structure or language. This type of research could be used from a data mining perspective, to gain insight into what areas of the brain are more relevant for certain activities and emotion. And as many of you mention, there is a vast uncharted territory about understanding of abstract or emotionally charged nouns.</p>
+<p>I personally would view this paper as a modest but encouraging step forward in the realm of computational neuroscience, and would encourage you not to worry too much about surveillance state dystopias (in the context of this paper, at least). But if you are worried about the government secretly scanning your brain to learn your deepest darkest secrets, just move your head a few millimeters every couple of seconds– that’ll throw ’em off.</p>
+<p>–Amelia</p>
 </div>
 
 
