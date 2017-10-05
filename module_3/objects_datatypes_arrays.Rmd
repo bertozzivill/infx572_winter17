@@ -12,28 +12,47 @@ This is our first real coding lecture. In this and all future such lectures, I h
 ## Basic Data Types
 Remember from our last lecture that you can use R as a calculator: 
 ```{r}
-4+5  # addition
-19-17 # subtraction
-5*3 # multiplication
-9/38 # division
-2^4 # exponentiation
+# addition
+4+5  
+```
+```{r}
+# subtraction
+19-17 
+```
+```{r}
+# multiplication
+5*3 
+```
+```{r}
+# division
+9/38 
+```
+```{r}
+# exponentiation
+2^4 
 ```
 
 <br>
 And that you can use it to display and manipulate strings:
 ```{r}
-print("Hello, World!") # display text in the console
-substr("Hello, World!", 3, 7) # select the 3rd-7th characters of the phrase "Hello, World!"
+# display text in the console
+print("Hello, World!") 
+# select the 3rd-7th characters of the phrase "Hello, World!"
+substr("Hello, World!", 3, 7) 
 ```
 
 <br> 
 And that you can test the equality, inequality, or relative size of two statements or numbers:
 ```{r}
-4 == 2+2 # test the equality of numbers
-4 != 2+2 # test the INequality of numbers
+# test the equality of numbers
+4 == 2+2 
+# test the INequality of numbers
+4 != 2+2 
 
-"Hello"=="hello" # test the equivalence of phrases
-"Hello"!="hello" # test the INequivalence of phrases
+# test the equivalence of phrases
+"Hello"=="hello" 
+# test the INequivalence of phrases
+"Hello"!="hello" 
 
 # size comparisons
 3>2 
@@ -51,56 +70,77 @@ Get to know these data types well-- programming is all about manipulating them i
 ## Objects and Variables
 So far, you're probably less-than-impressed that R knows how to add two numbers together. Fair. Programming languages like R really start to get powerful when you realize that you can **store** values in named objects called **variables**. 
 
-For example, let's say you want to multiply a number by 4, then check if that result is equal to 32. We can write code that looks like this:
-```{r}
-my_variable <- 8 # generate a variable named my_variable
-my_variable*4 == 32 # check if that variable, multiplied by 4, equals 32 
-```
-The `<-` symbol is what we use in R to **assign** a number to a variable name. 
+Let's say your at home, and you want to bake some brownies while you work on your Intro to Data Science homework, but your brownie pan is small so you want to make a batch 2/3 the size it says in the recipe. You could type in the amount of flour you'd need to measure:
 
-<br>
-But wait! I hear you say. That code is actually *longer* than doing what we learned earlier:
 ```{r}
-8*4 == 32
+# the recipe calls for 2 cups of flour, so the number of cups I need is:
+2*(2/3)
 ```
-<br>
-That's true, but the code with the variable has the benefit that, if we decide we're not interested in 8 and actually want to test if 9*4 equals 32, all we have to do is change the value of the variable:
+
+And then type in the amount of butter:
 ```{r}
-my_variable <- 9 # generate a variable named my_variable
+# the recipe calls for 8 tablespoons of butter, so the number of tablespoons I need is:
+8*(2/3)
 ```
-<br>
-And then we can run the `my_variable*4==32` code without having to change it at all. This becomes especially useful if you want to perform multiple tests on a certain number:
+
+And then the amount of sugar:
 ```{r}
-my_variable <- 9 
-
-my_variable*4 ==32 
-my_variable/6 > 2
-my_variable+17 <27.4
-
+# the recipe calls for 1.5 cups of sugar, so the number of cups I need is:
+1.5*(2/3)
 ```
-<br>
-With this code, if I suddenly decided I wanted to test the value 25 instead of 9, all I'd have to change is the top line. Whereas if I'd originally written this:
-```{r, results='hide'}
-9*4 ==32 
-9/6 > 2
-9+17 <27.4
 
-```
-I'd have to painstakingly change everything to this:
-```{r, results='hide'}
-25*4 ==32 
-25/6 > 2
-25+17 <27.4
+...but you see already how this is getting tedious. We want to do the same thing over and over (multiply a number by 2/3), we just want to change (or, some might say, *vary*) the value of the number we're multiplying. This is exactly what a **variable** is designed for. 
 
-```
-<br>
-And there's more! You can use variables to create other variables:
+If you're following along with this code in RStudio, look at "Environment" section in the top right corner of the screen. At the moment it should say "Environment is empty"-- what that means is that we haven't *stored* anything as a variable yet. Now, run this:
+
 ```{r}
-new_variable <- my_variable*4
-new_variable==32
+recipe_amount <- 2
+```
+You should notice two things about running this code. First, it didn't print any *output* to the console. Second, there should now be an entry in the "Environment" section, with the name "recipe_amount" and a value of 2:
+
+[insert screenshot]
+
+So, what have we done? We haven't multiplied anything by anything, but we've created a **variable** named "recipe_amount", set its value equal to 2 (the number of cups of flour specified in the recipe), and *saved* it in the R environment. The `<-` symbol is what we use in R to **assign** a value to a variable name. 
+
+Now that we have this variable, we can do math (or anything else) to it just the same as we would to the initial number. Here, we want to multiply it by 2/3, so we can write:
+
+```{r}
+recipe_amount * 2/3
+```
+
+As you can see, this gives us the correct number of cups of flour to use: 1 & 1/3.
+
+So at this point, we have a two-line script that looks like this:
+```{r, eval=F}
+recipe_amount <- 2
+recipe_amount * 2/3
+```
+
+Now, if we want to figure out how many tablespoons of butter we need, all we have to do is change the 2 to an 8 and run those two lines of code again, and the computer will print out the correct number. 
+
+What if, in two weeks, you buy a much bigger baking pan, so now you instead want to multiply the original recipe by 2.5? You could change your two-line script to a three-line script that looks like this:
+
+```{r}
+recipe_amount <- 2
+recipe_multiplier <- 2.5
+recipe_amount * recipe_multiplier
+```
+Now you've expanded your script to *two* variables, two stored values, and you can change either of them as needed to get your ingredient quantities!
+
+This may seem like a silly example--it would still be a bit tedious to change the value of the `recipe_amount` variable over and over again, and it would probably be easier just to use an actual calculator, but there are two things I want you to take away from this:
+
+1. It's possible to *store* values in memory as named variables;
+2. It would be super convenient if you could convert *all* the ingredient amounts in one go, like if you could sort of "loop" through the list of ingredients and multiply each one by your `recipe_multiplier` variable. Hmmm (*foreshadowing*)...
+
+
 ```
 <br>
-You can make string variables, or boolean variables:
+Also note: You can use variables to create other variables. So, if I wanted to save the final amount of some ingredient, I could do:
+```{r}
+final_quantity <- recipe_amount * recipe_multiplier
+```
+<br>
+You can make string variables or boolean variables as well as numeric variables:
 ```{r}
 # String variables
 string_variable <- "Hello, World!"
@@ -112,12 +152,13 @@ boolean_variable <- 2==4
 boolean_variable
 ```
 <br>
-Variables have that name because, as we've seen, they're very easy to change. We'll learn how to systematically change the value of a variable in our section about **loops**. 
 
-Notice that I can name variables whatever I want. I called our first variable `my_variable`, but I could have called it `goldfish` and the code would have understood it just fine:
+Notice that I can name variables whatever I want. I called our first variable `recipe_amount`, but I could have called it `goldfish` and the code would have understood it just fine:
 ```{r}
-goldfish <- 8 # generate a variable named goldfish
-goldfish*4 == 32 # check if that variable, multiplied by 4, equals 32
+# generate a variable named "goldfish"
+goldfish <- 8 
+# check if that variable, multiplied by 4, equals 32
+goldfish*4
 ```
 <br>
 Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:
@@ -133,7 +174,7 @@ I've thrown the word "object" around a few times without really describing what 
 
 ## 1-Dimensional Arrays
 
-So far we've just looked at objects that represent single things, like the number 8 or the word "cat" or the value "TRUE". What if we instead want a *collection* of things, like a list of numbers or words or true/false values? Well, we'd use an array. 
+So far we've just looked at objects that represent single things, like the number 8 or the word "cat" or the value "TRUE". What if we instead want a *collection* of things, like a list of numbers or words or true/false values (such as, perhaps, a list of recipe quantities)? Well, we'd use an array. 
 
 **"Array"** is a generic term for a group of things. Arrays can have many different formats, dimensions, and names. We're going to be focusing on a type of 1-dimensional array in R called a **vector**. (1-dimensional means that there's just one list of things-- a 2-dimensional array would be like a spreadsheet or a dataset, we'll get to those later.) 
 
@@ -147,7 +188,7 @@ print(numeric_vector)
 string_vector <- c("cat", "dog", "horse")
 print(string_vector)
 
-boolean_vector <- c(F, T, T, F)  # note: you can just write "T" or "F" instead of "TRUE" and "FALSE"; it acheives the same thing.
+boolean_vector <- c(F, T, T, F)  # note: you can just write "T" or "F" instead of "TRUE" and "FALSE"; it achieves the same thing.
 print(boolean_vector)
 ```
 
@@ -155,32 +196,45 @@ print(boolean_vector)
 Notice that all the *members* of each of these vectors is the same type. For vectors, each element has to be of the same type. If you try to make a vector with multiple types, it will coerce them to all be the same:
 
 ```{r}
-c(3, "cat", 4, "dog") # strings "beat" numerics
-c(7, T, F, 2) # numerics "beat" logicals (in binary arithmetic, 1 equals "True" and 0 equals "False", hence the conversions)
-c("Hello", F, "World!", T, T) # strings "beat" logicals
+# strings "beat" numerics
+c(3, "cat", 4, "dog") 
+# numerics "beat" logicals (in binary arithmetic, 1 equals "True" and 0 equals "False", hence the conversions)
+c(7, T, F, 2) 
+# strings "beat" logicals
+c("Hello", F, "World!", T, T) 
 ```
 <br>
 
 There are a few other ways to make vectors that are useful to know. If you want a series of numbers, you can use the `:` operator and then you just have to specify the first and last number you want:
 ```{r}
-1:10 # vector of integers from 1 to 10
-57:65 # integers from 57 to 65
-10:1 # it can go backwards, too!
-5.5:8.5 # it's fine with decimal numbers, but the interval between values will always be 1
+# vector of integers from 1 to 10
+1:10 
+# integers from 57 to 65
+57:65 
+# it can go backwards, too!
+10:1 
+# it's fine with decimal numbers, but the interval between values will always be 1
+5.5:8.5 
 ```
 <br> 
 If you want a series of numbers at intervals other than 1, use the `seq()` function. It needs three values: your starting number, your final number, and the interval between values:
 ```{r}
-seq(1, 10, 1) # this is the same as "1:10"
-seq(1, 10, 2) # every other number
-seq(10, 100, 10) # every ten numbers
+# this is the same as "1:10"
+seq(1, 10, 1) 
+# 1:10, but only keeping every other number
+seq(1, 10, 2) 
+# 10:100, only keeping every tenth number
+seq(10, 100, 10) 
 ```
 <br> 
 If you want to repeat the same set of values many times, use the `rep()` function. It needs two things: the vector of values you want to repeat, and how many times you want to repeat them:
 ```{r}
-rep(1:5, 3) # repeat the sequence 1:5 three times
-rep(c("Hello", "World!"), 2) # repeat this two element string vector twice
-rep(c(F, F, T), 4) # repeat this three-element boolean vector four times
+# repeat the sequence 1:5 three times
+rep(1:5, 3) 
+# repeat this two-element string vector twice
+rep(c("Hello", "World!"), 2) 
+# repeat this three-element boolean vector four times
+rep(c(F, F, T), 4) 
 ```
 
 ### Subsetting Vectors
@@ -200,20 +254,23 @@ example_vector[7]
 <br>
 you can use this same syntax to query a range of values:
 ```{r}
-example_vector[7:9] # shows the 7th-9th members of example_vector
+# show the 7th-9th members of example_vector
+example_vector[7:9] 
 ```
 <br>
 or (using more vector notation) to find a few specific values:
 ```{r}
-example_vector[c(5, 7, 9)] # shows the 5th, 7th, and 9th members of example_vector
+# shows the 5th, 7th, and 9th members of example_vector
+example_vector[c(5, 7, 9)] 
 ```
 <br>
 Each of these outputs is itself a vector, and you can save it as such:
 ```{r}
-subset_vector <- example_vector[c(5, 7, 9)] # saves the 5th, 7th, and 9th members of example_vector to a new vector
+# saves the 5th, 7th, and 9th members of example_vector to a new vector
+subset_vector <- example_vector[c(5, 7, 9)] 
 ```
 
-### Adding to, Subtracting from, and Combining Vectors
+### Lengthening, Shortening, and Combining Vectors
 
 Shoot! What if you wanted `example_vector` to have one last "1" at the end? You can **append** more elements to vectors using the same function we used to create them: `c()`! 
 

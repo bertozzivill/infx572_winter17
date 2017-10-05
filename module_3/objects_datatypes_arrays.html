@@ -124,29 +124,40 @@ $(document).ready(function () {
 <div id="basic-data-types" class="section level2">
 <h2>Basic Data Types</h2>
 <p>Remember from our last lecture that you can use R as a calculator:</p>
-<pre class="r"><code>4+5  # addition</code></pre>
+<pre class="r"><code># addition
+4+5  </code></pre>
 <pre><code>## [1] 9</code></pre>
-<pre class="r"><code>19-17 # subtraction</code></pre>
+<pre class="r"><code># subtraction
+19-17 </code></pre>
 <pre><code>## [1] 2</code></pre>
-<pre class="r"><code>5*3 # multiplication</code></pre>
+<pre class="r"><code># multiplication
+5*3 </code></pre>
 <pre><code>## [1] 15</code></pre>
-<pre class="r"><code>9/38 # division</code></pre>
+<pre class="r"><code># division
+9/38 </code></pre>
 <pre><code>## [1] 0.2368421</code></pre>
-<pre class="r"><code>2^4 # exponentiation</code></pre>
+<pre class="r"><code># exponentiation
+2^4 </code></pre>
 <pre><code>## [1] 16</code></pre>
 <p><br> And that you can use it to display and manipulate strings:</p>
-<pre class="r"><code>print(&quot;Hello, World!&quot;) # display text in the console</code></pre>
+<pre class="r"><code># display text in the console
+print(&quot;Hello, World!&quot;) </code></pre>
 <pre><code>## [1] &quot;Hello, World!&quot;</code></pre>
-<pre class="r"><code>substr(&quot;Hello, World!&quot;, 3, 7) # select the 3rd-7th characters of the phrase &quot;Hello, World!&quot;</code></pre>
+<pre class="r"><code># select the 3rd-7th characters of the phrase &quot;Hello, World!&quot;
+substr(&quot;Hello, World!&quot;, 3, 7) </code></pre>
 <pre><code>## [1] &quot;llo, &quot;</code></pre>
 <p><br> And that you can test the equality, inequality, or relative size of two statements or numbers:</p>
-<pre class="r"><code>4 == 2+2 # test the equality of numbers</code></pre>
+<pre class="r"><code># test the equality of numbers
+4 == 2+2 </code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>4 != 2+2 # test the INequality of numbers</code></pre>
+<pre class="r"><code># test the INequality of numbers
+4 != 2+2 </code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>&quot;Hello&quot;==&quot;hello&quot; # test the equivalence of phrases</code></pre>
+<pre class="r"><code># test the equivalence of phrases
+&quot;Hello&quot;==&quot;hello&quot; </code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>&quot;Hello&quot;!=&quot;hello&quot; # test the INequivalence of phrases</code></pre>
+<pre class="r"><code># test the INequivalence of phrases
+&quot;Hello&quot;!=&quot;hello&quot; </code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># size comparisons
 3&gt;2 </code></pre>
@@ -162,24 +173,28 @@ $(document).ready(function () {
 <h2>Objects and Variables</h2>
 <p>So far, you’re probably less-than-impressed that R knows how to add two numbers together. Fair. Programming languages like R really start to get powerful when you realize that you can <strong>store</strong> values in named objects called <strong>variables</strong>.</p>
 <p>For example, let’s say you want to multiply a number by 4, then check if that result is equal to 32. We can write code that looks like this:</p>
-<pre class="r"><code>my_variable &lt;- 8 # generate a variable named my_variable
-my_variable*4 == 32 # check if that variable, multiplied by 4, equals 32 </code></pre>
+<pre class="r"><code># generate a variable named my_variable
+my_variable &lt;- 8 
+
+# print the value of that variable to the console
+print(my_variable)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code># check if that variable, multiplied by 4, equals 32 
+my_variable*4 == 32 </code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>The <code>&lt;-</code> symbol is what we use in R to <strong>assign</strong> a number to a variable name.</p>
 <p><br> But wait! I hear you say. That code is actually <em>longer</em> than doing what we learned earlier:</p>
 <pre class="r"><code>8*4 == 32</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p><br> That’s true, but the code with the variable has the benefit that, if we decide we’re not interested in 8 and actually want to test if 9*4 equals 32, all we have to do is change the value of the variable:</p>
-<pre class="r"><code>my_variable &lt;- 9 # generate a variable named my_variable</code></pre>
+<pre class="r"><code># generate a variable named my_variable
+my_variable &lt;- 9 </code></pre>
 <p><br> And then we can run the <code>my_variable*4==32</code> code without having to change it at all. This becomes especially useful if you want to perform multiple tests on a certain number:</p>
 <pre class="r"><code>my_variable &lt;- 9 
 
-my_variable*4 ==32 </code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>my_variable/6 &gt; 2</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>my_variable+17 &lt;27.4</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+my_variable*4 ==32 
+my_variable/6 &gt; 2
+my_variable+17 &lt;27.4</code></pre>
 <p><br> With this code, if I suddenly decided I wanted to test the value 25 instead of 9, all I’d have to change is the top line. Whereas if I’d originally written this:</p>
 <pre class="r"><code>9*4 ==32 
 9/6 &gt; 2
@@ -205,8 +220,10 @@ boolean_variable</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <p><br> Variables have that name because, as we’ve seen, they’re very easy to change. We’ll learn how to systematically change the value of a variable in our section about <strong>loops</strong>.</p>
 <p>Notice that I can name variables whatever I want. I called our first variable <code>my_variable</code>, but I could have called it <code>goldfish</code> and the code would have understood it just fine:</p>
-<pre class="r"><code>goldfish &lt;- 8 # generate a variable named goldfish
-goldfish*4 == 32 # check if that variable, multiplied by 4, equals 32</code></pre>
+<pre class="r"><code># generate a variable named goldfish
+goldfish &lt;- 8 
+# check if that variable, multiplied by 4, equals 32
+goldfish*4 == 32 </code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p><br> Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:</p>
 <pre class="r"><code>print(goldfish)</code></pre>
@@ -235,35 +252,48 @@ print(string_vector)</code></pre>
 print(boolean_vector)</code></pre>
 <pre><code>## [1] FALSE  TRUE  TRUE FALSE</code></pre>
 <p><br> Notice that all the <em>members</em> of each of these vectors is the same type. For vectors, each element has to be of the same type. If you try to make a vector with multiple types, it will coerce them to all be the same:</p>
-<pre class="r"><code>c(3, &quot;cat&quot;, 4, &quot;dog&quot;) # strings &quot;beat&quot; numerics</code></pre>
+<pre class="r"><code># strings &quot;beat&quot; numerics
+c(3, &quot;cat&quot;, 4, &quot;dog&quot;) </code></pre>
 <pre><code>## [1] &quot;3&quot;   &quot;cat&quot; &quot;4&quot;   &quot;dog&quot;</code></pre>
-<pre class="r"><code>c(7, T, F, 2) # numerics &quot;beat&quot; logicals (in binary arithmetic, 1 equals &quot;True&quot; and 0 equals &quot;False&quot;, hence the conversions)</code></pre>
+<pre class="r"><code># numerics &quot;beat&quot; logicals (in binary arithmetic, 1 equals &quot;True&quot; and 0 equals &quot;False&quot;, hence the conversions)
+c(7, T, F, 2) </code></pre>
 <pre><code>## [1] 7 1 0 2</code></pre>
-<pre class="r"><code>c(&quot;Hello&quot;, F, &quot;World!&quot;, T, T) # strings &quot;beat&quot; logicals</code></pre>
+<pre class="r"><code># strings &quot;beat&quot; logicals
+c(&quot;Hello&quot;, F, &quot;World!&quot;, T, T) </code></pre>
 <pre><code>## [1] &quot;Hello&quot;  &quot;FALSE&quot;  &quot;World!&quot; &quot;TRUE&quot;   &quot;TRUE&quot;</code></pre>
 <p><br></p>
 <p>There are a few other ways to make vectors that are useful to know. If you want a series of numbers, you can use the <code>:</code> operator and then you just have to specify the first and last number you want:</p>
-<pre class="r"><code>1:10 # vector of integers from 1 to 10</code></pre>
+<pre class="r"><code># vector of integers from 1 to 10
+1:10 </code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
-<pre class="r"><code>57:65 # integers from 57 to 65</code></pre>
+<pre class="r"><code># integers from 57 to 65
+57:65 </code></pre>
 <pre><code>## [1] 57 58 59 60 61 62 63 64 65</code></pre>
-<pre class="r"><code>10:1 # it can go backwards, too!</code></pre>
+<pre class="r"><code># it can go backwards, too!
+10:1 </code></pre>
 <pre><code>##  [1] 10  9  8  7  6  5  4  3  2  1</code></pre>
-<pre class="r"><code>5.5:8.5 # it's fine with decimal numbers, but the interval between values will always be 1</code></pre>
+<pre class="r"><code># it's fine with decimal numbers, but the interval between values will always be 1
+5.5:8.5 </code></pre>
 <pre><code>## [1] 5.5 6.5 7.5 8.5</code></pre>
 <p><br> If you want a series of numbers at intervals other than 1, use the <code>seq()</code> function. It needs three values: your starting number, your final number, and the interval between values:</p>
-<pre class="r"><code>seq(1, 10, 1) # this is the same as &quot;1:10&quot;</code></pre>
+<pre class="r"><code># this is the same as &quot;1:10&quot;
+seq(1, 10, 1) </code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
-<pre class="r"><code>seq(1, 10, 2) # every other number</code></pre>
+<pre class="r"><code># 1:10, but only keeping every other number
+seq(1, 10, 2) </code></pre>
 <pre><code>## [1] 1 3 5 7 9</code></pre>
-<pre class="r"><code>seq(10, 100, 10) # every ten numbers</code></pre>
+<pre class="r"><code># 10:100, only keeping every tenth number
+seq(10, 100, 10) </code></pre>
 <pre><code>##  [1]  10  20  30  40  50  60  70  80  90 100</code></pre>
 <p><br> If you want to repeat the same set of values many times, use the <code>rep()</code> function. It needs two things: the vector of values you want to repeat, and how many times you want to repeat them:</p>
-<pre class="r"><code>rep(1:5, 3) # repeat the sequence 1:5 three times</code></pre>
+<pre class="r"><code># repeat the sequence 1:5 three times
+rep(1:5, 3) </code></pre>
 <pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5</code></pre>
-<pre class="r"><code>rep(c(&quot;Hello&quot;, &quot;World!&quot;), 2) # repeat this two element string vector twice</code></pre>
+<pre class="r"><code># repeat this two-element string vector twice
+rep(c(&quot;Hello&quot;, &quot;World!&quot;), 2) </code></pre>
 <pre><code>## [1] &quot;Hello&quot;  &quot;World!&quot; &quot;Hello&quot;  &quot;World!&quot;</code></pre>
-<pre class="r"><code>rep(c(F, F, T), 4) # repeat this three-element boolean vector four times</code></pre>
+<pre class="r"><code># repeat this three-element boolean vector four times
+rep(c(F, F, T), 4) </code></pre>
 <pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
 ## [12]  TRUE</code></pre>
 </div>
@@ -277,13 +307,16 @@ print(boolean_vector)</code></pre>
 <pre class="r"><code>example_vector[7]</code></pre>
 <pre><code>## [1] 2</code></pre>
 <p><br> you can use this same syntax to query a range of values:</p>
-<pre class="r"><code>example_vector[7:9] # shows the 7th-9th members of example_vector</code></pre>
+<pre class="r"><code># show the 7th-9th members of example_vector
+example_vector[7:9] </code></pre>
 <pre><code>## [1] 2 3 4</code></pre>
 <p><br> or (using more vector notation) to find a few specific values:</p>
-<pre class="r"><code>example_vector[c(5, 7, 9)] # shows the 5th, 7th, and 9th members of example_vector</code></pre>
+<pre class="r"><code># shows the 5th, 7th, and 9th members of example_vector
+example_vector[c(5, 7, 9)] </code></pre>
 <pre><code>## [1] 5 2 4</code></pre>
 <p><br> Each of these outputs is itself a vector, and you can save it as such:</p>
-<pre class="r"><code>subset_vector &lt;- example_vector[c(5, 7, 9)] # saves the 5th, 7th, and 9th members of example_vector to a new vector</code></pre>
+<pre class="r"><code># saves the 5th, 7th, and 9th members of example_vector to a new vector
+subset_vector &lt;- example_vector[c(5, 7, 9)] </code></pre>
 </div>
 <div id="adding-to-subtracting-from-and-combining-vectors" class="section level3">
 <h3>Adding to, Subtracting from, and Combining Vectors</h3>
