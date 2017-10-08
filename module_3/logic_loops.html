@@ -126,82 +126,97 @@ $(document).ready(function () {
 <p>It turns out that boolean values become extremely important when you’re considering the <strong>logical flow</strong> of your script. It’s incredibly common to want to do different things depending on the data you’re working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called <code>if</code>, <code>else</code>, and <code>else if</code>.</p>
 <div id="if" class="section level3">
 <h3>If</h3>
-<p>Let’s say you have a variable named <code>example_variable</code>. You know that this variable will always have a numeric value. If <code>example_variable</code> equals 8, you want to print a response to the screen, otherwise you want to do nothing. You would write the following:</p>
-<pre class="r"><code>if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
+<p>Let’s come back to our “making brownies” example from last page. Remember from that lecture that we ultimately created two variables and multiplied them together to get our updated recipe amounts:</p>
+<pre class="r"><code>recipe_amount &lt;- 2
+recipe_multiplier &lt;- 2.5
+updated_amount &lt;- recipe_amount * recipe_multiplier</code></pre>
+<p>In that example, we said that sometimes we set <code>recipe_multiplier</code> to <code>2/3</code> and sometimes we set it to <code>2.5</code>, but theoretically you could make it any number. Let’s say you want to write a little message to your future self the next time you make a big batch of brownies (that is, any batch where <code>recipe_multiplier</code> is greater than 1). You could generate a logical statement like this:</p>
+<pre class="r"><code>if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
 }</code></pre>
-<p><br> Let’s see what happens when <code>example_variable</code> does and doesn’t equal 8:</p>
-<pre class="r"><code>example_variable &lt;- 8
-if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
+<p><br> Here’s what happens when <code>recipe_multiplier</code> is greater than 1:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2.5
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
 }</code></pre>
-<pre><code>## [1] &quot;example_variable is equal to 8!&quot;</code></pre>
-<pre class="r"><code>example_variable &lt;- 80
-if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
-}</code></pre>
-<p><br> Let’s break down what just happened there. We invoked our special word, <code>if</code>, and put a <strong>logical statement</strong> in parentheses <code>()</code> right after it. After the logical statement, we have a set of curly brackets <code>{}</code> with some lines of code inside of them. Here’s how the computer interprets this when we ran the code with <code>example_variable</code> equal to 8:</p>
+<pre><code>## [1] &quot;Wow, that's a big batch of brownies! Delicious!&quot;</code></pre>
+<p>Let’s break down what just happened there. We invoked our special word, <code>if</code>, and put a <strong>logical statement</strong> in parentheses <code>()</code> right after it. After the logical statement, we have a set of curly brackets <code>{}</code> with some lines of code inside of them. Here’s how the computer interprets this when we ran the code with <code>recipe_multiplier</code> equal to 2.5:</p>
 <ol style="list-style-type: decimal">
 <li>Aha! an <code>if</code>! There should be a logical statement coming up for me to evaluate!<br />
 </li>
-<li>The locical statement evaluates to <code>TRUE</code>! I should <strong>run</strong> all the code inside those curly brackets!</li>
+<li>The logical statement evaluates to <code>TRUE</code>! I should <strong>run</strong> all the code inside those curly brackets!</li>
 </ol>
-<p>And how the computer interprets it when we ran the code with <code>example_variable</code> not equal to 8:</p>
+<p>Now let’s see what happens when <code>recipe_multiplier</code> is not greater than 1:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2/3
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
+}</code></pre>
+<p><br></p>
+<p>Here’s the logical flow:</p>
 <ol style="list-style-type: decimal">
 <li>Aha! an <code>if</code>! There should be a logical statement coming up for me to evaluate!<br />
 </li>
 <li>The logical statement evaluates to <code>FALSE</code>! I should <strong>ignore</strong> all the code inside those curly brackets and move on with the script!</li>
 </ol>
+<p>Hence, we don’t see any printed output in the second example.</p>
 </div>
 <div id="else" class="section level3">
 <h3>Else</h3>
-<p>We’re in the exact same situation as we were before, but we have an additional demand: If <code>example_variable</code> is NOT equal to 8, we want to know what value <code>example_variable</code> is. This is where an <code>else</code> statement comes in. You can never have an <code>else</code> without an <code>if</code> before it.</p>
-<pre class="r"><code>if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
+<p>Now we’ve written ourselves a nice message when we’re making a big batch of brownies, but what if we want to write a <em>different</em> message when we’re making a smaller batch? This is where an <code>else</code> statement comes in. First we’ll run <code>if</code> just like before, and if the logical statement evaluates to <code>FALSE</code>, we’ll move on to evaluate a <em>different</em> logical statement. You can never have an <code>else</code> without an <code>if</code> before it.</p>
+<pre class="r"><code>if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
 }else{
-  print(paste(&quot;example_variable is not equal to 8! It's equal to&quot;, example_variable)) # &quot;paste&quot; is a new function for us! Do you understand what it does?
+  print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
 }</code></pre>
-<p><br> Ok, our <code>if</code> statement has not changed at all. All we’ve done is added an <code>else</code> after the <code>if</code> statement, with its own set of code-containing curly brackets. Heres’ how the computer interprets this:</p>
-<p><em>If <code>example_variable</code> is equal to 8</em>:</p>
+<p><br> Here, our <code>if</code> statement has not changed at all. All we’ve done is added an <code>else</code> after the <code>if</code> statement, with its own set of code-containing curly brackets. So, when <code>recipe_multipler</code> is greater than 1:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2.5
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
+}else{
+  print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;Wow, that's a big batch of brownies! Delicious!&quot;</code></pre>
+<p>Our logical flow is:</p>
 <ol style="list-style-type: decimal">
 <li>Aha! an <code>if</code>! There should be a logical statement coming up for me to evaluate!<br />
 </li>
 <li>The logical statement evaluates to <code>TRUE</code>! I should run all the code inside the <code>if</code> statement’s curly brackets and ignore the <code>else</code> code completely!</li>
 </ol>
-<p><em>If <code>example_variable</code> is not equal to 8</em>:</p>
+<p>And if <code>recipe_multiplier</code> is not greater than 1:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2/3
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
+}else{
+  print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;Oh nice, a small brownie batch today. Enjoy them!&quot;</code></pre>
+<p>Our logical flow is:</p>
 <ol style="list-style-type: decimal">
 <li>Aha! an <code>if</code>! There should be a logical statement coming up for me to evaluate!<br />
 </li>
 <li>The logical statement evaluates to <code>FALSE</code>! I should ignore all the code inside the <code>if</code> statement’s curly brackets and run all the code inside the <code>else</code> statement’s curly brackets!</li>
 </ol>
-<p>Let’s see if it works:</p>
-<pre class="r"><code>example_variable &lt;- 8
-if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
-}else{
-  print(paste(&quot;example_variable is not equal to 8! It's equal to&quot;, example_variable)) 
-}</code></pre>
-<pre><code>## [1] &quot;example_variable is equal to 8!&quot;</code></pre>
-<pre class="r"><code>example_variable &lt;- 80
-if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
-}else{
-  print(paste(&quot;example_variable is not equal to 8! It's equal to&quot;, example_variable)) 
-}</code></pre>
-<pre><code>## [1] &quot;example_variable is not equal to 8! It's equal to 80&quot;</code></pre>
 </div>
 <div id="else-if" class="section level3">
 <h3>Else if</h3>
 <p><code>else if</code> is less common than <code>else</code> and <code>if</code>, but it’s still useful. You use it when there are multiple <code>if</code> statements you want to evaluate before you move to your default option, <code>else</code>.</p>
-<p>So let’s say you want to print a special message not only if <code>example_variable</code> equals 8, but also if it equals 20. Here’s your code:</p>
-<pre class="r"><code>if (example_variable==8){
-  print(&quot;example_variable is equal to 8!&quot;)
-}else if (example_variable==20){
-  print(&quot;Why would you choose to write a special message for the number 20?&quot;)
+<p>For example, the if-else code we wrote before currently doesn’t make sense for a very particular value of <code>recipe_multiplier</code>: <code>1</code>. Let me show you what I mean:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 1
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
 }else{
-  print(paste(&quot;example_variable is not equal to 8! It's equal to&quot;, example_variable)) 
+  print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
 }</code></pre>
-<p>Test this code out yourself! See if it works as expected for different values of <code>example_variable</code>.</p>
+<pre><code>## [1] &quot;Oh nice, a small brownie batch today. Enjoy them!&quot;</code></pre>
+<p>We get a “small batch” message even though we’re not making a small or a large batch when <code>recipe_multiplier</code> equals 1– we’re making exactly the suggested recipe size. We could use an <code>else if</code> statement to send an accurate message no matter what value of <code>recipe_multiplier</code> we use:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 1
+if (recipe_multiplier&gt;1){
+  print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
+}else if(recipe_multiplier==1){
+  print(&quot;You're making the suggested brownie batch size! Don't use this calculator, just look at the recipe in the book!&quot;)
+}else{
+  print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
+}</code></pre>
 </div>
 <div id="and-and-or-in-logical-statements" class="section level3">
 <h3>And and Or in Logical Statements</h3>
@@ -218,25 +233,25 @@ if (example_variable==8){
 </div>
 <div id="loops" class="section level2">
 <h2>Loops</h2>
-<p>Often times, in coding, we’ll want to perform a similar action over and over again, just changing a few input values each time. This is the express purpose of a <strong>loop</strong>.</p>
+<p>Often times, in coding, we’ll want to perform a similar action over and over again, just changing a few input values each time. For example, last page I mentioned that it would be useful to loop through all the different ingredient values in our brownie recipe instead of typing them in one by one. This is the express purpose of a <strong>loop</strong>.</p>
 <p>A loop of code allows you to <strong>iterate over</strong> the elements of a vector, and perform an operation on each of those elements in isolation. There are two main types of loop: <code>for</code> and <code>while</code>.</p>
 <div id="for" class="section level3">
 <h3>For</h3>
 <p><code>for</code> loops are by far the most common variety. They iterate over the entirety of a vector of specified length. Let’s look at a simple example:</p>
 <pre class="r"><code>iterating_vector &lt;- 1:10
 for (this_variable in iterating_vector){
-  print(paste(&quot;this variable is &quot;, this_variable))
+  print(this_variable)
 }</code></pre>
-<pre><code>## [1] &quot;this variable is  1&quot;
-## [1] &quot;this variable is  2&quot;
-## [1] &quot;this variable is  3&quot;
-## [1] &quot;this variable is  4&quot;
-## [1] &quot;this variable is  5&quot;
-## [1] &quot;this variable is  6&quot;
-## [1] &quot;this variable is  7&quot;
-## [1] &quot;this variable is  8&quot;
-## [1] &quot;this variable is  9&quot;
-## [1] &quot;this variable is  10&quot;</code></pre>
+<pre><code>## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10</code></pre>
 <p><br> Notice that the structure of this looks kind of like an <code>if</code> statement: there’s a special word (here it’s <code>for</code> instead of <code>if</code>), followed by a statement in parentheses <code>()</code>, followed by some code in curly brackets <code>{}</code>. The flow of code is fairly similar too– instead of the statement in parentheses determining <em>whether or not</em> the code in curly brackets gets run, it determines <em>how many times</em> and <em>with what values</em> that code gets run. The computer interpreting the code goes something like:</p>
 <ol style="list-style-type: decimal">
 <li>Aha! A <code>for</code>! There’s a loop coming up.</li>
@@ -249,24 +264,67 @@ for (this_variable in iterating_vector){
 <ol start="11" style="list-style-type: decimal">
 <li>I should save the <em>tenth</em> element of <code>iterating_vector</code> as a variable named <code>this_variable</code> and run the code in curly brackets.</li>
 </ol>
+<div id="brownie-example" class="section level4">
+<h4>Brownie example</h4>
+<p>There are five brownie ingredients I want to multiply by my <code>recipe_multiplier</code>: Flour (2 cups), sugar (1.5 cups), butter (8 tablespoons), eggs (2), and chocolate chips (1 cup, melted). Without a <code>for</code> loop, I’d have to do this to get all my converted values:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2.5
+
+original_amount &lt;- 2
+updated_amount &lt;- original_amount * recipe_multiplier
+print(updated_amount)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>original_amount &lt;- 1.5
+updated_amount &lt;- original_amount * recipe_multiplier
+print(updated_amount)</code></pre>
+<pre><code>## [1] 3.75</code></pre>
+<pre class="r"><code>original_amount &lt;- 8
+updated_amount &lt;- original_amount * recipe_multiplier
+print(updated_amount)</code></pre>
+<pre><code>## [1] 20</code></pre>
+<pre class="r"><code>original_amount &lt;- 2
+updated_amount &lt;- original_amount * recipe_multiplier
+print(updated_amount)</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>original_amount &lt;- 1
+updated_amount &lt;- original_amount * recipe_multiplier
+print(updated_amount)</code></pre>
+<pre><code>## [1] 2.5</code></pre>
+<p>With a <code>for</code> loop, I could put all my initial values into a vector, then just <em>loop over</em> the vector:</p>
+<pre class="r"><code>recipe_multiplier &lt;- 2.5
+
+original_ingredient_amounts &lt;- c(2, 1.5, 8, 2, 1)
+
+for (original_amount in original_ingredient_amounts){
+  updated_amount &lt;- original_amount * recipe_multiplier
+  print(updated_amount)
+}</code></pre>
+<pre><code>## [1] 5
+## [1] 3.75
+## [1] 20
+## [1] 5
+## [1] 2.5</code></pre>
+<p>The key thing to understand here is that <code>original_amount</code> is an <em>actual variable</em> generated by the <code>for</code> loop, whose values gets updated at every iteration of the loop. When the loop is over, you’ll still have a value called <code>original_amount</code> in your <code>Environment</code>, set equal to the last value in the vector over which you’re looping.</p>
 <p>Note that loops work just fine on non-numeric vectors, too:</p>
 <pre class="r"><code>iterating_vector &lt;- c(&quot;dog&quot;, &quot;cat&quot;, &quot;giraffe&quot;, &quot;parrot&quot;, &quot;penguin&quot;)
 for (this_variable in iterating_vector){
-  print(paste(&quot;this variable is &quot;, this_variable))
+  print(this_variable)
 }</code></pre>
-<pre><code>## [1] &quot;this variable is  dog&quot;
-## [1] &quot;this variable is  cat&quot;
-## [1] &quot;this variable is  giraffe&quot;
-## [1] &quot;this variable is  parrot&quot;
-## [1] &quot;this variable is  penguin&quot;</code></pre>
+<pre><code>## [1] &quot;dog&quot;
+## [1] &quot;cat&quot;
+## [1] &quot;giraffe&quot;
+## [1] &quot;parrot&quot;
+## [1] &quot;penguin&quot;</code></pre>
+</div>
 </div>
 <div id="while" class="section level3">
 <h3>While</h3>
-<p><code>while</code> loops are less common, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here’s an example:</p>
-<pre class="r"><code>this_variable &lt;- 1 # Initialize your looping variable
+<p><code>while</code> loops are less common, and are used when you want to iterate over something an unspecified number of times, until a particular condition is achieved. Here’s an example:</p>
+<pre class="r"><code># Initialize your looping variable
+this_variable &lt;- 1 
 while (this_variable&lt;20){
   print(paste(this_variable, &quot;is less than 20&quot;))
-  this_variable &lt;- this_variable+1 # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
+  # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
+  this_variable &lt;- this_variable+1 
 }</code></pre>
 <pre><code>## [1] &quot;1 is less than 20&quot;
 ## [1] &quot;2 is less than 20&quot;
@@ -296,14 +354,23 @@ while (this_variable&lt;20){
 </div>
 <div id="combining-loops-and-logic" class="section level2">
 <h2>Combining Loops and Logic</h2>
-<p>What does this code do?</p>
-<pre class="r"><code>for (this_variable in 1:10){
-  if(this_variable%%2==0){ # the '%%' operator shows the remainder of a division. 10%%3 would be 1, since 10/3 leaves a remainder of 1
-    print(paste(this_variable, &quot;is even!&quot;))
+<p>Here’s code that loops over three different numbers for <code>recipe_multiplier</code>, and prints the appropriate message:</p>
+<pre class="r"><code>for (recipe_multiplier in c(0.5, 1, 2.5)){
+  
+  # decide what message to print
+  if (recipe_multiplier&gt;1){
+    print(&quot;Wow, that's a big batch of brownies! Delicious!&quot;)
+  }else if(recipe_multiplier==1){
+    print(&quot;You're making the suggested brownie batch size! Don't use this calculator, just look at the recipe in the book!&quot;)
   }else{
-    print(paste(this_variable, &quot;is odd!&quot;))
+    print(&quot;Oh nice, a small brownie batch today. Enjoy them!&quot;)
   }
+
 }</code></pre>
+<pre><code>## [1] &quot;Oh nice, a small brownie batch today. Enjoy them!&quot;
+## [1] &quot;You're making the suggested brownie batch size! Don't use this calculator, just look at the recipe in the book!&quot;
+## [1] &quot;Wow, that's a big batch of brownies! Delicious!&quot;</code></pre>
+<p>If you want to really challenge yourself: nest the <code>for</code> loop we made over the brownie ingredients inside this loop we just made over the recipe multipliers, so you actually multiply your ingredients by 2.5, 1, and 2/3.</p>
 </div>
 
 

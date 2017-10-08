@@ -14,93 +14,119 @@ In the last page, one of our three main data types probably stuck out to you as 
 It turns out that boolean values become extremely important when you're considering the **logical flow** of your script. It's incredibly common to want to do different things depending on the data you're working with, and logical flow allows you to quickly and easily accomplish that goal. Our magical phrases for logic are special terms called `if`, `else`, and `else if`.
 
 ### If
-Let's say you have a variable named `example_variable`. You know that this variable will always have a numeric value. If `example_variable` equals 8, you want to print a response to the screen, otherwise you want to do nothing. You would write the following:
-```{r, echo=F}
-example_variable<-8
+
+Let's come back to our "making brownies" example from last page. Remember from that lecture that we ultimately created two variables and multiplied them together to get our updated recipe amounts:
+
+```{r}
+recipe_amount <- 2
+recipe_multiplier <- 2.5
+updated_amount <- recipe_amount * recipe_multiplier
 ```
 
+In that example, we said that sometimes we set `recipe_multiplier` to `2/3` and sometimes we set it to `2.5`, but theoretically you could make it any number. Let's say you want to write a little message to your future self the next time you make a big batch of brownies (that is, any batch where `recipe_multiplier` is greater than 1). You could generate a logical statement like this:
+
 ```{r, results='hide'}
-if (example_variable==8){
-  print("example_variable is equal to 8!")
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
 }
 ```
 <br>
-Let's see what happens when `example_variable` does and doesn't equal 8:
+Here's what happens when `recipe_multiplier` is greater than 1:
 ```{r}
-example_variable <- 8
-if (example_variable==8){
-  print("example_variable is equal to 8!")
+recipe_multiplier <- 2.5
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
 }
+```
+Let's break down what just happened there. We invoked our special word, `if`, and put a **logical statement** in parentheses `()` right after it. After the logical statement, we have a set of curly brackets `{}` with some lines of code inside of them. Here's how the computer interprets this when we ran the code with `recipe_multiplier` equal to 2.5: 
 
-example_variable <- 80
-if (example_variable==8){
-  print("example_variable is equal to 8!")
+1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
+2. The logical statement evaluates to `TRUE`! I should **run** all the code inside those curly brackets!
+
+Now let's see what happens when `recipe_multiplier` is not greater than 1:
+```{r}
+recipe_multiplier <- 2/3
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
 }
 ```
 <br> 
-Let's break down what just happened there. We invoked our special word, `if`, and put a **logical statement** in parentheses `()` right after it. After the logical statement, we have a set of curly brackets `{}` with some lines of code inside of them. Here's how the computer interprets this when we ran the code with `example_variable` equal to 8: 
 
-1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
-2. The locical statement evaluates to `TRUE`! I should **run** all the code inside those curly brackets!
-
-And how the computer interprets it when we ran the code with `example_variable` not equal to 8:
+Here's the logical flow:
 
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `FALSE`! I should **ignore** all the code inside those curly brackets and move on with the script!
 
+Hence, we don't see any printed output in the second example. 
+
 ### Else
-We're in the exact same situation as we were before, but we have an additional demand: If `example_variable` is NOT equal to 8, we want to know what value `example_variable` is. This is where an `else` statement comes in. You can never have an `else` without an `if` before it.
+Now we've written ourselves a nice message when we're making a big batch of brownies, but what if we want to write a *different* message when we're making a smaller batch? This is where an `else` statement comes in. First we'll run `if` just like before, and if the logical statement evaluates to `FALSE`, we'll move on to evaluate a *different* logical statement. You can never have an `else` without an `if` before it.
 ```{r, results='hide'}
-if (example_variable==8){
-  print("example_variable is equal to 8!")
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
 }else{
-  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) # "paste" is a new function for us! Do you understand what it does?
+  print("Oh nice, a small brownie batch today. Enjoy them!")
 }
 ```
 <br> 
-Ok, our `if` statement has not changed at all. All we've done is added an `else` after the `if` statement, with its own set of code-containing curly brackets. Heres' how the computer interprets this:
+Here, our `if` statement has not changed at all. All we've done is added an `else` after the `if` statement, with its own set of code-containing curly brackets. So, when `recipe_multipler` is greater than 1:
 
-*If `example_variable` is equal to 8*:
+```{r}
+recipe_multiplier <- 2.5
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
+}else{
+  print("Oh nice, a small brownie batch today. Enjoy them!")
+}
+```
+
+Our logical flow is:
 
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `TRUE`! I should run all the code inside the `if` statement's curly brackets and ignore the `else` code completely!
 
-*If `example_variable` is not equal to 8*:
+And if `recipe_multiplier` is not greater than 1:
+
+```{r}
+recipe_multiplier <- 2/3
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
+}else{
+  print("Oh nice, a small brownie batch today. Enjoy them!")
+}
+```
+
+Our logical flow is:
 
 1. Aha! an `if`! There should be a logical statement coming up for me to evaluate!   
 2. The logical statement evaluates to `FALSE`! I should ignore all the code inside the `if` statement's curly brackets and run all the code inside the `else` statement's curly brackets!
 
-Let's see if it works:
-```{r}
-example_variable <- 8
-if (example_variable==8){
-  print("example_variable is equal to 8!")
-}else{
-  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
-}
-
-example_variable <- 80
-if (example_variable==8){
-  print("example_variable is equal to 8!")
-}else{
-  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
-}
-```
-
 ### Else if 
 `else if` is less common than `else` and `if`, but it's still useful. You use it when there are multiple `if` statements you want to evaluate before you move to your default option, `else`. 
 
-So let's say you want to print a special message not only if `example_variable` equals 8, but also if it equals 20. Here's your code:
-```{r, results='hide'}
-if (example_variable==8){
-  print("example_variable is equal to 8!")
-}else if (example_variable==20){
-  print("Why would you choose to write a special message for the number 20?")
+For example, the if-else code we wrote before currently doesn't make sense for a very particular value of `recipe_multiplier`: `1`. Let me show you what I mean: 
+
+```{r}
+recipe_multiplier <- 1
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
 }else{
-  print(paste("example_variable is not equal to 8! It's equal to", example_variable)) 
+  print("Oh nice, a small brownie batch today. Enjoy them!")
 }
 ```
-Test this code out yourself! See if it works as expected for different values of `example_variable`. 
+
+We get a "small batch" message even though we're not making a small or a large batch when `recipe_multiplier` equals 1-- we're making exactly the suggested recipe size. We could use an `else if` statement to send an accurate message no matter what value of `recipe_multiplier` we use: 
+
+```{r, results='hide'}
+recipe_multiplier <- 1
+if (recipe_multiplier>1){
+  print("Wow, that's a big batch of brownies! Delicious!")
+}else if(recipe_multiplier==1){
+  print("You're making the suggested brownie batch size! Don't use this calculator, just look at the recipe in the book!")
+}else{
+  print("Oh nice, a small brownie batch today. Enjoy them!")
+}
+```
 
 ###  And and Or in Logical Statements
 So far, we've used very simple logical statements: `example_variable==8`, `4>3`, `"cat"!="dog"`. But there are often circumstances when we want to run certain code only if *two* things are true, or if one of two things is true, or if one thing is true and one isn't. For that, we use the `and` symbol `&` and the `or` symbol `|`. Below are some examples. Guess whether each statement will evaluate to `TRUE` or `FALSE`, then copy-paste it into your own console to check. Notice that in R, `or` is *inclusive*: it evaluates to `TRUE` if just one of its two inputs are true, *and* if they're both true.
@@ -117,7 +143,7 @@ So far, we've used very simple logical statements: `example_variable==8`, `4>3`,
 
 ## Loops
 
-Often times, in coding, we'll want to perform a similar action over and over again, just changing a few input values each time. This is the express purpose of a **loop**. 
+Often times, in coding, we'll want to perform a similar action over and over again, just changing a few input values each time. For example, last page I mentioned that it would be useful to loop through all the different ingredient values in our brownie recipe instead of typing them in one by one. This is the express purpose of a **loop**. 
 
 A loop of code allows you to **iterate over** the elements of a vector, and perform an operation on each of those elements in isolation. There are two main types of loop: `for` and `while`.
 
@@ -126,7 +152,7 @@ A loop of code allows you to **iterate over** the elements of a vector, and perf
 ```{r}
 iterating_vector <- 1:10
 for (this_variable in iterating_vector){
-  print(paste("this variable is ", this_variable))
+  print(this_variable)
 }
 ```
 <br> 
@@ -142,21 +168,67 @@ Notice that the structure of this looks kind of like an `if` statement: there's 
 
 11. I should save the *tenth* element of `iterating_vector` as a variable named `this_variable` and run the code in curly brackets.
 
+
+#### Brownie example
+There are five brownie ingredients I want to multiply by my `recipe_multiplier`: Flour (2 cups), sugar (1.5 cups), butter (8 tablespoons), eggs (2), and chocolate chips (1 cup, melted). Without a `for` loop, I'd have to do this to get all my converted values:
+
+```{r}
+recipe_multiplier <- 2.5
+
+original_amount <- 2
+updated_amount <- original_amount * recipe_multiplier
+print(updated_amount)
+
+original_amount <- 1.5
+updated_amount <- original_amount * recipe_multiplier
+print(updated_amount)
+
+original_amount <- 8
+updated_amount <- original_amount * recipe_multiplier
+print(updated_amount)
+
+original_amount <- 2
+updated_amount <- original_amount * recipe_multiplier
+print(updated_amount)
+
+original_amount <- 1
+updated_amount <- original_amount * recipe_multiplier
+print(updated_amount)
+```
+
+With a `for` loop, I could put all my initial values into a vector, then just *loop over* the vector:
+
+```{r}
+recipe_multiplier <- 2.5
+
+original_ingredient_amounts <- c(2, 1.5, 8, 2, 1)
+
+for (original_amount in original_ingredient_amounts){
+  updated_amount <- original_amount * recipe_multiplier
+  print(updated_amount)
+}
+
+```
+
+The key thing to understand here is that `original_amount` is an *actual variable* generated by the `for` loop, whose values gets updated at every iteration of the loop. When the loop is over, you'll still have a value called `original_amount` in your `Environment`, set equal to the last value in the vector over which you're looping.
+
 Note that loops work just fine on non-numeric vectors, too:
 ```{r}
 iterating_vector <- c("dog", "cat", "giraffe", "parrot", "penguin")
 for (this_variable in iterating_vector){
-  print(paste("this variable is ", this_variable))
+  print(this_variable)
 }
 ```
 
 ### While
-`while` loops are less common, and are used when you want to iterate over something an unspecified number of times, until a specific condition is achieved. Here's an example:
+`while` loops are less common, and are used when you want to iterate over something an unspecified number of times, until a particular condition is achieved. Here's an example:
 ```{r}
-this_variable <- 1 # Initialize your looping variable
+# Initialize your looping variable
+this_variable <- 1 
 while (this_variable<20){
   print(paste(this_variable, "is less than 20"))
-  this_variable <- this_variable+1 # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
+  # DON'T FORGET TO UPDATE YOUR VARIABLE, or you'll get stuck in an endless loop!
+  this_variable <- this_variable+1 
 }
 ```
 <br>
@@ -167,14 +239,27 @@ It's a silly example, but bear with me. There are a couple of things to notice a
 
 ## Combining Loops and Logic
 
-What does this code do?
-```{r, results='hide'}
-for (this_variable in 1:10){
-  if(this_variable%%2==0){ # the '%%' operator shows the remainder of a division. 10%%3 would be 1, since 10/3 leaves a remainder of 1
-    print(paste(this_variable, "is even!"))
+Here's code that loops over three different numbers for `recipe_multiplier`, and prints the appropriate message:
+```{r}
+for (recipe_multiplier in c(0.5, 1, 2.5)){
+  
+  # decide what message to print
+  if (recipe_multiplier>1){
+    print("Wow, that's a big batch of brownies! Delicious!")
+  }else if(recipe_multiplier==1){
+    print("You're making the suggested brownie batch size! Don't use this calculator, just look at the recipe in the book!")
   }else{
-    print(paste(this_variable, "is odd!"))
+    print("Oh nice, a small brownie batch today. Enjoy them!")
   }
+
 }
+
 ```
+
+If you want to really challenge yourself: nest the `for` loop we made over the brownie ingredients inside this loop we just made over the recipe multipliers, so you actually multiply your ingredients by 0.5, 1, and 2.5. 
+
+
+
+
+
 
