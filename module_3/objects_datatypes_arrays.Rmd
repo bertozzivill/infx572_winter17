@@ -70,7 +70,7 @@ Get to know these data types well-- programming is all about manipulating them i
 ## Objects and Variables
 So far, you're probably less-than-impressed that R knows how to add two numbers together. Fair. Programming languages like R really start to get powerful when you realize that you can **store** values in named objects called **variables**. 
 
-Let's say your at home, and you want to bake some brownies while you work on your Intro to Data Science homework, but your brownie pan is small so you want to make a batch 2/3 the size it says in the recipe. You could type in the amount of flour you'd need to measure:
+Let's say you're at home, and you want to bake some brownies while you work on your Intro to Data Science homework. Unfortunately, your brownie pan is small, so you want to make a batch 2/3 the size it says in the recipe. You could type in the amount of flour you'd need to measure:
 
 ```{r}
 # the recipe calls for 2 cups of flour, so the number of cups I need is:
@@ -89,34 +89,34 @@ And then the amount of sugar:
 1.5*(2/3)
 ```
 
-...but you see already how this is getting tedious. We want to do the same thing over and over (multiply a number by 2/3), we just want to change (or, some might say, *vary*) the value of the number we're multiplying. This is exactly what a **variable** is designed for. 
+...but you see already how this is getting tedious. We want to do the same thing over and over (multiply a number by 2/3), but changing (or, some might say, *varying*) the value of the number we're multiplying. This is exactly what a **variable** is designed for. 
 
-If you're following along with this code in RStudio, look at "Environment" section in the top right corner of the screen. At the moment it should say "Environment is empty"-- what that means is that we haven't *stored* anything as a variable yet. Now, run this:
+If you're following along with this code in RStudio, look at `Environment` section in the top right corner of the screen. At the moment it should say "Environment is empty"-- what that means is that we haven't *stored* anything as a variable yet. Now, run this:
 
 ```{r}
 recipe_amount <- 2
 ```
-You should notice two things about running this code. First, it didn't print any *output* to the console. Second, there should now be an entry in the "Environment" section, with the name "recipe_amount" and a value of 2:
+You should notice two things about running this code. First, it didn't print any *output* to the console. Second, there should now be an entry in the "Environment" section, with the name `recipe_amount` and a value of 2:
 
 [insert screenshot]
 
-So, what have we done? We haven't multiplied anything by anything, but we've created a **variable** named "recipe_amount", set its value equal to 2 (the number of cups of flour specified in the recipe), and *saved* it in the R environment. The `<-` symbol is what we use in R to **assign** a value to a variable name. 
+So, what have we done? We haven't multiplied anything by anything, but we've created a **variable** named `recipe_amount`, set its value equal to 2 (the number of cups of flour specified in the recipe), and *saved* it in the R environment. The `<-` operator is what we use in R to **assign** a value to a variable name. (In case it's unclear: that's not a single symbol, it's a left caret followed by the minus sign.)
 
 Now that we have this variable, we can do math (or anything else) to it just the same as we would to the initial number. Here, we want to multiply it by 2/3, so we can write:
 
 ```{r}
-recipe_amount * 2/3
+recipe_amount * (2/3)
 ```
 
-As you can see, this gives us the correct number of cups of flour to use: 1 & 1/3.
+As you can see, this gives us the correct number of cups of flour to use: 1 & 1/3 (aka 1.3333...).
 
-So at this point, we have a two-line script that looks like this:
+At this point, we have a two-line script that looks like this:
 ```{r, eval=F}
 recipe_amount <- 2
-recipe_amount * 2/3
+recipe_amount * (2/3)
 ```
 
-Now, if we want to figure out how many tablespoons of butter we need, all we have to do is change the 2 to an 8 and run those two lines of code again, and the computer will print out the correct number. 
+Now, if we want to figure out how many tablespoons of butter we need, all we have to do is change the 2 to an 8 and run those two lines of code again, and the computer will print out the correct number. Try it out!
 
 What if, in two weeks, you buy a much bigger baking pan, so now you instead want to multiply the original recipe by 2.5? You could change your two-line script to a three-line script that looks like this:
 
@@ -125,15 +125,14 @@ recipe_amount <- 2
 recipe_multiplier <- 2.5
 recipe_amount * recipe_multiplier
 ```
-Now you've expanded your script to *two* variables, two stored values, and you can change either of them as needed to get your ingredient quantities!
+Now you've expanded your script to *two* variables, and you can change either of them as needed to get your ingredient quantities!
 
 This may seem like a silly example--it would still be a bit tedious to change the value of the `recipe_amount` variable over and over again, and it would probably be easier just to use an actual calculator, but there are two things I want you to take away from this:
 
-1. It's possible to *store* values in memory as named variables;
+1. It's possible to *store* values in memory as named variables and manipulate them later;
 2. It would be super convenient if you could convert *all* the ingredient amounts in one go, like if you could sort of "loop" through the list of ingredients and multiply each one by your `recipe_multiplier` variable. Hmmm (*foreshadowing*)...
 
 
-```
 <br>
 Also note: You can use variables to create other variables. So, if I wanted to save the final amount of some ingredient, I could do:
 ```{r}
@@ -157,8 +156,8 @@ Notice that I can name variables whatever I want. I called our first variable `r
 ```{r}
 # generate a variable named "goldfish"
 goldfish <- 8 
-# check if that variable, multiplied by 4, equals 32
-goldfish*4
+# multiply that variable by 2/3
+goldfish*(2/3)
 ```
 <br>
 Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:
@@ -168,9 +167,25 @@ print(Goldfish)
 print(godlfish)
 ```
 <br>
-Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. See the coding best practices page for more details. 
+Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. If you name your objects well enough, it should really cut down on the number of comments you need to write. For example, in the section below on 1D arrays, you'll notice that instead of writing code like this:
+
+```{r, eval=F}
+# make a numeric vector
+c(1, 3, 8)
+```
+
+I create the numeric vector and save it as an object with a reasonable name:
+```{r, eval=F}
+numeric_vector <- c(1, 3, 8)
+```
+
+This conveys the same information more concisely and replicably. See the coding best practices page for more details. 
 
 I've thrown the word "object" around a few times without really describing what it is. An **object** is anything that you can manipulate in a programming language. They're usually named, and you can see them in your `Environment` panel. Variables are objects, but so are lots of other things (like arrays, which we'll learn about in the next section). 
+
+Take a break! 
+
+[insert gif]
 
 ## 1-Dimensional Arrays
 
@@ -179,10 +194,12 @@ So far we've just looked at objects that represent single things, like the numbe
 **"Array"** is a generic term for a group of things. Arrays can have many different formats, dimensions, and names. We're going to be focusing on a type of 1-dimensional array in R called a **vector**. (1-dimensional means that there's just one list of things-- a 2-dimensional array would be like a spreadsheet or a dataset, we'll get to those later.) 
 
 ### Making Vectors
+
+#### `c()`
 There are a few different ways to make vectors in R; the most manual way is using a fuction called `c()`. `c()` takes all the elements you give it (separated by commas) and *combines* elements into a vector (the `c` is for "combine"). Let's look at a few examples:
 
 ```{r}
-numeric_vector <- c(1, 2, 3)
+numeric_vector <- c(1, 3, 8)
 print(numeric_vector)
 
 string_vector <- c("cat", "dog", "horse")
@@ -193,7 +210,7 @@ print(boolean_vector)
 ```
 
 <br>
-Notice that all the *members* of each of these vectors is the same type. For vectors, each element has to be of the same type. If you try to make a vector with multiple types, it will coerce them to all be the same:
+Notice that all the *members* of each of these vectors is the same type. For vectors, all elements **must** be the same type. If you try to make a vector with multiple types, R will *coerce* them to all be the same:
 
 ```{r}
 # strings "beat" numerics
@@ -205,7 +222,8 @@ c("Hello", F, "World!", T, T)
 ```
 <br>
 
-There are a few other ways to make vectors that are useful to know. If you want a series of numbers, you can use the `:` operator and then you just have to specify the first and last number you want:
+#### Other Ways to Make Vectors
+There are a few other ways to make vectors that are useful to know. If you want a series of numbers in sequence, you can use the `:` operator and then you just have to specify the first and last number you want:
 ```{r}
 # vector of integers from 1 to 10
 1:10 
@@ -239,84 +257,208 @@ rep(c(F, F, T), 4)
 
 ### Subsetting Vectors
 <br> 
-Let's say you make a vector using one of the methods above:
+Let's say you make a vector:
 ```{r}
-example_vector <- rep(1:5, 2)
+example_vector <- c("Oxford", "London", "Cambridge", "Manchester", "Exeter", "Leeds")
+print(example_vector)
 ```
-And you want to know what the seventh element is. This is called an **indexing** operation. In our example, it's easy to count and discover that the seventh element is a 2:
-```{r, echo=F}
-rep(1:5, 2)
-```
-But you can do this much more quickly with code. R uses brackets `[]` for indexing operations. So, if you wanted to know the seventh element of `example_vector`, you would run:
+This vector is six elements long (which you can verify by running `length(example_vector)`). R records both the fact that `example_vector` contains these six values and *which position* each value is in. The position of a value in the vector is called its **index**. So "Oxford" would be in position #1 of the vector, "London" in position #2, and so on and so forth.  
+
+You can use these index vaues to *subset* your vector. R uses square brackets `[]` for indexing operations. If you wanted to know, say, what the 5th element of the vector was, you would type:
+
 ```{r}
-example_vector[7]
+example_vector[5]
 ```
-<br>
-you can use this same syntax to query a range of values:
+
+If you wanted to know what the 2nd *through* 5th elements were, you could use the range operator `:` that we learned earlier:
+
 ```{r}
-# show the 7th-9th members of example_vector
-example_vector[7:9] 
+example_vector[2:5]
 ```
-<br>
-or (using more vector notation) to find a few specific values:
+
+And similarly you can use vector notation if you want to know the 1st, 3rd, and 5th values:
+
 ```{r}
-# shows the 5th, 7th, and 9th members of example_vector
-example_vector[c(5, 7, 9)] 
+example_vector[c(1, 3, 5)]
 ```
-<br>
-Each of these outputs is itself a vector, and you can save it as such:
+
+
+What if you have the opposite question: you know that "Cambridge" is in your vector somewhere, and you want to know what position it's in? You would use the `which()` function, which takes as input a *logical statement* like the ones we've been learning. That code would look like this:
+
 ```{r}
-# saves the 5th, 7th, and 9th members of example_vector to a new vector
-subset_vector <- example_vector[c(5, 7, 9)] 
+which(example_vector=="Cambridge")
 ```
+
+**Exercises**: Think about the following vector:
+```{r}
+exercise_vector <- c("Cambridge", "Oxford", "Leeds", "Cambridge")
+```
+
+* Use code to determine the index value for "Leeds".
+* What would happen if you tried to use `which` to determine the index value for "Cambridge"? Make a guess before you run the code. 
+
+
+#### Note on Indexing and Numeric Vectors
+Think about the numeric vector we made at the beginning of this lesson:
+```{r}
+print(numeric_vector)
+```
+
+Here, the elements of the vector are numbers, not strings, but the way *indexing* works is exactly the same. So the first element of the vector is the number 1, the second element is the number 3, and the third element is the number 8. This can be hard to keep track of at times because both the elements of the vector and the indices of the vector are numbers (and those numbers are not the same). Guess what the output will be when you run the following lines of code, then check to see if you're right:
+
+```{r, eval=F}
+numeric_vector[1]
+which(numeric_vector==1)
+
+numeric_vector[2]
+which(numeric_vector==2)
+
+numeric_vector[3]
+which(numeric_vector==3)
+
+numeric_vector[8]
+which(numeric_vector==8)
+
+```
+
+
 
 ### Lengthening, Shortening, and Combining Vectors
 
-Shoot! What if you wanted `example_vector` to have one last "1" at the end? You can **append** more elements to vectors using the same function we used to create them: `c()`! 
+#### Lengthening Vectors
+Remember what our `example_vector` looks like:
 
-```{r}
-example_vector <- c(example_vector, 1)
-print(example_vector)
-```
-<br>
-**IMPORTANT: Notice that I assigned our new vector the name `example_vector` in order to *update* it. If I had just done this:**
-```{r, echo=F, results='hide'}
-example_vector <- rep(1:5, 2)
-```
-```{r}
-c(example_vector, 1)
-```
-**it would have printed the result to the screen, but would *not* have updated the values in `example_vector`**:
-```{r}
-print(example_vector)
-```
-**BE VIGILANT!**
-<br>
-<br>
-Ok, now you have your new `example_vector` with the 1 at the end:
 ```{r, echo=F}
-example_vector <- c(example_vector, 1)
 print(example_vector)
 ```
 
-Shoot! You just realized you don't want that last 5 in there. You can get rid of it using `[]`, the same as an indexing operation, but putting a `-` sign before the index value:
+Shoot, I forgot a city! I also wanted to include "Birmingham" in this list. I could re-create my entire vector with the additional element:
+
 ```{r}
-example_vector <- example_vector[-10]
+c("Oxford", "London", "Cambridge", "Manchester", "Exeter", "Leeds", "Birmingham")
+```
+
+
+...but that's quite time-consuming and annoying. It would be better if there were a way for me to easily just tack another element on to the end of the list. It turns out, that's easy to do-- and in fact, it uses the same function we used to create the vector in the first place-- the "combining" function, `c()`! 
+
+To **append** the element "Birmingham" to our `example_vector`, we would do: 
+
+```{r}
+c(example_vector, "Birmingham")
+```
+<br>
+
+#### Important Note: Execution vs Assignment 
+
+What is the difference between these two lines of code?
+
+```{r, eval=F}
+## Example Line 1
+c("cheese", "chips", "popcorn")
+
+## Example Line 2
+snack_vector <- c("cheese", "chips", "popcorn")
+```
+
+As you hopefully remember from the section above about creating variables, the key difference here is one of **assignment**-- that is, of saving values to memory. The first line tells R to create a vector, print it in the console screen, and then 'forget' about it immediately. The second line tells R to create a vector, *not* print it to the console, and save it in memory as an object named `snack_vector`. The first line is just **executing** the "create a vector" function, the second one is both executing that function and *assigning the output* to an object name. 
+
+This same logic applies to operations that *modify existing objects*-- if you don't run the special `<-` operator to *assign* the change to an object, the change won't get saved anywhere. Let's think of our example above, in which we want to append the element "Birmingham" to the vector `example_vector`. Consider these three commands:
+
+```{r}
+## Command 1: execute, but don't assign
+c(example_vector, "Birmingham")
 print(example_vector)
 ```
-<br>
-Notice that you remove values based on their *position* in the line, not based on their *value*. Doing `example_vector[-5]` would have removed the *first* `5` from the vector, because it's in the `fifth spot`. 
-<br>
-<br>
-What if you want to combine `example_vector` with some other vector? Our friend `c()` is here to help us again!
+
+Here, we've printed our new, expanded vector to the screen, but the *saved* `example_vector` is unchanged. 
+
 ```{r}
-other_vector <- c(50, 27, 84)
-new_vector <- c(example_vector, other_vector)
-print(new_vector)
+## Command 2: assign new vector to a new object name
+longer_example_vector <- c(example_vector, "Birmingham")
+print(example_vector)
+print(longer_example_vector)
+```
+
+Here, because we assigned the command to a *new* object name, `example_vector` remains unchanged and we have a new vector, `longer_example_vector`, that contains the expanded vector.
+
+```{r}
+## Command 3: *update* the existing vector
+example_vector <- c(example_vector, "Birmingham")
+print(example_vector)
+```
+
+Here, because we assigned the command to the *same* object name, we've *overwritten* our original value of `example_vector`, and `example_vector` itself is longer now. This type of operation, where we change the value of an existing object, is called **updating** the object.
+
+**Exercise: Now that we've updated `example_vector`, what will `example_vector` look like if we run this code?
+
+```{r, eval=F}
+c(example_vector, "Aberdeen")
+```
+
+What about this code?
+
+```{r, eval=F}
+new_vector <- c(example_vector, "Aberdeen")
+```
+
+And this code?
+```{r, eval=F}
+example_vector <- c(example_vector, "Aberdeen")
+```
+
+#### Shortening Vectors
+
+We've successfully updated our `example_vector` to include "Birmingham":
+```{r, echo=F}
+print(example_vector)
+```
+
+What if we now want to *remove* elements from this vector? We can do this by expanding on the indexing operations we learned earlier. Note that because we're working with the indexing operators `[]`, we'll be making references to the *indices* of vectors, not the values at those indices. For example, let's say we wanted to remove "Cambridge" from the vector. "Cambridge" is the third element, so you can run:
+```{r}
+example_vector[-3]
+```
+to remove that element.
+
+**Exercise**: Did the line of code above *update* `example_vector`? e.g., does the saved value of `example_vector` still contain "Cambridge" in the 3rd position? Why or why not?
+
+Here's an interesting question: what if you know that "Cambridge" is somewhere in the vector and you want to remove it, but you don't know where it is? You could solve this problem by running two commands: a `which` operation to find the index of "Cambridge", and a `[]` operation to remove that value:
+
+```{r}
+cambridge_index <- which(example_vector=="Cambridge") # note that I need to save this as a variable since I use it in the next line
+example_vector[-cambridge_index]
+```
+
+This works, but there's actually an even faster way to do it: nest the `which` function *inside* your `[]` operator:
+
+```{r}
+example_vector[-which(example_vector=="Cambridge")]
+```
+
+In the same way as you have an "order of operations" for multiplication, R will interpret these nested functions in sequence: first it will run the `which` operation, then take the output (here, the number 3) and run the indexing operation on that number. Nesting R commands within each other is a crucial part of progamming-- it cuts down on the length of scripts, increases clarity, and often (once you get the hang of it) makes commands more readable to others. 
+
+#### Combining vectors
+
+Once again, let's consider our `example_vector`:
+
+```{r, echo=F}
+print(example_vector)
+```
+
+Now, let's say we have another string vector `second_vector`:
+```{r}
+second_vector <- c("Barcelona", "Madrid", "Cadiz")
+print(second_vector)
+```
+
+How could we merge these two vectors into one? If you guessed that our combining function `c()` will be useful here, you were absolutly correct:
+
+```{r}
+merged_vector <- c(example_vector, second_vector)
+print(merged_vector)
 ```
 <br>
-Ok, now that we're armed with variables and arrays, we can get into the powerhouses of programming: logic and loops! 
 
+I know this is a lot of material to take in, but I assure you that with practice this will feel extremely natural. I'd recommend going through the first half of the problem set before continuing on to the "Logic and Loops" page.
 
 
 ## Side Note: Functions
@@ -328,15 +470,21 @@ Functions have **arguments**, which are the input variables, and they produce **
 seq(1, 10, 2)
 ```
 <br>
-Its *output* is a vector of values: the starting value, then the starting value plus the interval value, and so on until you hit the stopping value. But function outputs don't have to be vectors: they can be just about anything. The function `print()`, which we've seen several times before, doesn't strictly speaking "return" any output at all-- it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions! 
+The *output* of this function is a vector of values. But function outputs don't have to be vectors: they can be just about anything. The function `print()`, which we've seen several times before, doesn't strictly speaking "return" any output at all-- it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions! 
 
 Each argument in a function has a name, but you don't need to use them so long as you keep arguments in the same order that the function is expecting to see them. However, if you do choose to use argument names, you can list things in whatever order you like. These three lines of code are equivalent:
 ```{r}
 seq(1, 10, 2)
+#specify argument names, preserving original order
 seq(from=1, to=10, by=2)
+#specify argument names, scrambling order 
 seq(to=10, by=2, from=1)
 ```
 <br>
+Notice that we use `=` rather than `<-` when passing named arguments to functions.
+
+If you want to understand what a function does and what arguments it takes, type `?` followed by the function name into the console. This will bring the documentation for that function up in the `Help` window of RStudio. For instance, try typing `?seq` into the console and hitting enter. See what comes up? 
+
 We won't get too deep into the nitty gritty of functions in this course, but I want you to have some idea of what they are and when you're using them. 
 
 

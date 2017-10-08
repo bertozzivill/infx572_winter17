@@ -172,42 +172,46 @@ substr(&quot;Hello, World!&quot;, 3, 7) </code></pre>
 <div id="objects-and-variables" class="section level2">
 <h2>Objects and Variables</h2>
 <p>So far, you’re probably less-than-impressed that R knows how to add two numbers together. Fair. Programming languages like R really start to get powerful when you realize that you can <strong>store</strong> values in named objects called <strong>variables</strong>.</p>
-<p>For example, let’s say you want to multiply a number by 4, then check if that result is equal to 32. We can write code that looks like this:</p>
-<pre class="r"><code># generate a variable named my_variable
-my_variable &lt;- 8 
-
-# print the value of that variable to the console
-print(my_variable)</code></pre>
-<pre><code>## [1] 8</code></pre>
-<pre class="r"><code># check if that variable, multiplied by 4, equals 32 
-my_variable*4 == 32 </code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p>The <code>&lt;-</code> symbol is what we use in R to <strong>assign</strong> a number to a variable name.</p>
-<p><br> But wait! I hear you say. That code is actually <em>longer</em> than doing what we learned earlier:</p>
-<pre class="r"><code>8*4 == 32</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<p><br> That’s true, but the code with the variable has the benefit that, if we decide we’re not interested in 8 and actually want to test if 9*4 equals 32, all we have to do is change the value of the variable:</p>
-<pre class="r"><code># generate a variable named my_variable
-my_variable &lt;- 9 </code></pre>
-<p><br> And then we can run the <code>my_variable*4==32</code> code without having to change it at all. This becomes especially useful if you want to perform multiple tests on a certain number:</p>
-<pre class="r"><code>my_variable &lt;- 9 
-
-my_variable*4 ==32 
-my_variable/6 &gt; 2
-my_variable+17 &lt;27.4</code></pre>
-<p><br> With this code, if I suddenly decided I wanted to test the value 25 instead of 9, all I’d have to change is the top line. Whereas if I’d originally written this:</p>
-<pre class="r"><code>9*4 ==32 
-9/6 &gt; 2
-9+17 &lt;27.4</code></pre>
-<p>I’d have to painstakingly change everything to this:</p>
-<pre class="r"><code>25*4 ==32 
-25/6 &gt; 2
-25+17 &lt;27.4</code></pre>
-<p><br> And there’s more! You can use variables to create other variables:</p>
-<pre class="r"><code>new_variable &lt;- my_variable*4
-new_variable==32</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p><br> You can make string variables, or boolean variables:</p>
+<p>Let’s say you’re at home, and you want to bake some brownies while you work on your Intro to Data Science homework. Unfortunately, your brownie pan is small, so you want to make a batch 2/3 the size it says in the recipe. You could type in the amount of flour you’d need to measure:</p>
+<pre class="r"><code># the recipe calls for 2 cups of flour, so the number of cups I need is:
+2*(2/3)</code></pre>
+<pre><code>## [1] 1.333333</code></pre>
+<p>And then type in the amount of butter:</p>
+<pre class="r"><code># the recipe calls for 8 tablespoons of butter, so the number of tablespoons I need is:
+8*(2/3)</code></pre>
+<pre><code>## [1] 5.333333</code></pre>
+<p>And then the amount of sugar:</p>
+<pre class="r"><code># the recipe calls for 1.5 cups of sugar, so the number of cups I need is:
+1.5*(2/3)</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>…but you see already how this is getting tedious. We want to do the same thing over and over (multiply a number by 2/3), but changing (or, some might say, <em>varying</em>) the value of the number we’re multiplying. This is exactly what a <strong>variable</strong> is designed for.</p>
+<p>If you’re following along with this code in RStudio, look at <code>Environment</code> section in the top right corner of the screen. At the moment it should say “Environment is empty”– what that means is that we haven’t <em>stored</em> anything as a variable yet. Now, run this:</p>
+<pre class="r"><code>recipe_amount &lt;- 2</code></pre>
+<p>You should notice two things about running this code. First, it didn’t print any <em>output</em> to the console. Second, there should now be an entry in the “Environment” section, with the name <code>recipe_amount</code> and a value of 2:</p>
+<p>[insert screenshot]</p>
+<p>So, what have we done? We haven’t multiplied anything by anything, but we’ve created a <strong>variable</strong> named <code>recipe_amount</code>, set its value equal to 2 (the number of cups of flour specified in the recipe), and <em>saved</em> it in the R environment. The <code>&lt;-</code> operator is what we use in R to <strong>assign</strong> a value to a variable name. (In case it’s unclear: that’s not a single symbol, it’s a left caret followed by the minus sign.)</p>
+<p>Now that we have this variable, we can do math (or anything else) to it just the same as we would to the initial number. Here, we want to multiply it by 2/3, so we can write:</p>
+<pre class="r"><code>recipe_amount * (2/3)</code></pre>
+<pre><code>## [1] 1.333333</code></pre>
+<p>As you can see, this gives us the correct number of cups of flour to use: 1 &amp; 1/3 (aka 1.3333…).</p>
+<p>At this point, we have a two-line script that looks like this:</p>
+<pre class="r"><code>recipe_amount &lt;- 2
+recipe_amount * (2/3)</code></pre>
+<p>Now, if we want to figure out how many tablespoons of butter we need, all we have to do is change the 2 to an 8 and run those two lines of code again, and the computer will print out the correct number. Try it out!</p>
+<p>What if, in two weeks, you buy a much bigger baking pan, so now you instead want to multiply the original recipe by 2.5? You could change your two-line script to a three-line script that looks like this:</p>
+<pre class="r"><code>recipe_amount &lt;- 2
+recipe_multiplier &lt;- 2.5
+recipe_amount * recipe_multiplier</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>Now you’ve expanded your script to <em>two</em> variables, and you can change either of them as needed to get your ingredient quantities!</p>
+<p>This may seem like a silly example–it would still be a bit tedious to change the value of the <code>recipe_amount</code> variable over and over again, and it would probably be easier just to use an actual calculator, but there are two things I want you to take away from this:</p>
+<ol style="list-style-type: decimal">
+<li>It’s possible to <em>store</em> values in memory as named variables and manipulate them later;</li>
+<li>It would be super convenient if you could convert <em>all</em> the ingredient amounts in one go, like if you could sort of “loop” through the list of ingredients and multiply each one by your <code>recipe_multiplier</code> variable. Hmmm (<em>foreshadowing</em>)…</li>
+</ol>
+<p><br> Also note: You can use variables to create other variables. So, if I wanted to save the final amount of some ingredient, I could do:</p>
+<pre class="r"><code>final_quantity &lt;- recipe_amount * recipe_multiplier</code></pre>
+<p><br> You can make string variables or boolean variables as well as numeric variables:</p>
 <pre class="r"><code># String variables
 string_variable &lt;- &quot;Hello, World!&quot;
 print(string_variable)</code></pre>
@@ -218,13 +222,13 @@ print(string_variable)</code></pre>
 boolean_variable &lt;- 2==4
 boolean_variable</code></pre>
 <pre><code>## [1] FALSE</code></pre>
-<p><br> Variables have that name because, as we’ve seen, they’re very easy to change. We’ll learn how to systematically change the value of a variable in our section about <strong>loops</strong>.</p>
-<p>Notice that I can name variables whatever I want. I called our first variable <code>my_variable</code>, but I could have called it <code>goldfish</code> and the code would have understood it just fine:</p>
-<pre class="r"><code># generate a variable named goldfish
+<p><br></p>
+<p>Notice that I can name variables whatever I want. I called our first variable <code>recipe_amount</code>, but I could have called it <code>goldfish</code> and the code would have understood it just fine:</p>
+<pre class="r"><code># generate a variable named &quot;goldfish&quot;
 goldfish &lt;- 8 
-# check if that variable, multiplied by 4, equals 32
-goldfish*4 == 32 </code></pre>
-<pre><code>## [1] TRUE</code></pre>
+# multiply that variable by 2/3
+goldfish*(2/3)</code></pre>
+<pre><code>## [1] 5.333333</code></pre>
 <p><br> Also notice that R is extremely sensitive to small typos, like letter ordering or capitalization:</p>
 <pre class="r"><code>print(goldfish)</code></pre>
 <pre><code>## [1] 8</code></pre>
@@ -232,26 +236,35 @@ goldfish*4 == 32 </code></pre>
 <pre><code>## Error in print(Goldfish): object 'Goldfish' not found</code></pre>
 <pre class="r"><code>print(godlfish)</code></pre>
 <pre><code>## Error in print(godlfish): object 'godlfish' not found</code></pre>
-<p><br> Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. See the coding best practices page for more details.</p>
+<p><br> Naming things whatever we want is exciting, but we should use this power responsibly. Variable names (and object names more broadly), should be clear, concise, and descriptive of the thing they represent. If you name your objects well enough, it should really cut down on the number of comments you need to write. For example, in the section below on 1D arrays, you’ll notice that instead of writing code like this:</p>
+<pre class="r"><code># make a numeric vector
+c(1, 3, 8)</code></pre>
+<p>I create the numeric vector and save it as an object with a reasonable name:</p>
+<pre class="r"><code>numeric_vector &lt;- c(1, 3, 8)</code></pre>
+<p>This conveys the same information more concisely and replicably. See the coding best practices page for more details.</p>
 <p>I’ve thrown the word “object” around a few times without really describing what it is. An <strong>object</strong> is anything that you can manipulate in a programming language. They’re usually named, and you can see them in your <code>Environment</code> panel. Variables are objects, but so are lots of other things (like arrays, which we’ll learn about in the next section).</p>
+<p>Take a break!</p>
+<p>[insert gif]</p>
 </div>
 <div id="dimensional-arrays" class="section level2">
 <h2>1-Dimensional Arrays</h2>
-<p>So far we’ve just looked at objects that represent single things, like the number 8 or the word “cat” or the value “TRUE”. What if we instead want a <em>collection</em> of things, like a list of numbers or words or true/false values? Well, we’d use an array.</p>
+<p>So far we’ve just looked at objects that represent single things, like the number 8 or the word “cat” or the value “TRUE”. What if we instead want a <em>collection</em> of things, like a list of numbers or words or true/false values (such as, perhaps, a list of recipe quantities)? Well, we’d use an array.</p>
 <p><strong>“Array”</strong> is a generic term for a group of things. Arrays can have many different formats, dimensions, and names. We’re going to be focusing on a type of 1-dimensional array in R called a <strong>vector</strong>. (1-dimensional means that there’s just one list of things– a 2-dimensional array would be like a spreadsheet or a dataset, we’ll get to those later.)</p>
 <div id="making-vectors" class="section level3">
 <h3>Making Vectors</h3>
+<div id="c" class="section level4">
+<h4><code>c()</code></h4>
 <p>There are a few different ways to make vectors in R; the most manual way is using a fuction called <code>c()</code>. <code>c()</code> takes all the elements you give it (separated by commas) and <em>combines</em> elements into a vector (the <code>c</code> is for “combine”). Let’s look at a few examples:</p>
-<pre class="r"><code>numeric_vector &lt;- c(1, 2, 3)
+<pre class="r"><code>numeric_vector &lt;- c(1, 3, 8)
 print(numeric_vector)</code></pre>
-<pre><code>## [1] 1 2 3</code></pre>
+<pre><code>## [1] 1 3 8</code></pre>
 <pre class="r"><code>string_vector &lt;- c(&quot;cat&quot;, &quot;dog&quot;, &quot;horse&quot;)
 print(string_vector)</code></pre>
 <pre><code>## [1] &quot;cat&quot;   &quot;dog&quot;   &quot;horse&quot;</code></pre>
-<pre class="r"><code>boolean_vector &lt;- c(F, T, T, F)  # note: you can just write &quot;T&quot; or &quot;F&quot; instead of &quot;TRUE&quot; and &quot;FALSE&quot;; it acheives the same thing.
+<pre class="r"><code>boolean_vector &lt;- c(F, T, T, F)  # note: you can just write &quot;T&quot; or &quot;F&quot; instead of &quot;TRUE&quot; and &quot;FALSE&quot;; it achieves the same thing.
 print(boolean_vector)</code></pre>
 <pre><code>## [1] FALSE  TRUE  TRUE FALSE</code></pre>
-<p><br> Notice that all the <em>members</em> of each of these vectors is the same type. For vectors, each element has to be of the same type. If you try to make a vector with multiple types, it will coerce them to all be the same:</p>
+<p><br> Notice that all the <em>members</em> of each of these vectors is the same type. For vectors, all elements <strong>must</strong> be the same type. If you try to make a vector with multiple types, R will <em>coerce</em> them to all be the same:</p>
 <pre class="r"><code># strings &quot;beat&quot; numerics
 c(3, &quot;cat&quot;, 4, &quot;dog&quot;) </code></pre>
 <pre><code>## [1] &quot;3&quot;   &quot;cat&quot; &quot;4&quot;   &quot;dog&quot;</code></pre>
@@ -262,7 +275,10 @@ c(7, T, F, 2) </code></pre>
 c(&quot;Hello&quot;, F, &quot;World!&quot;, T, T) </code></pre>
 <pre><code>## [1] &quot;Hello&quot;  &quot;FALSE&quot;  &quot;World!&quot; &quot;TRUE&quot;   &quot;TRUE&quot;</code></pre>
 <p><br></p>
-<p>There are a few other ways to make vectors that are useful to know. If you want a series of numbers, you can use the <code>:</code> operator and then you just have to specify the first and last number you want:</p>
+</div>
+<div id="other-ways-to-make-vectors" class="section level4">
+<h4>Other Ways to Make Vectors</h4>
+<p>There are a few other ways to make vectors that are useful to know. If you want a series of numbers in sequence, you can use the <code>:</code> operator and then you just have to specify the first and last number you want:</p>
 <pre class="r"><code># vector of integers from 1 to 10
 1:10 </code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
@@ -297,51 +313,149 @@ rep(c(F, F, T), 4) </code></pre>
 <pre><code>##  [1] FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
 ## [12]  TRUE</code></pre>
 </div>
+</div>
 <div id="subsetting-vectors" class="section level3">
 <h3>Subsetting Vectors</h3>
-<p><br> Let’s say you make a vector using one of the methods above:</p>
-<pre class="r"><code>example_vector &lt;- rep(1:5, 2)</code></pre>
-<p>And you want to know what the seventh element is. This is called an <strong>indexing</strong> operation. In our example, it’s easy to count and discover that the seventh element is a 2:</p>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5</code></pre>
-<p>But you can do this much more quickly with code. R uses brackets <code>[]</code> for indexing operations. So, if you wanted to know the seventh element of <code>example_vector</code>, you would run:</p>
-<pre class="r"><code>example_vector[7]</code></pre>
-<pre><code>## [1] 2</code></pre>
-<p><br> you can use this same syntax to query a range of values:</p>
-<pre class="r"><code># show the 7th-9th members of example_vector
-example_vector[7:9] </code></pre>
-<pre><code>## [1] 2 3 4</code></pre>
-<p><br> or (using more vector notation) to find a few specific values:</p>
-<pre class="r"><code># shows the 5th, 7th, and 9th members of example_vector
-example_vector[c(5, 7, 9)] </code></pre>
-<pre><code>## [1] 5 2 4</code></pre>
-<p><br> Each of these outputs is itself a vector, and you can save it as such:</p>
-<pre class="r"><code># saves the 5th, 7th, and 9th members of example_vector to a new vector
-subset_vector &lt;- example_vector[c(5, 7, 9)] </code></pre>
+<p><br> Let’s say you make a vector:</p>
+<pre class="r"><code>example_vector &lt;- c(&quot;Oxford&quot;, &quot;London&quot;, &quot;Cambridge&quot;, &quot;Manchester&quot;, &quot;Exeter&quot;, &quot;Leeds&quot;)
+print(example_vector)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;</code></pre>
+<p>This vector is six elements long (which you can verify by running <code>length(example_vector)</code>). R records both the fact that <code>example_vector</code> contains these six values and <em>which position</em> each value is in. The position of a value in the vector is called its <strong>index</strong>. So “Oxford” would be in position #1 of the vector, “London” in position #2, and so on and so forth.</p>
+<p>You can use these index vaues to <em>subset</em> your vector. R uses square brackets <code>[]</code> for indexing operations. If you wanted to know, say, what the 5th element of the vector was, you would type:</p>
+<pre class="r"><code>example_vector[5]</code></pre>
+<pre><code>## [1] &quot;Exeter&quot;</code></pre>
+<p>If you wanted to know what the 2nd <em>through</em> 5th elements were, you could use the range operator <code>:</code> that we learned earlier:</p>
+<pre class="r"><code>example_vector[2:5]</code></pre>
+<pre><code>## [1] &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;</code></pre>
+<p>And similarly you can use vector notation if you want to know the 1st, 3rd, and 5th values:</p>
+<pre class="r"><code>example_vector[c(1, 3, 5)]</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;    &quot;Cambridge&quot; &quot;Exeter&quot;</code></pre>
+<p>What if you have the opposite question: you know that “Cambridge” is in your vector somewhere, and you want to know what position it’s in? You would use the <code>which()</code> function, which takes as input a <em>logical statement</em> like the ones we’ve been learning. That code would look like this:</p>
+<pre class="r"><code>which(example_vector==&quot;Cambridge&quot;)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p><strong>Exercises</strong>: Think about the following vector:</p>
+<pre class="r"><code>exercise_vector &lt;- c(&quot;Cambridge&quot;, &quot;Oxford&quot;, &quot;Leeds&quot;, &quot;Cambridge&quot;)</code></pre>
+<ul>
+<li>Use code to determine the index value for “Leeds”.</li>
+<li>What would happen if you tried to use <code>which</code> to determine the index value for “Cambridge”? Make a guess before you run the code.</li>
+</ul>
+<div id="note-on-indexing-and-numeric-vectors" class="section level4">
+<h4>Note on Indexing and Numeric Vectors</h4>
+<p>Think about the numeric vector we made at the beginning of this lesson:</p>
+<pre class="r"><code>print(numeric_vector)</code></pre>
+<pre><code>## [1] 1 3 8</code></pre>
+<p>Here, the elements of the vector are numbers, not strings, but the way <em>indexing</em> works is exactly the same. So the first element of the vector is the number 1, the second element is the number 3, and the third element is the number 8. This can be hard to keep track of at times because both the elements of the vector and the indices of the vector are numbers (and those numbers are not the same). Guess what the output will be when you run the following lines of code, then check to see if you’re right:</p>
+<pre class="r"><code>numeric_vector[1]
+which(numeric_vector==1)
+
+numeric_vector[2]
+which(numeric_vector==2)
+
+numeric_vector[3]
+which(numeric_vector==3)
+
+numeric_vector[8]
+which(numeric_vector==8)</code></pre>
 </div>
-<div id="adding-to-subtracting-from-and-combining-vectors" class="section level3">
-<h3>Adding to, Subtracting from, and Combining Vectors</h3>
-<p>Shoot! What if you wanted <code>example_vector</code> to have one last “1” at the end? You can <strong>append</strong> more elements to vectors using the same function we used to create them: <code>c()</code>!</p>
-<pre class="r"><code>example_vector &lt;- c(example_vector, 1)
-print(example_vector)</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5 1</code></pre>
-<p><br> <strong>IMPORTANT: Notice that I assigned our new vector the name <code>example_vector</code> in order to <em>update</em> it. If I had just done this:</strong></p>
-<pre class="r"><code>c(example_vector, 1)</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5 1</code></pre>
-<p><strong>it would have printed the result to the screen, but would <em>not</em> have updated the values in <code>example_vector</code></strong>:</p>
+</div>
+<div id="lengthening-shortening-and-combining-vectors" class="section level3">
+<h3>Lengthening, Shortening, and Combining Vectors</h3>
+<div id="lengthening-vectors" class="section level4">
+<h4>Lengthening Vectors</h4>
+<p>Remember what our <code>example_vector</code> looks like:</p>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;</code></pre>
+<p>Shoot, I forgot a city! I also wanted to include “Birmingham” in this list. I could re-create my entire vector with the additional element:</p>
+<pre class="r"><code>c(&quot;Oxford&quot;, &quot;London&quot;, &quot;Cambridge&quot;, &quot;Manchester&quot;, &quot;Exeter&quot;, &quot;Leeds&quot;, &quot;Birmingham&quot;)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p>…but that’s quite time-consuming and annoying. It would be better if there were a way for me to easily just tack another element on to the end of the list. It turns out, that’s easy to do– and in fact, it uses the same function we used to create the vector in the first place– the “combining” function, <code>c()</code>!</p>
+<p>To <strong>append</strong> the element “Birmingham” to our <code>example_vector</code>, we would do:</p>
+<pre class="r"><code>c(example_vector, &quot;Birmingham&quot;)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p><br></p>
+</div>
+<div id="important-note-execution-vs-assignment" class="section level4">
+<h4>Important Note: Execution vs Assignment</h4>
+<p>What is the difference between these two lines of code?</p>
+<pre class="r"><code>## Example Line 1
+c(&quot;cheese&quot;, &quot;chips&quot;, &quot;popcorn&quot;)
+
+## Example Line 2
+snack_vector &lt;- c(&quot;cheese&quot;, &quot;chips&quot;, &quot;popcorn&quot;)</code></pre>
+<p>As you hopefully remember from the section above about creating variables, the key difference here is one of <strong>assignment</strong>– that is, of saving values to memory. The first line tells R to create a vector, print it in the console screen, and then ‘forget’ about it immediately. The second line tells R to create a vector, <em>not</em> print it to the console, and save it in memory as an object named <code>snack_vector</code>. The first line is just <strong>executing</strong> the “create a vector” function, the second one is both executing that function and <em>assigning the output</em> to an object name.</p>
+<p>This same logic applies to operations that <em>modify existing objects</em>– if you don’t run the special <code>&lt;-</code> operator to <em>assign</em> the change to an object, the change won’t get saved anywhere. Let’s think of our example above, in which we want to append the element “Birmingham” to the vector <code>example_vector</code>. Consider these three commands:</p>
+<pre class="r"><code>## Command 1: execute, but don't assign
+c(example_vector, &quot;Birmingham&quot;)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
 <pre class="r"><code>print(example_vector)</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5</code></pre>
-<p><strong>BE VIGILANT!</strong> <br> <br> Ok, now you have your new <code>example_vector</code> with the 1 at the end:</p>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 5 1</code></pre>
-<p>Shoot! You just realized you don’t want that last 5 in there. You can get rid of it using <code>[]</code>, the same as an indexing operation, but putting a <code>-</code> sign before the index value:</p>
-<pre class="r"><code>example_vector &lt;- example_vector[-10]
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;</code></pre>
+<p>Here, we’ve printed our new, expanded vector to the screen, but the <em>saved</em> <code>example_vector</code> is unchanged.</p>
+<pre class="r"><code>## Command 2: assign new vector to a new object name
+longer_example_vector &lt;- c(example_vector, &quot;Birmingham&quot;)
 print(example_vector)</code></pre>
-<pre><code>##  [1] 1 2 3 4 5 1 2 3 4 1</code></pre>
-<p><br> Notice that you remove values based on their <em>position</em> in the line, not based on their <em>value</em>. Doing <code>example_vector[-5]</code> would have removed the <em>first</em> <code>5</code> from the vector, because it’s in the <code>fifth spot</code>. <br> <br> What if you want to combine <code>example_vector</code> with some other vector? Our friend <code>c()</code> is here to help us again!</p>
-<pre class="r"><code>other_vector &lt;- c(50, 27, 84)
-new_vector &lt;- c(example_vector, other_vector)
-print(new_vector)</code></pre>
-<pre><code>##  [1]  1  2  3  4  5  1  2  3  4  1 50 27 84</code></pre>
-<p><br> Ok, now that we’re armed with variables and arrays, we can get into the powerhouses of programming: logic and loops!</p>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;</code></pre>
+<pre class="r"><code>print(longer_example_vector)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p>Here, because we assigned the command to a <em>new</em> object name, <code>example_vector</code> remains unchanged and we have a new vector, <code>longer_example_vector</code>, that contains the expanded vector.</p>
+<pre class="r"><code>## Command 3: *update* the existing vector
+example_vector &lt;- c(example_vector, &quot;Birmingham&quot;)
+print(example_vector)</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p>Here, because we assigned the command to the <em>same</em> object name, we’ve <em>overwritten</em> our original value of <code>example_vector</code>, and <code>example_vector</code> itself is longer now. This type of operation, where we change the value of an existing object, is called <strong>updating</strong> the object.</p>
+<p>**Exercise: Now that we’ve updated <code>example_vector</code>, what will <code>example_vector</code> look like if we run this code?</p>
+<pre class="r"><code>c(example_vector, &quot;Aberdeen&quot;)</code></pre>
+<p>What about this code?</p>
+<pre class="r"><code>new_vector &lt;- c(example_vector, &quot;Aberdeen&quot;)</code></pre>
+<p>And this code?</p>
+<pre class="r"><code>example_vector &lt;- c(example_vector, &quot;Aberdeen&quot;)</code></pre>
+</div>
+<div id="shortening-vectors" class="section level4">
+<h4>Shortening Vectors</h4>
+<p>We’ve successfully updated our <code>example_vector</code> to include “Birmingham”:</p>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p>What if we now want to <em>remove</em> elements from this vector? We can do this by expanding on the indexing operations we learned earlier. Note that because we’re working with the indexing operators <code>[]</code>, we’ll be making references to the <em>indices</em> of vectors, not the values at those indices. For example, let’s say we wanted to remove “Cambridge” from the vector. “Cambridge” is the third element, so you can run:</p>
+<pre class="r"><code>example_vector[-3]</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Manchester&quot; &quot;Exeter&quot;     &quot;Leeds&quot;     
+## [6] &quot;Birmingham&quot;</code></pre>
+<p>to remove that element.</p>
+<p><strong>Exercise</strong>: Did the line of code above <em>update</em> <code>example_vector</code>? e.g., does the saved value of <code>example_vector</code> still contain “Cambridge” in the 3rd position? Why or why not?</p>
+<p>Here’s an interesting question: what if you know that “Cambridge” is somewhere in the vector and you want to remove it, but you don’t know where it is? You could solve this problem by running two commands: a <code>which</code> operation to find the index of “Cambridge”, and a <code>[]</code> operation to remove that value:</p>
+<pre class="r"><code>cambridge_index &lt;- which(example_vector==&quot;Cambridge&quot;) # note that I need to save this as a variable since I use it in the next line
+example_vector[-cambridge_index]</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Manchester&quot; &quot;Exeter&quot;     &quot;Leeds&quot;     
+## [6] &quot;Birmingham&quot;</code></pre>
+<p>This works, but there’s actually an even faster way to do it: nest the <code>which</code> function <em>inside</em> your <code>[]</code> operator:</p>
+<pre class="r"><code>example_vector[-which(example_vector==&quot;Cambridge&quot;)]</code></pre>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Manchester&quot; &quot;Exeter&quot;     &quot;Leeds&quot;     
+## [6] &quot;Birmingham&quot;</code></pre>
+<p>In the same way as you have an “order of operations” for multiplication, R will interpret these nested functions in sequence: first it will run the <code>which</code> operation, then take the output (here, the number 3) and run the indexing operation on that number. Nesting R commands within each other is a crucial part of progamming– it cuts down on the length of scripts, increases clarity, and often (once you get the hang of it) makes commands more readable to others.</p>
+</div>
+<div id="combining-vectors" class="section level4">
+<h4>Combining vectors</h4>
+<p>Once again, let’s consider our <code>example_vector</code>:</p>
+<pre><code>## [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+## [6] &quot;Leeds&quot;      &quot;Birmingham&quot;</code></pre>
+<p>Now, let’s say we have another string vector <code>second_vector</code>:</p>
+<pre class="r"><code>second_vector &lt;- c(&quot;Barcelona&quot;, &quot;Madrid&quot;, &quot;Cadiz&quot;)
+print(second_vector)</code></pre>
+<pre><code>## [1] &quot;Barcelona&quot; &quot;Madrid&quot;    &quot;Cadiz&quot;</code></pre>
+<p>How could we merge these two vectors into one? If you guessed that our combining function <code>c()</code> will be useful here, you were absolutly correct:</p>
+<pre class="r"><code>merged_vector &lt;- c(example_vector, second_vector)
+print(merged_vector)</code></pre>
+<pre><code>##  [1] &quot;Oxford&quot;     &quot;London&quot;     &quot;Cambridge&quot;  &quot;Manchester&quot; &quot;Exeter&quot;    
+##  [6] &quot;Leeds&quot;      &quot;Birmingham&quot; &quot;Barcelona&quot;  &quot;Madrid&quot;     &quot;Cadiz&quot;</code></pre>
+<p><br></p>
+<p>I know this is a lot of material to take in, but I assure you that with practice this will feel extremely natural. I’d recommend going through the first half of the problem set before continuing on to the “Logic and Loops” page.</p>
+</div>
 </div>
 </div>
 <div id="side-note-functions" class="section level2">
@@ -350,15 +464,19 @@ print(new_vector)</code></pre>
 <p>Functions have <strong>arguments</strong>, which are the input variables, and they produce <strong>outputs</strong>. Let’s think back to that function <code>seq()</code>, which takes three arguments: a starting value, a stopping value, and the interval between values:</p>
 <pre class="r"><code>seq(1, 10, 2)</code></pre>
 <pre><code>## [1] 1 3 5 7 9</code></pre>
-<p><br> Its <em>output</em> is a vector of values: the starting value, then the starting value plus the interval value, and so on until you hit the stopping value. But function outputs don’t have to be vectors: they can be just about anything. The function <code>print()</code>, which we’ve seen several times before, doesn’t strictly speaking “return” any output at all– it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions!</p>
+<p><br> The <em>output</em> of this function is a vector of values. But function outputs don’t have to be vectors: they can be just about anything. The function <code>print()</code>, which we’ve seen several times before, doesn’t strictly speaking “return” any output at all– it just displays values on the screen. Other functions return single values, 2D arrays, or even other functions!</p>
 <p>Each argument in a function has a name, but you don’t need to use them so long as you keep arguments in the same order that the function is expecting to see them. However, if you do choose to use argument names, you can list things in whatever order you like. These three lines of code are equivalent:</p>
 <pre class="r"><code>seq(1, 10, 2)</code></pre>
 <pre><code>## [1] 1 3 5 7 9</code></pre>
-<pre class="r"><code>seq(from=1, to=10, by=2)</code></pre>
+<pre class="r"><code>#specify argument names, preserving original order
+seq(from=1, to=10, by=2)</code></pre>
 <pre><code>## [1] 1 3 5 7 9</code></pre>
-<pre class="r"><code>seq(to=10, by=2, from=1)</code></pre>
+<pre class="r"><code>#specify argument names, scrambling order 
+seq(to=10, by=2, from=1)</code></pre>
 <pre><code>## [1] 1 3 5 7 9</code></pre>
-<p><br> We won’t get too deep into the nitty gritty of functions in this course, but I want you to have some idea of what they are and when you’re using them.</p>
+<p><br> Notice that we use <code>=</code> rather than <code>&lt;-</code> when passing named arguments to functions.</p>
+<p>If you want to understand what a function does and what arguments it takes, type <code>?</code> followed by the function name into the console. This will bring the documentation for that function up in the <code>Help</code> window of RStudio. For instance, try typing <code>?seq</code> into the console and hitting enter. See what comes up?</p>
+<p>We won’t get too deep into the nitty gritty of functions in this course, but I want you to have some idea of what they are and when you’re using them.</p>
 </div>
 
 
