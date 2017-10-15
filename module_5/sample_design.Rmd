@@ -4,21 +4,24 @@ output: html_document
 ---
 
 ## How Do You Know What Data to Collect?
-Let's think back to my (again, made-up) plot of the distrubiton of human height:
-```{r, echo=F}
-library(data.table)
-library(ggplot2)
-test <- data.table(height=rnorm(n=5000, mean=60, sd=10))
-ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
-```
+Think back to my (again, made-up) plot of the distribution of adult human height:
 
-This distribution is well and good if I have no information about the person whose height I'm trying to predict, but what if I know she's a woman? An American woman? An American woman of Japanese descent? Suddenly, this distribution of human height across all individuals is insufficient. 
+[insert plot]
 
-Conversely, what if I were trying to make a distribution of human height worldwide, and the only people I sampled were male professional basketball players? I'd do a pretty terrible job of predicting height probabilities for most people. 
+Let's say I wanted you to guess the height of a random member of the adult population. What this distribution is telling you is that your *best guess* would be around 60 inches (5 feet), because that's the place in which the probability density is highest. 
 
-Both of these examples show cases in which distributions are not actually *representative* of the population they're claiming to capture. This introduces *bias*-- a deviation between the true distribution and the distribution you capture while sampling.
+This distribution is well and good if you have no information about the person whose height you're trying to predict. But what if I asked you to guess the height of a random *male* member of the adult population? What if I further specified that he was of Dutch heritage? Your initial guess, based on the global height distribution, that this man is 5 feet tall is unlikely to be correct-- the population you want to sample from is different than the population represented by the global distribution.  
+
+Conversely, what if I didn't know this global height distribution, and tried to create one by measuring the height of every male professional basketball player? I would end up with a distribution claiming that the average height is much much taller than it actually is-- the population from which I sampled is *biased* towards taller individuals, so I'll often guess wrong if I try to guess the height of a non-basketball-player.
+
+Both of these examples show cases in which distributions are not actually *representative* of the population they're claiming to capture. This introduces *bias*-- a deviation between the true distribution and the distribution you capture while sampling. Bias in a statistical sense doesn't mean that either of your distributions is wrong, it means there's a mismatch between what you claim to measure and what you actually measure.
 
 ## What Question Are You Asking?
+
+Usually, as data scientists, we don't get to choose what data to collect. Data is given to us, and we need to try to understand what populations are captured by that data and how to appropriately incorporate that information into an analysis. But sometimes, sometimes, you do get to be involved in data collection. For those moments, you should be familiar with the methods presented here.
+
+You will never be able to question everybody from your population of interest. Instead, as discussed last lecture, you'll need to pull a *sample* from that distribution and ask questions of the resulting dataset. If you're sampling from a different population than the one you're interested in, your results will be biased.
+
 The best way to avoid bias while collecting data is to be extremely clear about what question you are trying to answer. Are you interested in answering questions about the height of humans globally, or the height of male professional basketball players specifically? This dramatically impacts what type of data you should collect. 
 
 Some common sampling methods are below, but there are dozens of different sampling tactics. 
@@ -31,9 +34,7 @@ Some common sampling methods are below, but there are dozens of different sampli
 
 ## Random Sampling Methods
 
-**Simple random sampling** is the "purest" form of random sample. If there are $N$ people in your community of interest, select $k$ of them and survey those people. Simple random sampling is basically impossible for large communities of interest, because a) you probably can't identify everyone in your community of interest, and b) even if you could, locating, accessing, and surveying that random sample would be incredibly time-consuming and expensive.
-
-To that end, there are many variations on random sampling methods:
+**Simple random sampling** is the "purest" form of random sample. If there are $N$ people in your community of interest, select $k$ of them and survey those people. Simple random sampling is theoretically very simple, but is also extremely time-consuming and expensive. Over the years, researchers have developed leaner random sampling method that allow you to preserve statistical power while utilizing fewer resources. Here are a few variations on random sampling methods:
 
 * **Stratified** sampling: Split the population into groups based on some characteristic, then sample randomly within that characteristic. For example, you could split a state into counties, then sample randomly within each county. 
 * **Cluster** sampling: Assign each member of the population to a small cluster, then pick a random sample of clusters and survey all individuals within that cluster. 
@@ -42,7 +43,7 @@ To that end, there are many variations on random sampling methods:
 Each of these methods has the same glaring weakness: Ethically, you can never force someone to do a survey (remember, censuses are different), so your sample will *always* be biased toward the people who agree to answer your questions. You have to make a case for why that bias shouldn't affect the outcome you're interested in. Here are some other common sources of bias in surveys:
 
 * **Self-report bias**: People lie. Or, to be kinder, people fudge. Women tend to underreport their own weight, men tend to overreport their height. Nobody will ever actually tell you how many sexual partners they've had. All of these lead to biased results when you ask people questions directly.
-* **Binning**: Numbers are hard to remember. People are far more likely to report their age (or their relative's ages, or their weight, etc) as multiples of 5, which leads to non-normally distributed survey results. 
+* **Binning**: Numbers are hard to remember. People are far more likely to report their age (or their relatives' ages, or their weight, etc) as multiples of 5, which leads to non-normally distributed survey results. 
 * **Survey fatigue**: The more questions you ask people, the more likely they are to get bored and just start answering "Yes" or "C" to each question you present to them. Keep surveys short, and shuffle question order if you can. 
 
 
