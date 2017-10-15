@@ -3,31 +3,52 @@ title: "Distributions and Sampling"
 output: html_document
 ---
 
+## Intro: Uniform Distributions
 A **probability distribution** is a mathematical function that describes the probability of any given outcome in an experiment. For example, let's say that you wanted to pick a completely random number between *a* and *b*, with every value in that interval having the same probability of being chosen. This scenario describes a *uniform distribution*:
 
 [insert uniform distribution plot]
 
-Let's say instead that you wanted to pick an adult at random from the global population, and wanted to know the probability of that person being over 6 feet (72 inches) tall. In that case, you would look at a *normal distribution* reflective of human height worldwide, and make your assessment from there:
+How do we interpret this plot? Think about flipping a fair coin. You have a 50% chance of rolling heads, and 50% chance of rolling tails. Think about rolling a fair six-sided die. You have a 1/6 chance of rolling each of the six numbers. Think about spinning a wheel split into 12 sections. You have a 1/12 chance of landing on any one of the sections. Do you see what each of these examples has in common? The probabilities all add up to 1. Hopefully this is intuitive-- if *something* is going to happen, there is a 100% chance of *one of the possible options* happening, right? 
+
+A uniform distribution takes that "equal events have equal probability" concepts and extends it to **continuous** outcomes. The examples I gave before were **discrete**: there were a given number of possibilities (2, 6, or 12) and we gave each one an equal probability. But we want to pick *any number* between *a* and *b*, and there are infinitely many such numbers. So how do you formalize the idea that all outcomes should have the same probability? The solution is to mandate that the *area under the distribution* must equal 1. 
+
+Look at the figure above again. Let's say that *a* equals 3 and *b* equals 5, so we're trying to pull some value between 3 and 5 (examples include: 3.5, 4.239, 3.00000001...) with equal probability. The probability distribution is equal to 0 everywhere except between 3 and 5 (because we want 0% probability of pulling a number less than 3 or greater than 5). Between 3 and 5, it's equal to $1/(b-a)$, which in our current example would equal $1/(5-3)=1/2$. Why is that?  
+
+Well, we said that we want the area under the distribution (which in this case is just a rectangle) to equal 1. You get the area of a rectangle by multiplying one side by the other. The length of the long side of the rectangle is 2, so the length of the short side must be 1/2 so that we can get $2*1/2=1$. 
+
+Why am I telling you all this? What's the point of drawing this rectangle? Why does it matter that it has an area of 1?
+
+Imagine we wanted to know the probability that, when pick a random value between 3 and 5, that value is less than 4. We could calculate the area of our uniform distribution between 3 and 4: that is, a rectangle of length 1 (becasuse $4-3=1$) and height $1/2$ (because we already said that's the height of our distribution). $1*1/2=0.5$, so there's a 50% chance that our random draw is less than 4. Similarly, if we wanted to know the probability that our random draw is between 3.1 and 3.4, we could calculate the length of that rectangle ($3.4-3.1=0.2$) and multiply it by  its height ($1/2$) to find a probability of 0.1, or a 10% chance that our draw is between 3.1 and 3.4. 
+The height of the distribution, which here is $1/2$, is called the *probability density* of the distribution.
+
+In the context of uniform distributions, this may seem like an unnecessary amount of math. If I randomly pick a value between 3 and 5, of course there's a 50% chance that it will be less than 4! That's what that means! But once you move to more involved distribution, having an understanding of how that math works will be extremely helpful.
+
+For example: Let's say instead that you wanted to pick an adult at random from the global population, and wanted to know the probability of that person being over 6 feet (72 inches) tall. In that case, you would look at a *normal distribution* reflective of human height worldwide:
 
 ```{r, echo=F}
 library(data.table)
 library(ggplot2)
 main_dir <- 
 test <- data.table(height=rnorm(n=5000, mean=60, sd=10))
-normal_dist <- ggplot(test, aes(x=height)) + stat_function(fun=dnorm, args=list(mean=60, sd=10)) + labs(y="Probability", x="Height (inches)")
+normal_dist <- ggplot(test, aes(x=height)) +
+  stat_function(fun=dnorm, args=list(mean=60, sd=10)) +
+  geom_vline(xintercept = 72, color="red", size=1) + 
+  labs(y="Probability Density", x="Height (inches)")
 print(normal_dist)
 png("/Users/bertozzivill/Desktop/normal_distribution.png")
 print(normal_dist)
 graphics.off()
 ```
 
-And you'd see that the probability of picking a person over 72 inches tall is right around 2%. (Note: I just made the data for that plot up, don't take it as gospel.)
+Just like with uniform distributions, the *area under this curve* must equal 1. So if you wanted to know the probability that someone was over 6 feet, you'd use software like R to calculate the area under the curve between the red line (at 72 inches) and the edge of the plot. I used the function `pnorm` to discover that the area under the curve from 72 onwards is 0.115. So, according to this distribution, there's an 11.5% chance that a random adult you pick off the street will be over 6 feet tall.
 
-Different distributions are defined in different ways and serve different purposes. Here we'll describe two of the most common distributions: Normal and Binomal. 
+(Note: I just made up the data for this plot, true distributions of human height look very different.)
+
+Different distributions are defined in different ways and serve different purposes. As we've seen, uniform distributions are used when we're studying *continuous events* that happen with *equal probability*. Below we describe two of the most common distributions: Normal and Binomal. 
 
 ## Normal Distributions: Means and Standard Errors
 
-What is the normal distribution, and why do we hear so much about it? Also called the Gaussian distribution (or, colloquially, a "bell curve"), normal distributions define most aspects of daily life. Just about any *continuous random variable*, like height or test score results, will *converge* to a normal distribution. What that means is that, as you take more and more samples from the population, and make a histogram, that plot will start to look more and more like a normal distribution: 
+You've probably heard the term "normal distribution" (also called a "Gaussian distribution" or, colloquially, "bell curve"), before. Normal distributions define most aspects of daily life. Just about any *continuous random variable*, like height or test score results, will *converge* to a normal distribution. What that means is that, as you take more and more samples from the population, and make a histogram, that plot will start to look more and more like a normal distribution: 
 
 ```{r, echo=F, message=F}
 # example <- lapply(c(1:4), function(exponent){
@@ -52,11 +73,17 @@ print(increase_n)
 graphics.off()
 ```
 
-Many statistical methods rely on the assumption that you're pulling data from a *normally distributed* variable.
+It also turns out that normal distributions have a lot of nice properties that make statistics easy. Many statistical methods rely on the assumption that you're pulling data from a *normally distributed* variable.
 
 That's all well and good, but what *is* a normal distribution? How do you define it?
 
-Remember high school math class, when you learned the formula for a line: $y=mx+b$. That line is defined by two parameters: $m$, the slope, and $b$, the intercept. Normal distributions are also defined by two parameters: the **mean** of the distribution, $\mu$ ("mu"), and the **variance**, $\sigma^2$ ("sigma squared")[^1].The formula for a normal distribution is a little more complicated than the one for a line, but the basic idea is the same:
+Remember high school math class, when you learned the formula for a line: $y=mx+b$:
+
+[insert y=mx+b plot]
+
+A line is completely defined by two parameters: $m$, the slope (how steep the line is), and $b$, the intercept (where the line crosses the y-axis). Change either of those two parameters, and you make a different line.
+
+Normal distributions are also defined by two parameters: the **mean** of the distribution, $\mu$ ("mu", pronounced "mew"), and the **variance**, $\sigma^2$ ("sigma squared")[^1].The formula for a normal distribution is a little more complicated than the one for a line, but the basic idea is the same--change either of those two variables, and you get a different distribution.
 
 [^1]: The square root of the variance, $\sigma$, is called the **standard deviation**. It will come up later.
 
@@ -64,7 +91,7 @@ $$P(x | \mu,\sigma^2) = \frac{1}{{\sqrt{2\sigma^2\pi}}}e^{-\frac{(x-\mu)^2}{2\si
 
 The left part of that equation is read as, "The *probability* of $x$ *given* $\mu$ and $\sigma^2$" is...
 
-It's less important that you remember the specific equation, and more important that you understand how the two parameters shape the distribution. In normal distributions, the $\mu$ parameter determines where the peak of the distribution is, and the $\sigma^2$ parameter determines how wide the distribution is. Below are some examples of different normal distributions:
+It's completely unimportant for you to remember the specific equation. It is important that you understand how the two parameters shape the distribution. In normal distributions, the $\mu$ parameter specifies the location of the *peak* of the distribution, and the $\sigma^2$ parameter determines how wide the distribution is. Below are some examples of different normal distributions:
 
 [insert wikipedia plot]
 
@@ -78,21 +105,27 @@ $$P(X=k | n,p) = {{n}\choose{k}}p^k(1-p)^{(n-k)}$$
 Where ${n}\choose{k}$ means "n choose k". ${n}\choose{k}$ is a count of how many different ways you can pull a subset of $k$ elements from a set of $n$ elements. Specifically it means:
 
 $${{n}\choose{k}} = \frac{n!}{k!(n-k)!}$$
-Where $!$ means "factorial"-- $5!$ means $5*4*3*2*1=120$
+Where $!$ means "factorial"-- $5!$ means $5*4*3*2*1=120$.
 
-Again, don't get too bogged down in the math here-- all you really need to know is that binomial distributions describe the paradigm where your outcome can only be one of two options. Binomial distributions look like this, for some example values of $n$ and $p$:
+Again, the math here doesn't actually matter for this class-- all you really need to know is that binomial distributions describe the paradigm where your outcome can only be one of two options, and you want to *count the number of times you see one of those two options*. Binomial distributions look like this, for some example values of $n$ and $p$:
 
 [insert wikipedia plot]
 
 In this plot, the x axis represents $k$, the number of successes. Notice that, unlike the normal distribution, the binomial distribution is *discrete*-- it only has meaningful probabilities at integer values of $k$, because you can't have fractional successes. 
 
 ## What is a Sample?
-A **sample** is the data that we actually see. We can never actually "capture" an entire distribution because distributions are infinite and unknown-- all we can do is take observations from a distribution and let those observations help us understand the shape of the distribution. 
+Again, let's imagine for a moment that the distribution of adult human height, globally, looks like this:
+
+[insert dist plot]
+
+Now let's say that I measure the height of an individual pulled randomly from the global adult population, like the woman standing in line at the cafe where I'm writing this. She looks to be around 5 feet (60 inches) tall. Next, I'll pull another measurement from this population-- the height of my father, who is about 6'2" (74 inches). How do these two measurements relate to the normal distribution in the plot?
+
+These two height measurements are *samples* from the global height distribution. A **sample** is a piece of data that we actually see. We can never fully "capture" an entire distribution because distributions are infinite and unknown-- all we can do is take observations from a distribution and let those observations help us understand the shape of that distribution. 
 
 ### What Assumptions Do We Make When We Sample?
-When sampling from a population, our most fundamental assumption is that *the data we're collecting is an unbiased reflection of the distribution it's drawn from*. This assumption can be mistaken for a number of reasons we'll get to in the next lecture.
+When sampling from a population, our most fundamental assumption is that **the data we're collecting is an unbiased reflection of the distribution it's drawn from**. This assumption can be mistaken for a number of reasons we'll get to in the next lecture.
 
-Another important assumption we make is that *the more data we collect, the closer we get to approximating the real distribution*. Let's take my example up above, where we plotted the histograms of human height for different sample sizes. I pulled that data at random from a normal distribution with $\mu$ of 60 and a $\sigma^2$ of 100. Let's see what the mean and variance are of the *data* that I *sampled* for each value of n:
+Another important assumption we make is that **the more data we collect, the closer we get to approximating the real distribution**. Let's take my example up above, where we plotted the histograms of human height for different sample sizes. I pulled that data from a normal distribution with parameters $\mu$ of 60 and a $\sigma^2$ of 10. Let's see what the mean and variance are of the *data* that I *sampled* for each value of n:
 
 ```{r, echo=F}
 for (exponent in 1:4){
