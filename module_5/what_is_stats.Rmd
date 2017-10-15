@@ -3,7 +3,14 @@ title: "What is Statistics?"
 output: html_document
 ---
 
-Statistics is the oldest form of data science. It really started to hit its stride in the 17th century, but has never been quite as sexy as it is now. We're in an era where nerdiness is attractive-- sieze the day!
+```{r, echo=F}
+library(car)
+data(Davis)
+```
+
+Statistics is the oldest form of data science. It really started to hit its stride in the 17th century, but has never been quite as sexy as it is now.
+
+In many ways, it's difficult to define statistics separate from our earlier definition of data science. Most of the concepts are translateable. At its simplest, statistics is: all the parts of data science that don't include machine learning. Theoretical statistics far, far predate computers, but in the modern day it's difficult to do sophisticated stats without considerable computational resources. 
 
 ## Distributions: a Primer
 The basic unit of statistics is the **distribution**. Statistics looks at the variation in the world and claims that this variation is *patterned* and *informative*. For example, if you know something about the distribution of human heights, you could make a good guess about how likely a random person is to be a certain height. Or at least, so statistics claims. 
@@ -11,7 +18,29 @@ The basic unit of statistics is the **distribution**. Statistics looks at the va
 We'll talk a lot more about distributions next lecture, but for now just get used to the idea of thinking about every data point as a single sample from a varied background. 
 
 ## Descriptive Statisics
-The most basic set of explorations you can conduct on a dataset is what are called *descriptive* statistics-- this is simply understanding what patterns there are in each individual variable of your dataset. Things like, "How many observations are there?" "What is the average value of this variable?" "What are the minimum and maximum values?", etc. Running the `summary()` command on a dataset in R is a great way to get descriptive statistics for each variable.
+The most basic set of explorations you can conduct on a dataset is what are called *descriptive* statistics-- this is simply understanding what patterns there are in each individual variable of your dataset. Things like, "How many observations are there?" "What is the average value of this variable?" "What are the minimum and maximum values?", etc. Running the `summary()` command on a dataset in R is a great way to get descriptive statistics for each variable. Let's try running `summary()` on the `Davis` dataset, which looks at true versus reported height and weight in adults:
+
+```{r}
+summary(Davis)
+```
+
+These descriptive statistics tell us the following:
+
+* 112 study participants were female, 88 were male. 
+* People's reported weight ranged from 41 to 124 kilos, with an average (mean) value of 65.62.
+* 17 people didn't report their weight (hence, the `NA's`: null values). These are probably the same 17 people who didn't report their height. 
+
+Let's quickly review the other rows of this summary dataset. There are two types of "average" reported here: the mean, which is what we usually mean when we say "average", and the median, which is the physical midpoint of the data. To understand the difference, consider this array of how many pets people own. Seven individuals were surveyed, and we sorted the dataset in ascending order:
+
+```{r, echo=FALSE}
+print(c(1, 1, 1, 1, 2, 2, 5))
+```
+
+You calculate the *mean* by adding all these values together and dividing by the number of samples. So here, the mean would be $(1+1+1+1+2+2+5)/5=1.86$. The median, on the other hand, is whatever value is in the middle of this sorted list-- here, it's 1. The value of the median is that 50% of the samples will be greater than (or equal to) it, and the other 50% will be less than (or equal to) it. Another word for the median is the **50th percentile** of the data. 
+
+You can take other percentiles of the data, too. It's common to split the data into 4 parts and describe the **25th percentile**, also known as the **first quartile**, and the **75th percentile**, or **third quartile**. So in the Davis dataset above, the `1st Qu` row of `repwt` tells us that the slimmest 25% of the sample had weights at or below 55 kilos, while the `3rd Qu` row says that the heaviest 25% of people had weigths at or above 73.5 kilos. 
+
+The data visualizations we discussed in Module 1 were all founded on either the raw data itself or descriptive statistics like these. It's open for debate whether or not that counts as "data science".
 
 ## Inference vs. Prediction
 Descriptive statistics, while useful, isn't usually considered a statistical "analysis". Things like regressions or other models are more of the meat-and-potatoes of statistical methods, and these analyses are usually performed for one of two distinct purposes. In both cases, you run some model to establish a relationship between two or more variables.
@@ -22,16 +51,4 @@ In the second case, known as **prediction**, you don't really care what the valu
 
 These two types of analysis are of course not mutually exclusive, but give very different content and motivation to statistical analyses. 
 
-
-## Frequentists vs. Bayesians
-There's a philosophical divide in statistics between two different camps: *Frequentists* and *Bayesians*. The fundamental difference between the two groups is a difference in how to interpret probabilities. The easiest way to describe this is with an example. You've all seen these *90% confidence intervals* around reports of statistical results, right?
-
-[insert picture]
-
-A Frequentist, looking at these intervals, would say, "They only collected data/ran this experiment once. But if they had collected data and run the analysis 100 times, on 90 of those occasions the mean result they found would be within that interval." A Bayesian would say "There's a 90% chance the true value is within this interval."
-
-This seems like a silly semantic issue, but it actually leads to quite distinct analytical strategies. Both groups use data to inform model outcomes, but Bayesians also use something called a *prior* in their analyses. A prior is an "educated guess" of what you think is going on in a model, based on previously published results, your own experience/intuition, whatever. In Bayesian statistics you explicitly incorporate your prior beliefs about relationships into the model. This concept horrifies diehard Frequentists, who say that this method inevitably biases results. However, Bayesians argue back that Frequentist methods *implicitly* incorporate prior information based on what parameters they choose to include or not include in their models.
-
-In recent years especially, Bayesian statistics has gone through something of a renaissance, and the Frequentist/Bayesian divide has often been pegged as this huge contentious battle, but the reality is that any statistician will use both methods over the source of his or her career. Different approaches are appropriate for different problems, and few people get overly ideological about such things.
-
-
+Now that I've waved my hands a bit about what "statistics" mean, let's actually start learning some real stats: on to distributions!

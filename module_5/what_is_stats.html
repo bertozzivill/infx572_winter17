@@ -120,7 +120,8 @@ $(document).ready(function () {
 </div>
 
 
-<p>Statistics is the oldest form of data science. It really started to hit its stride in the 17th century, but has never been quite as sexy as it is now. We’re in an era where nerdiness is attractive– sieze the day!</p>
+<p>Statistics is the oldest form of data science. It really started to hit its stride in the 17th century, but has never been quite as sexy as it is now.</p>
+<p>In many ways, it’s difficult to define statistics separate from our earlier definition of data science. Most of the concepts are translateable. At its simplest, statistics is: all the parts of data science that don’t include machine learning. Theoretical statistics far, far predate computers, but in the modern day it’s difficult to do sophisticated stats without considerable computational resources.</p>
 <div id="distributions-a-primer" class="section level2">
 <h2>Distributions: a Primer</h2>
 <p>The basic unit of statistics is the <strong>distribution</strong>. Statistics looks at the variation in the world and claims that this variation is <em>patterned</em> and <em>informative</em>. For example, if you know something about the distribution of human heights, you could make a good guess about how likely a random person is to be a certain height. Or at least, so statistics claims.</p>
@@ -128,7 +129,27 @@ $(document).ready(function () {
 </div>
 <div id="descriptive-statisics" class="section level2">
 <h2>Descriptive Statisics</h2>
-<p>The most basic set of explorations you can conduct on a dataset is what are called <em>descriptive</em> statistics– this is simply understanding what patterns there are in each individual variable of your dataset. Things like, “How many observations are there?” “What is the average value of this variable?” “What are the minimum and maximum values?”, etc. Running the <code>summary()</code> command on a dataset in R is a great way to get descriptive statistics for each variable.</p>
+<p>The most basic set of explorations you can conduct on a dataset is what are called <em>descriptive</em> statistics– this is simply understanding what patterns there are in each individual variable of your dataset. Things like, “How many observations are there?” “What is the average value of this variable?” “What are the minimum and maximum values?”, etc. Running the <code>summary()</code> command on a dataset in R is a great way to get descriptive statistics for each variable. Let’s try running <code>summary()</code> on the <code>Davis</code> dataset, which looks at true versus reported height and weight in adults:</p>
+<pre class="r"><code>summary(Davis)</code></pre>
+<pre><code>##  sex         weight          height          repwt            repht      
+##  F:112   Min.   : 39.0   Min.   : 57.0   Min.   : 41.00   Min.   :148.0  
+##  M: 88   1st Qu.: 55.0   1st Qu.:164.0   1st Qu.: 55.00   1st Qu.:160.5  
+##          Median : 63.0   Median :169.5   Median : 63.00   Median :168.0  
+##          Mean   : 65.8   Mean   :170.0   Mean   : 65.62   Mean   :168.5  
+##          3rd Qu.: 74.0   3rd Qu.:177.2   3rd Qu.: 73.50   3rd Qu.:175.0  
+##          Max.   :166.0   Max.   :197.0   Max.   :124.00   Max.   :200.0  
+##                                          NA's   :17       NA's   :17</code></pre>
+<p>These descriptive statistics tell us the following:</p>
+<ul>
+<li>112 study participants were female, 88 were male.</li>
+<li>People’s reported weight ranged from 41 to 124 kilos, with an average (mean) value of 65.62.</li>
+<li>17 people didn’t report their weight (hence, the <code>NA's</code>: null values). These are probably the same 17 people who didn’t report their height.</li>
+</ul>
+<p>Let’s quickly review the other rows of this summary dataset. There are two types of “average” reported here: the mean, which is what we usually mean when we say “average”, and the median, which is the physical midpoint of the data. To understand the difference, consider this array of how many pets people own. Seven individuals were surveyed, and we sorted the dataset in ascending order:</p>
+<pre><code>## [1] 1 1 1 1 2 2 5</code></pre>
+<p>You calculate the <em>mean</em> by adding all these values together and dividing by the number of samples. So here, the mean would be <span class="math inline">\((1+1+1+1+2+2+5)/5=1.86\)</span>. The median, on the other hand, is whatever value is in the middle of this sorted list– here, it’s 1. The value of the median is that 50% of the samples will be greater than (or equal to) it, and the other 50% will be less than (or equal to) it. Another word for the median is the <strong>50th percentile</strong> of the data.</p>
+<p>You can take other percentiles of the data, too. It’s common to split the data into 4 parts and describe the <strong>25th percentile</strong>, also known as the <strong>first quartile</strong>, and the <strong>75th percentile</strong>, or <strong>third quartile</strong>. So in the Davis dataset above, the <code>1st Qu</code> row of <code>repwt</code> tells us that the slimmest 25% of the sample had weights at or below 55 kilos, while the <code>3rd Qu</code> row says that the heaviest 25% of people had weigths at or above 73.5 kilos.</p>
+<p>The data visualizations we discussed in Module 1 were all founded on either the raw data itself or descriptive statistics like these. It’s open for debate whether or not that counts as “data science”.</p>
 </div>
 <div id="inference-vs.prediction" class="section level2">
 <h2>Inference vs. Prediction</h2>
@@ -136,14 +157,7 @@ $(document).ready(function () {
 <p>The first case, known as <strong>inference</strong>, asks the question “What does the relationships between my variables <em>mean</em>?” For example, if you run an analysis testing how education, access to health care, and income affect mortality, inferential statistics would be interested in knowing which of those three variables had the biggest impact on mortality, whether or not that impact was <em>statistically significant</em>, and what the values and directions were of those relationships.</p>
 <p>In the second case, known as <strong>prediction</strong>, you don’t really care what the values of the relationship are in the model, so long as they allow you to accurately predict outcomes for new data points. So, using the above example of the model for mortality rates, a predictive analysis would be interested in knowing what mortality outcome the model would expect for a person with a given education level, degree of access to health care, and income.</p>
 <p>These two types of analysis are of course not mutually exclusive, but give very different content and motivation to statistical analyses.</p>
-</div>
-<div id="frequentists-vs.bayesians" class="section level2">
-<h2>Frequentists vs. Bayesians</h2>
-<p>There’s a philosophical divide in statistics between two different camps: <em>Frequentists</em> and <em>Bayesians</em>. The fundamental difference between the two groups is a difference in how to interpret probabilities. The easiest way to describe this is with an example. You’ve all seen these <em>90% confidence intervals</em> around reports of statistical results, right?</p>
-<p>[insert picture]</p>
-<p>A Frequentist, looking at these intervals, would say, “They only collected data/ran this experiment once. But if they had collected data and run the analysis 100 times, on 90 of those occasions the mean result they found would be within that interval.” A Bayesian would say “There’s a 90% chance the true value is within this interval.”</p>
-<p>This seems like a silly semantic issue, but it actually leads to quite distinct analytical strategies. Both groups use data to inform model outcomes, but Bayesians also use something called a <em>prior</em> in their analyses. A prior is an “educated guess” of what you think is going on in a model, based on previously published results, your own experience/intuition, whatever. In Bayesian statistics you explicitly incorporate your prior beliefs about relationships into the model. This concept horrifies diehard Frequentists, who say that this method inevitably biases results. However, Bayesians argue back that Frequentist methods <em>implicitly</em> incorporate prior information based on what parameters they choose to include or not include in their models.</p>
-<p>In recent years especially, Bayesian statistics has gone through something of a renaissance, and the Frequentist/Bayesian divide has often been pegged as this huge contentious battle, but the reality is that any statistician will use both methods over the source of his or her career. Different approaches are appropriate for different problems, and few people get overly ideological about such things.</p>
+<p>Now that I’ve waved my hands a bit about what “statistics” mean, let’s actually start learning some real stats: on to distributions!</p>
 </div>
 
 
