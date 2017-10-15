@@ -3,11 +3,11 @@ title: "Libraries"
 output: html_document
 ---
 
-Think about how we humans learn. We know a lot of words, but not all of them. We have a wide range of skills, but faced with a task we've never performed before, we need to acquire a new talent. 
+Think about how we humans learn. We know a lot of words, but not all of them. We have a wide range of skills, but faced with a task we've never performed before, we need to acquire a new talent. For example, I don't know how to ride a unicycle. This doesn't mean that I'm fundamentally incapable of it, just that it would take time and energy for me to learn that technique. But since not being able to unicycle hasn't really affected my daily life, for now I'm fine without that skill. 
 
-Computers are the same way. The R software that you installed onto your computer contains all the generic functionality you'd need from a programming language, but if you want to do something extremely specific, this **base** R might not have what you need. This is where **libraries** come in.
+Similarly, software packages don't come auto-installed with every possible utility. The R software that you installed onto your computer contains all the generic functionality you'd need from a programming language, but if you want to do something extremely specific, this **base** R might not have what you need. This is where **libraries** come in.
 
-Let's take an example. Say you have very specific opinions about how you think data should be plotted. You always want a neutral gray background, you want to automatically select distinct colors based on how many different elements you're trying to plot, you want to be able to easily customize faceting and labeling... and you are *fed up* with R's default plotting functions:
+Let's take an example. Say you have very specific opinions about how you think data should be plotted. You always want a neutral gray background, you want to automatically select distinct colors based on how many different elements you're trying to plot, you want to be able to easily customize faceting and labeling... and you are *fed up* with the noisy soup that comes out of R's default plotting functions:
 
 ```{r, echo=F}
 library(car)
@@ -58,7 +58,7 @@ ggplot(Davis, aes(x=weight, y=value)) +
 graphics.off()
 ```
 <br>
-Whew, that's so much better! You keep building on this collection of functions, until suddenly you have a whole bunch of related functions for making these beautiful plots. You realize that there are hundreds of R users out there struggling with the terrible default plotting functions, and that you could help them by sharing your tools with them. So, you bundle all your functions up, give the whole collection a name, put it on the internet where anyone can easily access it, and watch peoples' lives improve. What you've just made is a coding **library**-- a collection of related functions and tools that is *not* included by default in R's installation. Open-source languages like R and Python are explicitly set up to welcome these user-created libraries (also known as **packages**), and make it very easy for R users to access them. 
+That's a much nicer plot! You keep building on this collection of functions, until suddenly you have a whole bunch of related functions for making these beautiful plots. You realize that there are hundreds of R users out there struggling with the terrible default plotting functions, and that you could help them by sharing your tools with them. So, you bundle all your functions up, give the whole collection a name, put it on the internet where anyone can easily access it, and watch peoples' lives improve. What you've just made is a coding **library**-- a collection of related functions and tools that is *not* included by default in R's installation. Open-source languages like R and Python are explicitly set up to welcome these user-created libraries (also known as **packages**), and make it very easy for R users to access them. 
 
 We're not going to go into *constructing* libraries in this class, that's pretty advanced stuff. But it is important that you understand the two steps of *utilizing* R libraries: **installation** and **loading**.
 
@@ -66,35 +66,36 @@ We're not going to go into *constructing* libraries in this class, that's pretty
 
 Remember that story I just told about making your own custom plotting library? Luckily, you don't have to do that. Some guy named Hadley Wickham already did. (For those of you keeping track: yes, he's the same guy who wrote the "R for Data Science" textbook.) His plotting package is called `ggplot2` (the first one was called `ggplot`, the second version is much improved). `ggplot2` is the main library we'll be using for our data visualization in R, so let's use it as an example of how to get libraries set up. 
 
-Right now, if you've never used R before, there is no trace of anything called "ggplot2" on your computer. That library only exists online, so you need to **install** it to your machine, the same way we installed R and RStudio onto your computer. You install libraries using the command `install.packages("{library_name}")`. So, to install `ggplot2`, go to your **Console** and type: `install.packages("ggplot2")`.
+Right now, if you've never used R before, there is no trace of anything called "ggplot2" on your computer. That library only exists online, so you need to **install** it to your machine, the same way we installed R and RStudio onto your computer. Luckily, you can install libraries stright from RStudio. You install libraries using the command `install.packages("{library_name}")`. So, to install `ggplot2`, go to your RStudio **Console** and type: `install.packages("ggplot2")`.
 
 You should get an output that looks something like this (sometimes it will have to try several different URL's before it finds one it can use):
 
 [insert screenshot]
 
-Great! Now you have `ggplot2` on your machine and it's there to stay. It won't go away when you quit RStudio, or when you turn your computer off, or anything else. The *only* things that will uninstall `ggplot2` are manually digging around in the guts of your computer's file folders, or upgrading to a new version of R. So unless you do either of those thing, **you ONLY have to install a library once**. You'll understand why I'm stressing this so much in a moment. 
+Great! Now you have `ggplot2` on your machine and it's there to stay. It won't go away when you quit RStudio, or when you turn your computer off, or anything else. The *only* things that will uninstall `ggplot2` are manually digging around in the guts of your computer's file folders, or upgrading to a new version of R. So unless you do either of those thing, **you ONLY have to install a library once**. 
+
+Let me repeat that one more time: **you only have to install any given library ONCE on your machine**. Running an `install` command every time you want to use a library would be like re-installing R and RStudio any time you wanted to program. **Never** put an `install` command in a script. 
+
 
 ## Loading
 
 Ok! You've installed your `ggplot2` package, you're ready to go! You open up a new script, load your Davis dataset [^data], and type:
 
-[^data]: More on loading packages next lecture. 
+[^data]: More on loading datasets next lecture. 
 
 ```{r, eval=F}
-ggplot(Davis, aes(x=weight, y=value)) +
-   geom_point(aes(color=sex), alpha=0.5) +
-   facet_grid(~variable)
+ggplot(Davis, aes(x=weight, y=value)) 
 ```
 <br>
 Oh no! Why do you get this output?
 
 [insert error screenshot]
 
-The problem here is that your library is *installed*, but it's not **loaded**. R and RStudio are installed on your machine, but you can't start typing R code on your Desktop and expect to get anywhere, right? You have to *load* those applications to use them. Similarly, within an R session, you have to load your libraries into the R session you're working with. It's convention to load all the libraries you'll need for a script at the beginning of that script, so you'll know immediately if you're missing anything.
+The problem here is that your library is *installed*, but it's not **loaded**. R and RStudio are installed on your machine, but you can't start typing R code on your Desktop and expect to get anywhere, right? You have to *open* those applications to use them. Similarly, within an R session, you have to load your libraries into the R session you're working with. It's convention to load all the libraries you'll need for a script at the beginning of that script, so you'll know immediately if you're missing anything.
 
-The command to *load* a library is `library{library_name}` (notice the absence of quotation marks). So, to load `ggplot2`, go to the **top of your script** and type `library(ggplot2)`. Then run that line of code.
+The command to *load* a library is `library({library_name})` (notice the absence of quotation marks). So, to load `ggplot2`, go to the **top of your script** and type `library(ggplot2)`. Then run that line of code.
 
-Now try that plotting code again. Better?
+Now try that plotting code again. It should print an empty gray box (more on plotting next week). 
 
 
 ## Review
