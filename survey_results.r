@@ -11,7 +11,7 @@ library(gridExtra)
 
 theme_set(theme_minimal(base_size = 12))
 
-main_dir <- "/Users/bertozzivill/Dropbox/main/iSchool/imt_572_spring_19/"
+main_dir <- "/Users/bertozzivill/Dropbox (Personal)/main/iSchool/imt_572_spring_19/"
 data <- fread(paste0(main_dir, "welcome_survey.csv"))
 
 # Plots by Sex
