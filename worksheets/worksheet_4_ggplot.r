@@ -6,7 +6,7 @@
 
 ## 1. libraries and data -----------------------------
 
-## Load the data.table and car libraries. 
+## Load the ggplot2, data.table and car libraries. 
 
 ## load the dataset called "Wong" from the car library, and convert it to a data.table called "comas".
 
@@ -21,7 +21,7 @@
 
 # ---
 
-## Make a histogram (bar chart with counts) of the datset, by sex.
+## Make a histogram (bar chart with counts) of the datset on the y-axis and sex on the x-axis.
 
 ## Change this histogram so the y-axis is mean piq. 
 
