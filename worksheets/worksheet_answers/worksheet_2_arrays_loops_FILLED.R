@@ -50,8 +50,33 @@ for (idx in 1:length(combined_music)){
 
 ## 3. Logic -----------------------------
 
-## Modify the last "for" loop you made such that, if the musician has a rating below 3, 
-## the console prints out "I don't like this musician".
+## write an "if" statement that prints "I don't like this musician" if the first artist in combined_music has a rating below 3.
+if(music_rating[1] < 3){
+  print("I don't like this musician")
+}
+
+## add an "else if" statement that prints "I'm ok with this musician" if the first artist in combined_music has a rating of 3 or 4.
+this_rating <- music_rating[1]
+if(this_rating < 3){
+  print("I don't like this musician")
+}else if(this_rating==3 | this_rating==4){
+  print("I'm ok with this musician")
+}
+
+## add an "else" statement that prints "I love this musician" if the first artist in combined_music has a rating of exactly 5.
+this_rating <- music_rating[1]
+if(this_rating < 3){
+  print("I don't like this musician")
+}else if(this_rating==3 | this_rating==4){
+  print("I'm ok with this musician")
+}else{
+  print("I love this musician")
+}
+
+## 4. Logic and Loops combined -----------------------------
+
+## Modify the last "for" loop you wrote in section 1  such that, for each musician in combined_music,
+## if the musician has a rating below 3, the console prints out "I don't like this musician".
 for (idx in 1:length(combined_music)){
   
   this_musician <- combined_music[idx]
@@ -64,6 +89,22 @@ for (idx in 1:length(combined_music)){
   }
 }
 
+
+## Modify this combined loop with an "else if" statement such that, if the musician has a rating of 3 or 4, 
+## the console prints out "I'm ok with this musician".
+for (idx in 1:length(combined_music)){
+  
+  this_musician <- combined_music[idx]
+  this_rating <- music_rating[idx]
+  
+  print(paste(this_musician, "has rating", this_rating))
+  
+  if (this_rating<3){
+    print("I don't like this musician.")
+  }else if (this_rating==3 | this_rating==4){
+    print("I'm ok with this musician")
+  }
+}
 
 
 ## Modify *that* loop such that, if the musician has a rating of 5, the console prints out
@@ -77,27 +118,14 @@ for (idx in 1:length(combined_music)){
   
   if (this_rating<3){
     print("I don't like this musician.")
-  }else if (this_rating==5){
+  }else if (this_rating==3 | this_rating==4){
+    print("I'm ok with this musician")
+  }else{
     print("I love this musician")
   }
 }
 
 
-## Use a "while" loop to print out the first element of combined_music with a rating of 3
-## MAKE SURE that at least one of your musicians has a rating of 3 before you do this!!
-
-idx <- 1
-
-while(music_rating[idx]!=3){
-  print(idx)
-  print(music_rating[idx])
-  idx <- idx +1
-}
-
-combined_music[idx]
-
-## more reasonable way to do this:
-combined_music[which(music_rating==3)][1]
 
 
 

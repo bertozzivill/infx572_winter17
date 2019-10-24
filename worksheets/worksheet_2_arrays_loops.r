@@ -33,14 +33,26 @@
 
 ## 3. Logic -----------------------------
 
-## Modify the last "for" loop you made such that, if the musician has a rating below 3, 
-## the console prints out "I don't like this musician".
+## write an "if" statement that prints "I don't like this musician" if the first artist in combined_music has a rating below 3.
+
+## add an "else if" statement that prints "I'm ok with this musician" if the first artist in combined_music has a rating of 3 or 4.
+
+## add an "else" statement that prints "I love this musician" if the first artist in combined_music has a rating of exactly 5.
+
+
+## 4. Logic and Loops combined -----------------------------
+
+## Modify the last "for" loop you wrote in section 1  such that, for each musician in combined_music,
+## if the musician has a rating below 3, the console prints out "I don't like this musician".
+
+## Modify this combined loop with an "else if" statement such that, if the musician has a rating of 3 or 4, 
+## the console prints out "I'm ok with this musician".
 
 ## Modify *that* loop such that, if the musician has a rating of 5, the console prints out
 # "I love this musician". 
 
-## Use a "while" loop to print out the first element of combined_music with a rating of 5
-## MAKE SURE that at least one of your musicians has a rating of 5 before you do this!!
+
+
 
 
 
